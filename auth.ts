@@ -2,8 +2,10 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
-import type { HermesUser, User } from '@/app/lib/definitions';
+import type { User } from '@/app/lib/definitions';
 import { apiFetchServer, getFullPath } from '@/app/lib/api';
+import { LoginResponse } from './app/lib/responses';
+import { decodeToken, TokenPayload } from './app/lib/token-decode';
  
 async function getUser(username: string, password: string): Promise<User | undefined> {
   try {
@@ -12,16 +14,24 @@ async function getUser(username: string, password: string): Promise<User | undef
     data.append('password', password);
 
     const responseTokens = await apiFetchServer({method: 'POST', path: 'auth/login', body: data, isForm: true});
-    const tokens = await responseTokens.json();
+    const tokens: LoginResponse = await responseTokens.json();
+
+    const decodedToken: TokenPayload | null = decodeToken(tokens.access_token);
+
+    if(!decodedToken) {
+      throw('No se pudo decodificar el token');
+    }
+
     console.log('TOKENS RESPONSE', responseTokens, "TOKENS", tokens);
 
     const responseUser = await fetchUser(tokens);
 
     const user: User = {
-      email: username,
+      email: decodedToken.email,
       password: '',
-      id: '1',
+      id: '1', //TODO refactorear esto con tiempo
       name: 'John Doe',
+      premises: decodedToken.premises,
       tokens: tokens,
       user_data: await responseUser.json()
     }

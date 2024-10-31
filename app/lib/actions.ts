@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { apiFetchServer } from './api';
-import { Article } from './definitions';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -166,80 +165,80 @@ export type ArticleFormState = {
   formData?: any | null;
 };
 
-export async function createOrUpdateArticle(prevState: ArticleFormState, formData: FormData) {
-  const validatedFields = ArticleFormSchema.safeParse({
-    name: formData.get('name'),
-    categoryId: formData.get('category'),
-    currency: formData.get('currency'),
-    price: formData.get('price'),
-    currentStock: formData.get('current_stock'),
-    internalCode: formData.get('internal_code'),
-    articleImages: formData.getAll('article-images'),
-    imagesToRemove: formData.get('images-to-remove'),
-  });
+// export async function createOrUpdateArticle(prevState: ArticleFormState, formData: FormData) {
+//   const validatedFields = ArticleFormSchema.safeParse({
+//     name: formData.get('name'),
+//     categoryId: formData.get('category'),
+//     currency: formData.get('currency'),
+//     price: formData.get('price'),
+//     currentStock: formData.get('current_stock'),
+//     internalCode: formData.get('internal_code'),
+//     articleImages: formData.getAll('article-images'),
+//     imagesToRemove: formData.get('images-to-remove'),
+//   });
 
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Hay campos faltantes, por favor revise.',
-      formData: Object.fromEntries(formData.entries()),
-    };
-  }
+//   if (!validatedFields.success) {
+//     return {
+//       errors: validatedFields.error.flatten().fieldErrors,
+//       message: 'Hay campos faltantes, por favor revise.',
+//       formData: Object.fromEntries(formData.entries()),
+//     };
+//   }
   
-  const { categoryId,currency,currentStock,internalCode,name,price,articleImages, imagesToRemove } = validatedFields.data;
+//   const { categoryId,currency,currentStock,internalCode,name,price,articleImages, imagesToRemove } = validatedFields.data;
 
-  try {
-    const body = {
-      name: name,
-      price: price,
-      category_id: categoryId,
-      currency: currency,
-      current_stock: currentStock,
-      internal_code: internalCode,
-      description: '', //TODO Agregar rich text editor
-      size_weight: undefined,
-      barcode_value: '',
-      media_files: undefined
-    } //TODO cargar estos datos que faltan
+//   try {
+//     const body = {
+//       name: name,
+//       price: price,
+//       category_id: categoryId,
+//       currency: currency,
+//       current_stock: currentStock,
+//       internal_code: internalCode,
+//       description: '', //TODO Agregar rich text editor
+//       size_weight: undefined,
+//       barcode_value: '',
+//       media_files: undefined
+//     } //TODO cargar estos datos que faltan
 
-    const articleId = formData.get('article_id'); //On add this will be null
-    const method = articleId ? 'PUT' : 'POST';
-    const path = articleId ? `article/${articleId}` : 'article';
+//     const articleId = formData.get('article_id'); //On add this will be null
+//     const method = articleId ? 'PUT' : 'POST';
+//     const path = articleId ? `article/${articleId}` : 'article';
     
-    const response = await apiFetchServer({method: method, path: path, body: JSON.stringify(body)});
-    const responseJson: Article = await response.json();
-    console.log("ADD ARTICLE RESPONSE", responseJson);
+//     const response = await apiFetchServer({method: method, path: path, body: JSON.stringify(body)});
+//     const responseJson: Article = await response.json();
+//     console.log("ADD ARTICLE RESPONSE", responseJson);
 
-    if(articleImages[0].name != 'undefined'){
-      const mediaResponse = await uploadArticleImages(responseJson.id, articleImages);
-      let mediaResponseJson: Article;
-      if(mediaResponse){
-        mediaResponseJson = await mediaResponse.json();
-        console.log("ADD ARTICLE MEDIA RESPONSE", mediaResponseJson);
-      } else {
-        console.log("NO IMAGE TO UPLOAD OR INPUT NOT FOUND");
-      }
-    } else {
-      console.log("NO IMAGES ADDED");
-    }
+//     if(articleImages[0].name != 'undefined'){
+//       const mediaResponse = await uploadArticleImages(responseJson.id, articleImages);
+//       let mediaResponseJson: Article;
+//       if(mediaResponse){
+//         mediaResponseJson = await mediaResponse.json();
+//         console.log("ADD ARTICLE MEDIA RESPONSE", mediaResponseJson);
+//       } else {
+//         console.log("NO IMAGE TO UPLOAD OR INPUT NOT FOUND");
+//       }
+//     } else {
+//       console.log("NO IMAGES ADDED");
+//     }
 
-    if(imagesToRemove.length != 0){
-      await removeArticleImages(responseJson.id, imagesToRemove);
-    }
+//     if(imagesToRemove.length != 0){
+//       await removeArticleImages(responseJson.id, imagesToRemove);
+//     }
 
-    console.log("NEW/UPDATE ARTICLE RESPONSE: " + articleId, response);
+//     console.log("NEW/UPDATE ARTICLE RESPONSE: " + articleId, response);
 
-    //TODO mostrar error del response
-  } catch (error) {
-    return {
-      message: 'Database Error: Failed to Create Article.',
-      formData: Object.fromEntries(formData.entries()),
-    };
-  }
+//     //TODO mostrar error del response
+//   } catch (error) {
+//     return {
+//       message: 'Database Error: Failed to Create Article.',
+//       formData: Object.fromEntries(formData.entries()),
+//     };
+//   }
 
-  revalidatePath('/welcome/articles');
-  redirect('/welcome/articles');
-}
+//   revalidatePath('/welcome/articles');
+//   redirect('/welcome/articles');
+// }
 
 async function uploadArticleImages(articleId: number, file: File[]){
   

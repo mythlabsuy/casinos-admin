@@ -1,18 +1,18 @@
 import NavLinks from './nav-links'
 import MobileSideNav from './mobile/mobile-nav'
-import StoreSelect from './store-select'
 import Link from 'next/link';
 import { fetchActivePremises } from '@/app/lib/data/articles';
+import { signOut } from '@/auth';
 
 interface props {
   topNavigation: any[],
-  bottomNavigation: any[],
+  //bottomNavigation: any[],
   topNavTitle?: string,
   bottomNavTitle?: string,
   userName?: string
 }
 
-export default async function SideNav({ topNavigation, bottomNavigation, topNavTitle, bottomNavTitle, userName }: props) {
+export default async function SideNav({ topNavigation, topNavTitle, bottomNavTitle, userName }: props) {
   const stores = await fetchActivePremises();
   
   return (
@@ -32,25 +32,19 @@ export default async function SideNav({ topNavigation, bottomNavigation, topNavT
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <NavLinks 
                 topNavigation={topNavigation} 
-                bottomNavigation={bottomNavigation} 
+               // bottomNavigation={bottomNavigation} 
                 topNavTitle={topNavTitle} 
                 bottomNavTitle={bottomNavTitle}/>
                 
                 {/* User Profile */}
-                <li className="-mx-6 mt-auto">
+                {/* <li className="-mx-6 mt-auto">
                   <StoreSelect stores={stores}/>
-                </li>
+                </li> */}
                 <li className="-mx-6">
                   <Link
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
                   >
-                    <img
-                      alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      className="h-8 w-8 rounded-full bg-gray-800"
-                    />
-                    <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">{userName}</span>
                   </Link>
                 </li>
@@ -61,7 +55,7 @@ export default async function SideNav({ topNavigation, bottomNavigation, topNavT
         
         <MobileSideNav 
           topNavigation={topNavigation} 
-          bottomNavigation={bottomNavigation} 
+         // bottomNavigation={bottomNavigation} 
           topNavTitle={topNavTitle} 
           bottomNavTitle={bottomNavTitle} 
           userName={userName}/>

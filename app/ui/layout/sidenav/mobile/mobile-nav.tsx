@@ -8,13 +8,13 @@ import MobileNavLinks from './mobile-nav-links'
 
 interface props {
   topNavigation: any[],
-  bottomNavigation: any[],
+//  bottomNavigation: any[],
   topNavTitle?: string,
   bottomNavTitle?: string,
   userName?: string
 }
 
-export default function MobileSideNav({ topNavigation, bottomNavigation, topNavTitle, bottomNavTitle, userName }: props) {
+export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTitle, userName }: props) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -52,7 +52,7 @@ export default function MobileSideNav({ topNavigation, bottomNavigation, topNavT
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <MobileNavLinks 
                     topNavigation={topNavigation} 
-                    bottomNavigation={bottomNavigation} 
+                    //bottomNavigation={bottomNavigation} 
                     topNavTitle={topNavTitle} 
                     bottomNavTitle={bottomNavTitle}/>
                   </ul>

@@ -1,6 +1,6 @@
 'use client';
 
-import { MediaFiles } from "@/app/lib/definitions";
+import { MediaFile } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import Modal, { ModalType } from "../modal";
 import GridGallery from "../grid-gallery";
@@ -14,12 +14,12 @@ interface Props {
   allowedFileTypes?: string[];
   maxFileSizeBytes?: number;
   maxFilesAmount?: number;
-  mediaFiles?: MediaFiles[];
+  mediaFiles?: MediaFile[];
 }
 
 export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES, removeMediaCallback , maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED, maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT, mediaFiles = [], name }: Props ) {
   const [fileNames, setFileNames] = useState<string>("");
-  const [formMediaFiles, setFormMediaFiles] = useState<MediaFiles[] | undefined>(mediaFiles.filter(mf => !mf.disabled));
+  const [formMediaFiles, setFormMediaFiles] = useState<MediaFile[] | undefined>(mediaFiles.filter(mf => !mf.disabled));
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalText, setModalText] = useState<string>('');

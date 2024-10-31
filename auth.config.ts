@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
+import { SystemUser } from './app/lib/definitions';
  
 export const authConfig = {
   pages: {
@@ -29,7 +30,7 @@ export const authConfig = {
     session({ session, token }) {
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
-      session.user_data = token.user_data;
+      session.user_data = token.user_data as SystemUser;
       return session;
     },
   },

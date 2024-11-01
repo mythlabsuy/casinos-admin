@@ -6,7 +6,7 @@ import DynamicHeroIcon from '../dynamic-hero-icon';
 import { IconButton } from '../components/icon-button';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { fetchFilteredData } from '@/app/lib/data/generic';
-import { deleteCategory } from '@/app/lib/category-actions';
+import { deleteCategory } from '@/app/lib/premise-actions';
 
 export default async function CategoriesTable({
   query,

@@ -6,15 +6,15 @@ import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
 import FileChooser from '../components/form-fields/file-chooser';
-import { CategoryFormState, createOrUpdateCategory } from '@/app/lib/category-actions';
+import { PremiseFormState, CreateOrUpdatePremise } from '@/app/lib/premise-actions';
 
 interface Props {
   category?: Category;
 }
 
 export default function CategoryForm({ category }: Props ) {
-  const initialState: CategoryFormState = { message: null, errors: {}, formData: {} };
-  const [state, formAction] = useActionState(createOrUpdateCategory, initialState);
+  const initialState: PremiseFormState = { message: null, errors: {}, formData: {} };
+  const [state, formAction] = useActionState(CreateOrUpdatePremise, initialState);
   const [mediaToRemove, setMediaToRemove] = useState<string>();
   const [formData, setFormData] = useState<any>({});
 

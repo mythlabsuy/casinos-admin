@@ -3,10 +3,7 @@ import { auth } from '@/auth';
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const topNav = [
-    { name: 'Dashboard', href: '/welcome', iconName: 'HomeIcon' },
-    { name: 'Artículos', href: '/welcome/articles', iconName: 'ArchiveBoxIcon' },
-    { name: 'Categorías', href: '/welcome/categories', iconName: 'TagIcon' },
-    { name: 'Órdenes', href: '/welcome/orders', iconName: 'InboxStackIcon' },
+    { name: 'Locales', href: '/welcome/premises', iconName: 'ArchiveBoxIcon' },
   ]
 
   const session = await auth();

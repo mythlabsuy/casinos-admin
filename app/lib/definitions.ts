@@ -33,7 +33,7 @@ export type User = {
 export type Premise = {
   id: number;
   name: string;
-  logo: string;
+  logo: MediaFile;
   privacy_policy: MediaFile;
   disabled: boolean;
 }

@@ -68,7 +68,6 @@ export async function apiFetchServer({method = 'GET', path = '/', query, body, i
       headers.append('Authorization', session.accessToken ?? '');
     }
   }
-   console.log(getFullPath(path), '"TJE REQUEST:"'); 
   const response = await fetch(getFullPath(path) + (query ? (`?${query}`) : ''), 
     {
       method: method,

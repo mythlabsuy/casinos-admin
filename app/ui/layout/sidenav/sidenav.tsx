@@ -13,7 +13,7 @@ interface props {
 }
 
 export default async function SideNav({ topNavigation, topNavTitle, bottomNavTitle, userName }: props) {
-  const stores = await fetchActivePremises();
+ // const stores = await fetchActivePremises();
   
   return (
     <>

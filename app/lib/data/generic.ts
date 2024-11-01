@@ -13,7 +13,7 @@ const ITEMS_PER_PAGE = 6;
 export async function fetchPagesAmount(path: string, search_query: string) {
   try {
     const query = new URLSearchParams({ query: search_query })
-    const response = await apiFetchServer({method: 'GET', path: path, body: undefined, query: query});
+    const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: query });
     const amount = await response.json();
 
     const totalPages = Math.ceil(amount / ITEMS_PER_PAGE);
@@ -24,28 +24,35 @@ export async function fetchPagesAmount(path: string, search_query: string) {
   }
 }
 
+export function getPagesAmount(amount: number) {
+  const totalPages = Math.ceil(amount / ITEMS_PER_PAGE);
+  return totalPages;
+}
+
 export async function fetchFilteredData(
   path: string,
   query: string,
   currentPage: number,
   urlParams?: URLSearchParams
-) : Promise<any> {
+): Promise<any> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   //TODO Filter articles using search bar text
   try {
     let searchParams = urlParams;
-    if(urlParams){
+    if (urlParams) {
       searchParams?.append('skip', offset.toString());
       searchParams?.append('limit', ITEMS_PER_PAGE.toString());
-      searchParams?.append('query', query);
+      if (query) {
+        searchParams?.append('query', query);
+      }
     } else {
       searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query });
     }
-    
-    const response = await apiFetchServer({method: 'GET', path: path, body: undefined, query: searchParams});
+
+    const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams });
     const responseJson = response.json();
     console.log(`Data response for ${path}`, responseJson);
-    
+
     return responseJson;
   } catch (error) {
     console.error('Database Error:', error);

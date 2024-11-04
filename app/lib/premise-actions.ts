@@ -14,22 +14,19 @@ export type PremiseFormState = {
   formData?: any | null;
 };
 
-const PremiseFormSchema = z.object({ 
+const PremiseFormSchema = z.object({
   name: z.string({
     required_error: 'Por favor ingrese un nombre para el local.',
-  }).min(1,{message: 'Por favor ingrese un nombre para el local.'}),
-  // logoImages: z.array(z.instanceof(File)),
-  // privacyImages: z.array(z.instanceof(File)),
-  // imagesToRemove: z.string(),
+  }).min(1, { message: 'Por favor ingrese un nombre para el local.' }),
+  logoImages: z.instanceof(File),
+  privacyImages: z.instanceof(File),
 });
 
 export async function CreateOrUpdatePremise(prevState: PremiseFormState, formData: FormData) {
   const validatedFields = PremiseFormSchema.safeParse({
-    //TODO ADD DISABLE
     name: formData.get('name'),
-    // logoImages: formData.getAll('logo-images'),
-    // privacyImages: formData.getAll('privacy-images'),
-    // imagesToRemove: formData.get('images-to-remove'),
+    logoImages: formData.get('premise-logo-image'),
+    privacyImages: formData.get('premise-privacy-image'),
   });
   var n = formData.get('name')
   if (!validatedFields.success) {
@@ -39,46 +36,29 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
       formData: Object.fromEntries(formData.entries()),
     };
   }
-  
-  const { name, } = validatedFields.data;
+
+  const { name, logoImages, privacyImages } = validatedFields.data;
 
   try {
-    const body = {
-    //TODO ADD DISABLE
-      name: name
-    }
+    const data: FormData = new FormData()
+    data.append('name', name);
+    data.append('logo', logoImages);
+    data.append('privacy_policy', logoImages);
 
     const premiseId = formData.get('premise_id'); //On add this will be null
     const method = premiseId ? 'PUT' : 'POST';
     const path = premiseId ? `premise/${premiseId}` : 'premise';
-    const query = new URLSearchParams({ name: name })
-    const response = await apiFetchServer({method: method, path: path, body: undefined, query: query});
+
+    const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
     const responseJson: Premise = await response.json();
     console.log("ADD OR UPDATE PREMISE RESPONSE", responseJson);
 
-    // if(logoImages[0].name != 'undefined'){
-    //   const mediaResponse = await uploadCategoryImage(responseJson.id, categoryImages);
-    //   let mediaResponseJson: Category;
-    //   if(mediaResponse){
-    //     mediaResponseJson = await mediaResponse.json();
-    //     console.log("ADD CATEGORY MEDIA RESPONSE", mediaResponseJson);
-    //   } else {
-    //     console.log("NO IMAGE TO UPLOAD OR INPUT NOT FOUND");
-    //   }
-    // } else {
-    //   console.log("NO IMAGES ADDED");
-    // }
-
-    // if(imagesToRemove.length != 0){
-    //   await removeCategoryImages(responseJson.id, imagesToRemove);
-    // }
-
-    console.log("NEW/UPDATE CATEGORY RESPONSE: " + premiseId, response);
+    console.log("NEW/UPDATE PREMISE RESPONSE: " + premiseId, response);
 
     //TODO mostrar error del response
   } catch (error) {
     return {
-      message: 'Database Error: Failed to Create Category.',
+      message: 'Database Error: Failed to Create Premise.',
       formData: Object.fromEntries(formData.entries()),
     };
   }
@@ -87,29 +67,29 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
   redirect('/welcome/premises');
 }
 
-async function uploadCategoryImage(categoryId: number, file: File[]){
-  
+async function uploadCategoryImage(categoryId: number, file: File[]) {
+
   const formData = new FormData();
   for (let index = 0; index < file.length; index++) {
     const element = file[index];
     formData.append('files', element);
   }
 
-  return await apiFetchServer({method: 'POST', path: `category/${categoryId}/upload-file`, body: formData, isFileUpload: true});
+  return await apiFetchServer({ method: 'POST', path: `category/${categoryId}/upload-file`, body: formData, isFileUpload: true });
 }
 
-async function removeCategoryImages(categoryId: number, imagesToRemove: string){
+async function removeCategoryImages(categoryId: number, imagesToRemove: string) {
   let imagesToRemoveArr = imagesToRemove.split(',');
   //TODO return responses from image removal
   for (let index = 0; index < imagesToRemoveArr.length; index++) {
-    const imageRemoveResponse = await apiFetchServer({ method: 'DELETE', path: `category/${categoryId}/delete-file/`});
+    const imageRemoveResponse = await apiFetchServer({ method: 'DELETE', path: `category/${categoryId}/delete-file/` });
     console.log("IMAGE REMOVED: ", imageRemoveResponse.json());
   }
 }
 
 export async function disablePremise(id: number) {
   try {
-    const response = await apiFetchServer({method: 'DELETE', path: `premise/${id}`, body: undefined });
+    const response = await apiFetchServer({ method: 'DELETE', path: `premise/${id}`, body: undefined });
     revalidatePath('/welcome/premises');
     return { message: 'Local deshabilitado.' };
   } catch (error) {

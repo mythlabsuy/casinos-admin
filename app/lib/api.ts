@@ -10,7 +10,8 @@ interface Props {
   query?: URLSearchParams,
   isForm?: boolean
   isFileUpload?: boolean
-  withAuth?: boolean
+  withAuth?: boolean,
+  isMultipartForm? : boolean,
 }
 
 // const getCookieValue = (name: string) => {
@@ -59,8 +60,9 @@ export async function apiFetchServer({method = 'GET', path = '/', query, body, i
 
   if(!isForm && !isFileUpload){
     headers.append('Content-type', 'application/json')
+  }else{
+    console.log('--- IN CREATE PREMISE');
   }
-
   if(withAuth){
     const session = await auth();
     // If user is not logged in session will be null
@@ -75,11 +77,6 @@ export async function apiFetchServer({method = 'GET', path = '/', query, body, i
       body: body
     }
   );
-  // .then((res) => {
-  //   //TODO handle status errors and trigger a dialog and log errors
-  //   console.info("FETCH SERVER RESPONSE", res);
-  //   return res.json()
-  // });
 
   return response
 }
@@ -87,3 +84,5 @@ export async function apiFetchServer({method = 'GET', path = '/', query, body, i
 export function getFullPath(path?: string){
   return API_HOST + (path ? path : '');
 }
+
+

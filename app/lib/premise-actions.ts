@@ -18,15 +18,15 @@ const PremiseFormSchema = z.object({
   name: z.string({
     required_error: 'Por favor ingrese un nombre para el local.',
   }).min(1, { message: 'Por favor ingrese un nombre para el local.' }),
-  logoImages: z.instanceof(File),
-  privacyImages: z.instanceof(File),
+  logoImage: z.instanceof(File),
+  privacyImage: z.instanceof(File),
 });
 
 export async function CreateOrUpdatePremise(prevState: PremiseFormState, formData: FormData) {
   const validatedFields = PremiseFormSchema.safeParse({
     name: formData.get('name'),
-    logoImages: formData.get('premise-logo-image'),
-    privacyImages: formData.get('premise-privacy-image'),
+    logoImage: formData.get('premise-logo-image'),
+    privacyImage: formData.get('premise-privacy-image'),
   });
   var n = formData.get('name')
   if (!validatedFields.success) {
@@ -37,21 +37,28 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
     };
   }
 
-  const { name, logoImages, privacyImages } = validatedFields.data;
+  const { name, logoImage, privacyImage } = validatedFields.data;
 
   try {
     const data: FormData = new FormData()
     data.append('name', name);
-    data.append('logo', logoImages);
-    data.append('privacy_policy', logoImages);
+    data.append('logo', logoImage);
+    data.append('privacy_policy', privacyImage);
+
+    // Log the FormData content for debugging
+    for (const [key, value] of data.entries()) {
+      console.log(key, value);
+    }
 
     const premiseId = formData.get('premise_id'); //On add this will be null
     const method = premiseId ? 'PUT' : 'POST';
-    const path = premiseId ? `premise/${premiseId}` : 'premise';
+    const path = premiseId ? `premise/${premiseId}` : 'premise/';
 
     const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
     const responseJson: Premise = await response.json();
     console.log("ADD OR UPDATE PREMISE RESPONSE", responseJson);
+
+
 
     console.log("NEW/UPDATE PREMISE RESPONSE: " + premiseId, response);
 

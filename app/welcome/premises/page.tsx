@@ -15,7 +15,7 @@ import {
 import PremisesTable from '@/app/ui/premises/premises-table';
 
 export const metadata: Metadata = {
-  title: 'Categorias',
+  title: 'Locales',
 };
 
 export default async function Page({

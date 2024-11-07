@@ -1,8 +1,9 @@
 import NavLinks from './nav-links'
 import MobileSideNav from './mobile/mobile-nav'
 import Link from 'next/link';
-import { fetchActivePremises } from '@/app/lib/data/articles';
 import { signOut } from '@/auth';
+import PremiseSelect from './premise-select';
+import { fetchActivePremises } from '@/app/lib/data/premises';
 
 interface props {
   topNavigation: any[],
@@ -13,7 +14,7 @@ interface props {
 }
 
 export default async function SideNav({ topNavigation, topNavTitle, bottomNavTitle, userName }: props) {
- // const stores = await fetchActivePremises();
+  const premiseList = await fetchActivePremises();
   
   return (
     <>
@@ -37,9 +38,9 @@ export default async function SideNav({ topNavigation, topNavTitle, bottomNavTit
                 bottomNavTitle={bottomNavTitle}/>
                 
                 {/* User Profile */}
-                {/* <li className="-mx-6 mt-auto">
-                  <StoreSelect stores={stores}/>
-                </li> */}
+                <li className="-mx-6 mt-auto">
+                  <PremiseSelect premises={premiseList}/>
+                </li>
                 <li className="-mx-6">
                   <Link
                     href="#"

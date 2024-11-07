@@ -28,11 +28,6 @@ export default function PremiseForm({ premise }: Props) {
   const [mediaToRemove, setMediaToRemove] = useState<string>();
   const [formData, setFormData] = useState<any>({});
 
-  const logoMediaFiles: [MediaFile] | [] = premise ? [premise.logo] : [];
-  const privacyMediaFiles: [MediaFile] | [] = premise
-    ? [premise.privacy_policy]
-    : [];
-
   useEffect(() => {
     if (state.errors) {
       setFormData(state.formData || {});

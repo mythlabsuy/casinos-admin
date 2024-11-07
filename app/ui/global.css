@@ -16,16 +16,6 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
 .arrow {
   width: 30px;
   height: 30px;
@@ -42,4 +32,10 @@ body {
 .arrow--right {
   right: -14px;
   top: calc(50% - 30px);
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
 }

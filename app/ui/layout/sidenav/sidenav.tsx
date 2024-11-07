@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { signOut } from '@/auth';
 import PremiseSelect from './premise-select';
 import { fetchActivePremises } from '@/app/lib/data/premises';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
 
 interface props {
   topNavigation: any[],
@@ -22,12 +23,9 @@ export default async function SideNav({ topNavigation, topNavTitle, bottomNavTit
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
-            <div className="flex h-16 shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
+            <div className="flex h-16 shrink-0 items-center gap-x-4 px-6 py-3 text-sm 
+              font-semibold leading-6 text-white border-b border-dotted">
+              <span aria-hidden="true">Bienvenido {userName}</span>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -36,19 +34,24 @@ export default async function SideNav({ topNavigation, topNavTitle, bottomNavTit
                // bottomNavigation={bottomNavigation} 
                 topNavTitle={topNavTitle} 
                 bottomNavTitle={bottomNavTitle}/>
-                
-                {/* User Profile */}
+
                 <li className="-mx-6 mt-auto">
                   <PremiseSelect premises={premiseList}/>
                 </li>
-                <li className="-mx-6">
-                  <Link
-                    href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
-                  >
-                    <span aria-hidden="true">{userName}</span>
-                  </Link>
-                </li>
+                <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2 mb-4">
+                  <form  action={async () => {
+                      'use server';
+                      await signOut({ redirectTo: "/login" });
+                    }}>
+                      <ul role="list" className="-mx-2 space-y-1">
+                        <button className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 
+                          text-sm font-semibold leading-6">
+                            <ArrowRightStartOnRectangleIcon className="h-6 w-6 shrink-0"/>
+                            Cerrar sesión
+                        </button>
+                      </ul>
+                  </form>
+                </div>
               </ul>
             </nav>
           </div>

@@ -1,6 +1,6 @@
 import TopNavLink from './top-nav-link';
-import BottomNavLink from './bottom-nav-link';
 import { signOut } from '@/auth';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
 
 interface Props {
   topNavigation: any[],
@@ -24,17 +24,20 @@ export default function NavLinks({ topNavigation, topNavTitle, bottomNavTitle }:
         </ul>
       </li> 
       </div>    
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      {/* <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <div className="hidden h-auto w-full grow rounded-md md:block"></div>
         <form  action={async () => {
             'use server';
-            await signOut();
+            await signOut({ redirectTo: "/login" });
           }}>
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md  p-3 text-sm font-medium text-gray-400 hover:bg-gray-800 hover:text-white md:flex-none md:justify-start md:p-2 md:px-3">
-            <div className="hidden md:block">Cerrar sesión</div>
-          </button>
+            <ul role="list" className="-mx-2 space-y-1">
+              <button className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6">
+                  <ArrowRightStartOnRectangleIcon className="h-6 w-6 shrink-0"/>
+                  Cerrar sesión
+              </button>
+            </ul>
         </form>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -51,7 +51,7 @@ export default function PremiseSelect({ premises }: Props) {
 
   return (
     <>
-      <div className="flex items-center gap-x-4 py-3 text-sm font-semibold text-white">
+      <div className="flex items-center gap-x-4 text-sm font-semibold text-white">
         <Select
           id="store"
           icon="BuildingStorefrontIcon"

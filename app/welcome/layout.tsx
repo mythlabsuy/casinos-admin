@@ -1,5 +1,6 @@
 import SideNav from '@/app/ui/layout/sidenav/sidenav';
 import { auth } from '@/auth';
+import { SessionProvider } from 'next-auth/react';
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const topNav = [
@@ -16,11 +17,13 @@ export default async function Layout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-64">
-        <SideNav topNavigation={topNav} bottomNavTitle='Your Team' userName={userName}/>
-      </div>
-      <div className="flex-grow p-6 md:overflow-y-auto xs:p-12">{children}</div>
+    <div className="flex h-screen flex-col lg:flex-row md:overflow-hidden">
+      <SessionProvider>
+        <div className="w-full flex-none lg:w-64">
+          <SideNav topNavigation={topNav} userName={userName}/>
+        </div>
+        <div className="flex-grow p-6 md:overflow-y-auto xs:p-12">{children}</div>
+      </SessionProvider>
     </div>
   );
 }

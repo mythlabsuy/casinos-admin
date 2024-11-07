@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessui/react'
 import DynamicHeroIcon from '../../../dynamic-hero-icon'
-import Link from 'next/link'
+import { signOut } from "next-auth/react";
 import MobileNavLinks from './mobile-nav-links'
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline'
 
 interface props {
   topNavigation: any[],
@@ -29,10 +30,10 @@ export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTit
           <div className="fixed inset-0 flex">
             <DialogPanel
               transition
-              className="relative mr-16 flex w-full max-w-xs flex-1 transform transition duration-300 ease-in-out data-[closed]:-translate-x-full"
-            >
+              className="relative flex w-full flex-1 transform transition duration-300 ease-in-out 
+              data-[closed]:-translate-x-full">
               <TransitionChild>
-                <div className="absolute left-full top-0 flex w-16 justify-center pt-5 duration-300 ease-in-out data-[closed]:opacity-0">
+                <div className="absolute right-0 top-0 flex w-16 justify-center pt-5 duration-300 ease-in-out data-[closed]:opacity-0">
                   <button type="button" onClick={() => setSidebarOpen(false)} className="-m-2.5 p-2.5">
                     <span className="sr-only">Close sidebar</span>
                     <DynamicHeroIcon icon='XMarkIcon' aria-hidden="true" className="h-6 w-6 text-white"/>
@@ -40,13 +41,12 @@ export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTit
                 </div>
               </TransitionChild>
               {/* Sidebar component, swap this element with another sidebar if you like */}
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
-                <div className="flex h-16 shrink-0 items-center">
-                  <img
-                    alt="Your Company"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    className="h-8 w-auto"
-                  />
+              <div className="flex grow w-full flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
+                <div className="flex h-16 flex-col items-center border-b border-dotted">
+                  <div className="flex h-16 items-center gap-x-4 px-6 py-3 text-sm 
+                    font-semibold leading-6 text-white ">
+                    <span aria-hidden="true">Bienvenido {userName}</span>
+                  </div>
                 </div>
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -57,6 +57,18 @@ export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTit
                     bottomNavTitle={bottomNavTitle}/>
                   </ul>
                 </nav>
+                <div className='flex grow'></div>
+                <div className="flex space-x-2 md:flex-col md:space-x-0 md:space-y-2 mb-4">
+                  <form  action={() => { signOut({ callbackUrl: "/login" }); }} className='w-full'>
+                      <ul role="list" className="-mx-2">
+                        <button className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 
+                          text-sm font-semibold leading-6">
+                            <ArrowRightStartOnRectangleIcon className="h-6 w-6 shrink-0"/>
+                            Cerrar sesión
+                        </button>
+                      </ul>
+                  </form>
+                </div>
               </div>
             </DialogPanel>
           </div>
@@ -68,15 +80,9 @@ export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTit
             <DynamicHeroIcon icon='Bars3Icon' aria-hidden="true" className="h-6 w-6"/>
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
-          <Link href="#" className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
-            <span className="sr-only">Your profile</span>
-            <img
-              alt=""
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              className="h-8 w-8 rounded-full bg-gray-800"
-            />
+          <div className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
             <span aria-hidden="true">{userName}</span>
-          </Link>
+          </div>
         </div>
       </div>
     </>

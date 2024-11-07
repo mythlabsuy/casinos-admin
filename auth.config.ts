@@ -1,6 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
 import { SystemUser } from './app/lib/definitions';
- 
+
 export const authConfig = {
   pages: {
     signIn: '/login',
@@ -15,7 +15,7 @@ export const authConfig = {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       } else if (isLoggedIn) {
-        return Response.redirect(new URL('/welcome/premises', nextUrl));
+        return Response.redirect(new URL('/welcome', nextUrl));
       }
       return false;
     },

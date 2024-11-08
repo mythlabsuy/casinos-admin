@@ -33,7 +33,8 @@ export async function fetchFilteredData(
   path: string,
   query: string,
   currentPage: number,
-  urlParams?: URLSearchParams
+  urlParams?: URLSearchParams,
+  addPremiseQuery?: boolean,
 ): Promise<any> {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   //TODO Filter articles using search bar text
@@ -46,11 +47,11 @@ export async function fetchFilteredData(
         searchParams?.append('query', query);
       }
     } else {
-      searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query });
+      searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query, });
     }
 
-    const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams });
-    const responseJson = response.json();
+    const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
+    const responseJson = await response.json();
     console.log(`Data response for ${path}`, responseJson);
 
     return responseJson;

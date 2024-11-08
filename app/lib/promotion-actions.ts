@@ -165,3 +165,15 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
     revalidatePath('/welcome/promotions');
     redirect('/welcome/promotions/create');
 }
+
+export async function softDeletePromotion(id: number) {
+    try {
+        const response = await apiFetchServer({ method: 'DELETE', path: `promotion/${id}`, body: undefined });
+        revalidatePath('/welcome/promotion');
+        return { message: 'Promocion borrada.' };
+    } catch (error) {
+        return {
+            message: 'Error al borrar la promoción.',
+        };
+    }
+}

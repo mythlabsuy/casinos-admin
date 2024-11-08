@@ -13,6 +13,7 @@ interface Props {
   withAuth?: boolean,
   isMultipartForm?: boolean,
   addPremisePath?: boolean,
+  addPremiseQuery?: boolean,
 }
 
 export async function apiFetch({ method = 'GET', path = '/', query, body, isForm = false, isFileUpload = false, withAuth = true, addPremisePath = false, }: Props) {
@@ -42,7 +43,7 @@ export async function apiFetch({ method = 'GET', path = '/', query, body, isForm
   return response.json()
 }
 
-export async function apiFetchServer({ method = 'GET', path = '/', query, body, isForm = false, isFileUpload = false, withAuth = true, addPremisePath = false, }: Props) {
+export async function apiFetchServer({ method = 'GET', path = '/', query, body, isForm = false, isFileUpload = false, withAuth = true, addPremisePath = false, addPremiseQuery= false }: Props) {
   const cookieStore = cookies();
 
   var headers = new Headers({
@@ -66,6 +67,15 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     let premiseId = cookieStore.get('selectedPremise')?.value;
     if (premiseId) {
       path = path + `${premiseId}`
+    } else {
+      console.log('No premise, ERROR');
+    }
+  }
+
+  if (addPremiseQuery) {
+    let premiseId = cookieStore.get('selectedPremise')?.value;
+    if (premiseId) {
+      query?.set('premise_id', premiseId);
     } else {
       console.log('No premise, ERROR');
     }

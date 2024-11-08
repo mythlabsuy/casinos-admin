@@ -15,7 +15,7 @@ export interface Breadcrumb {
 
 export default function Breadcrumbs({ breadcrumbs, homeUrl = '/' }: Props) {
   return (
-    <nav aria-label="Breadcrumb" className='flex flex-row mb-4'>
+    <nav aria-label="Breadcrumb" className='flex flex-row w-min pr-4 mb-4'>
       <Link href={homeUrl} className='flex items-center'>
         <DynamicHeroIcon className='h-5' icon='HomeIcon' solid={true}/>
       </Link>

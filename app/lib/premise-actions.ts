@@ -32,7 +32,6 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Hay campos faltantes, por favor revise.',
       formData: Object.fromEntries(formData.entries()),
     };
   }
@@ -40,19 +39,27 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
   const { name, logoImage, privacyImage } = validatedFields.data;
 
   try {
+    const premiseId = formData.get('premise_id'); //On add this will be null
+    const method = premiseId ? 'PUT' : 'POST';
+    const path = premiseId ? `premise/${premiseId}` : 'premise/';
+
     const data: FormData = new FormData()
     data.append('name', name);
-    data.append('logo', logoImage);
-    data.append('privacy_policy', privacyImage);
+
+    if (logoImage.size > 0) {
+      data.append('logo', logoImage);
+    }
+
+    if (privacyImage.size > 0) {
+      data.append('privacy_policy', privacyImage);
+    }
 
     // Log the FormData content for debugging
     for (const [key, value] of data.entries()) {
       console.log(key, value);
     }
 
-    const premiseId = formData.get('premise_id'); //On add this will be null
-    const method = premiseId ? 'PUT' : 'POST';
-    const path = premiseId ? `premise/${premiseId}` : 'premise/';
+
 
     const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
     const responseJson: Premise = await response.json();
@@ -62,10 +69,13 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
 
     console.log("NEW/UPDATE PREMISE RESPONSE: " + premiseId, response);
 
-    //TODO mostrar error del response
   } catch (error) {
+    var errorText = 'Error inesperado';
+    if (error instanceof Error) {
+      errorText = error.message;
+    }
     return {
-      message: 'Database Error: Failed to Create Premise.',
+      message: errorText, // Directly access 'error' or fallback
       formData: Object.fromEntries(formData.entries()),
     };
   }

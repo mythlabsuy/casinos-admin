@@ -57,32 +57,12 @@ export default function PremiseForm({ premise }: Props) {
           <div className="mb-4">
             <TextInput
               id="name"
-              label='Nombre del local'
+              label="Nombre del local"
               defaultValue={formData.name || premise?.name || ''}
               errors={state.errors ? state.errors.name : undefined}
               icon="DocumentTextIcon"
             />
           </div>
-          {premise ? (
-            <div className="mb-4 flex flex-col">
-              <label
-                htmlFor="flag"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Deshabilitar
-              </label>
-              <div className="mt-2 flex items-center space-x-2.5">
-                <input
-                  type="checkbox"
-                  id="flag"
-                  name="flag"
-                  defaultChecked={formData.flag || false}
-                  className="min-h-[38px] min-w-[38px] rounded border-gray-300 p-2.5 text-blue-600 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-          ) : null}
-          {/* Disabled */}
         </div>
         <div className="mb-4">
           <label
@@ -113,7 +93,12 @@ export default function PremiseForm({ premise }: Props) {
           />
         </div>
       </div>
-
+      
+      {state?.message && (
+        <div className="my-2 rounded border border-red-500 bg-red-100 p-4 text-red-700">
+          {state?.message}
+        </div>
+      )}
       <div className="flex justify-end gap-4">
         <Link
           href="/welcome/premises"

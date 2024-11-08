@@ -1,6 +1,6 @@
 import { apiFetchServer } from "../api";
 import { Premise } from "../definitions";
-import { PremisesResponse } from "../responses";
+import { PremiseResponse, PremisesResponse } from "../responses";
 const ITEMS_PER_PAGE = 6;
 
 export async function fetchActivePremises(
@@ -19,6 +19,22 @@ export async function fetchActivePremises(
         const premisesResp: PremisesResponse = await response.json();
 
         return premisesResp.premises.filter((s) => s.disabled == false);
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch active premises.');
+    }
+}
+
+export async function fetchPremiseById(
+    query?: string,
+    id?: string,
+): Promise<Premise> {
+    try {
+        const response = await apiFetchServer({ method: 'GET', path: `premise/${id}`, body: undefined, });
+
+        console.log("Premises response", response);
+
+        return await response.json();
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch active premises.');

@@ -4,6 +4,10 @@ export type PremisesResponse = {
   premises: Premise[];
 }
 
+export type PremiseResponse = {
+  premise: Premise;
+}
+
 export type LoginResponse = {
   user: string;
   access_token: string;

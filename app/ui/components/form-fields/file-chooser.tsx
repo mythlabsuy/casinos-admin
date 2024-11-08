@@ -90,11 +90,11 @@ export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES
           </label>
         </div> 
 
-        <div className="flex items-center justify-center sm:col-span-12">
+        {/* <div className="flex items-center justify-center sm:col-span-12">
           <div className="w-full py-8 relative">
             <GridGallery mediaFiles={ formMediaFiles } removeCallback={confirmRemoveMediaFile} removeIcon="TrashIcon" iconBgColor="bg-gray-200" iconColor="text-red-700"/>
           </div>
-        </div>
+        </div> */}
     </>
   );
 }

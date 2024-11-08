@@ -59,9 +59,9 @@ export default function MobileSideNav({ topNavigation, topNavTitle, bottomNavTit
                 </nav>
                 <div className='flex grow'></div>
                 <div className="flex space-x-2 md:flex-col md:space-x-0 md:space-y-2 mb-4">
-                  <form  action={() => { signOut({ callbackUrl: "/login" }); }} className='w-full'>
+                  <form id='mobile-navbar-logout' action={() => { signOut({ callbackUrl: "/login" }); }} className='w-full'>
                       <ul role="list" className="-mx-2">
-                        <button className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 
+                        <button type='submit' className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 
                           text-sm font-semibold leading-6">
                             <ArrowRightStartOnRectangleIcon className="h-6 w-6 shrink-0"/>
                             Cerrar sesión

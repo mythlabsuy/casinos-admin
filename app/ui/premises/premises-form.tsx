@@ -42,7 +42,7 @@ export default function PremiseForm({ premise }: Props) {
 
   return (
     <form action={formAction}>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md p-4 md:p-6">
         {/* Hidden input with category id for the edit */}
         {premise ? (
           <input
@@ -55,14 +55,9 @@ export default function PremiseForm({ premise }: Props) {
         <div className="grid grid-cols-2 gap-4">
           {/* Name */}
           <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Nombre del local
-            </label>
             <TextInput
               id="name"
+              label='Nombre del local'
               defaultValue={formData.name || premise?.name || ''}
               errors={state.errors ? state.errors.name : undefined}
               icon="DocumentTextIcon"
@@ -89,33 +84,37 @@ export default function PremiseForm({ premise }: Props) {
           ) : null}
           {/* Disabled */}
         </div>
-        <FileChooser
-          id="premise-logo-image"
-          maxFilesAmount={1}
-          removeMediaCallback={removeMedia}
-          mediaFiles={formData.media_files || premise?.logo || []}
-        />
-        <input
-          type="hidden"
-          id="images-to-remove"
-          name="images-to-remove"
-          defaultValue={mediaToRemove}
-        />
-        <FileChooser
-          id="premise-privacy-image"
-          maxFilesAmount={1}
-          removeMediaCallback={removeMedia}
-          mediaFiles={formData.media_files || premise?.privacy_policy || []}
-        />
-        <input
-          type="hidden"
-          id="images-to-remove"
-          name="images-to-remove"
-          defaultValue={mediaToRemove}
-        />
+        <div className="mb-4">
+          <label
+            htmlFor="premise-logo-image"
+            className="mb-2 ml-1 block text-sm font-medium text-gray-700"
+          >
+            Logo o foto del local
+          </label>
+          <FileChooser
+            id="premise-logo-image"
+            maxFilesAmount={1}
+            removeMediaCallback={removeMedia}
+            mediaFiles={formData.media_files || premise?.logo || []}
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="premise-privacy-image"
+            className="mb-2 ml-1 block text-sm font-medium text-gray-700"
+          >
+            Política de privacidad
+          </label>
+          <FileChooser
+            id="premise-privacy-image"
+            maxFilesAmount={1}
+            removeMediaCallback={removeMedia}
+            mediaFiles={formData.media_files || premise?.privacy_policy || []}
+          />
+        </div>
       </div>
 
-      <div className="mt-6 flex justify-end gap-4">
+      <div className="flex justify-end gap-4">
         <Link
           href="/welcome/premises"
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"

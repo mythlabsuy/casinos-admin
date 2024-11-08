@@ -37,6 +37,6 @@ export async function fetchPremiseById(
         return await response.json();
     } catch (error) {
         console.error('Database Error:', error);
-        throw new Error('Failed to fetch active premises.');
+        throw new Error('Failed to fetch premise by Id.');
     }
 }

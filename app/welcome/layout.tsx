@@ -4,8 +4,9 @@ import { SessionProvider } from 'next-auth/react';
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const topNav = [
-    { name: 'Locales', href: '/welcome/premises', iconName: 'BuildingStorefrontIcon' },
+    { name: 'Participantes', href: '/welcome/participants', iconName: 'UserGroupIcon' },
     { name: 'Promociones', href: '/welcome/promotions', iconName: 'TicketIcon' },
+    { name: 'Locales', href: '/welcome/premises', iconName: 'BuildingStorefrontIcon' },
   ]
 
   const session = await auth();

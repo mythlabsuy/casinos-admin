@@ -39,10 +39,10 @@ export type Premise = {
 }
 
 export type Participant = {
-  id?: number;
+  id: number;
   full_name: string;
   email: string;
-  document_number?: string;
+  document_number: string;
   phone_number: string;
   accepts_terms_of_service: boolean;
   accepts_privacy_policy: boolean;

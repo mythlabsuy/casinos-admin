@@ -1,10 +1,6 @@
-import Image from 'next/image';
 import { Participant } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
-import DynamicHeroIcon from '../dynamic-hero-icon';
-import { IconButton } from '../components/icon-button';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import Pagination from '../components/pagination';
 import clsx from 'clsx';

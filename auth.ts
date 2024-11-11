@@ -21,9 +21,6 @@ async function getUser(username: string, password: string): Promise<User | undef
     if(!decodedToken) {
       throw('No se pudo decodificar el token');
     }
-
-    console.log('TOKENS RESPONSE', responseTokens, "TOKENS", tokens);
-
     const responseUser = await fetchUser(tokens);
 
     const user: User = {
@@ -73,12 +70,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const { username, password } = parsedCredentials.data;
           const user = await getUser(username, password);
           if (!user) return null;
-
-          console.log('Valid credentials');
           return user;
         }
  
-        console.log('Invalid credentials');
         return null;
       },
     }),

@@ -53,7 +53,6 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
   if (!isForm && !isFileUpload) {
     headers.append('Content-type', 'application/json')
   } else {
-    console.log('--- IN CREATE PREMISE');
   }
   if (withAuth) {
     const session = await auth();
@@ -68,7 +67,6 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     if (premiseId) {
       path = path + `${premiseId}`
     } else {
-      console.log('No premise, ERROR');
     }
   }
 
@@ -77,7 +75,6 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     if (premiseId) {
       query?.set('premise_id', premiseId);
     } else {
-      console.log('No premise, ERROR');
     }
   }
   try {
@@ -99,7 +96,6 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     return response; // Return the successful response
 
   } catch (error) {
-    console.log('API ERROR:', error);
     if (error instanceof Error) {
       throw error;
     }

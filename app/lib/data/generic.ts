@@ -51,7 +51,6 @@ export async function fetchFilteredData(
     }
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
     const responseJson = await response.json();
-    console.log(`Data response for ${path}`, responseJson);
 
     return responseJson;
   } catch (error) {

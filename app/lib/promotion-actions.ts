@@ -156,8 +156,6 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
 
         const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: false });
         const responseJson: Promotion = await response.json();
-
-        console.log("ADD OR UPDATE PROMOTION RESPONSE", responseJson);
     } catch (error) {
         var errorText = 'Error inesperado';
         if (error instanceof Error) {

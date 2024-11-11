@@ -10,8 +10,6 @@ export async function fetchParticipants(
     try {
         const response = await apiFetchServer({ method: 'GET', path: `promotion/${id}`, body: undefined, });
 
-        console.log("Promotion response", response);
-
         return await response.json();
     } catch (error) {
         console.error('Database Error:', error);

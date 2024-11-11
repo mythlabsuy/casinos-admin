@@ -54,6 +54,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     headers.append('Content-type', 'application/json')
   } else {
   }
+
   if (withAuth) {
     const session = await auth();
     // If user is not logged in session will be null
@@ -97,6 +98,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
 
   } catch (error) {
     if (error instanceof Error) {
+      console.log('apiFetchServer', error)
       throw error;
     }
     throw { error: 'Error inesperado' }; 

@@ -1,5 +1,4 @@
 import { fetchPromotionById } from '@/app/lib/data/promotions';
-import CategoryForm from '@/app/ui/categories/categories-form';
 import Breadcrumbs, { Breadcrumb } from '@/app/ui/components/breadcrumbs';
 import PremiseForm from '@/app/ui/premises/premises-form';
 import PromotionForm from '@/app/ui/promotions/promotions-form';

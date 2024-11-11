@@ -86,11 +86,11 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
       headers: headers,
       body: body
     });
-    console.log('----');
-    console.log('BACKEND RESPONSE FOR (' + getFullPath(path) + (query ? `?${query}` : '') + ')', response);
-    // Check for successful status codes (2xx)
     if (!response.ok) {
       const errorResponse = await response.json();
+      // console.log('---ERROR---');
+      // console.log('THE ERROR RESPONSE: ---', errorResponse);
+      // console.log('---ERROR---');
       // If the response contains a 'detail' field, use it, otherwise fallback to a generic error
       const errorDetail = errorResponse.detail || 'Ha ocurrido un error inesperado.';
       throw new Error(errorDetail); // Throw error with the detail message

@@ -51,13 +51,13 @@ const PromotionFormSchema = z.object({
 
     termsAndConditionsFile: z.instanceof(File),
 
-    startDate: z.string()
-        .min(1, { message: 'Por favor ingrese una fecha de inicio.' })
-        .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de inicio inválida.' }),
+    startDate: z.string(),
+    // .min(1, { message: 'Por favor ingrese una fecha de inicio.' })
+    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de inicio inválida.' }),
 
-    endDate: z.string()
-        .min(1, { message: 'Por favor ingrese una fecha de fin.' })
-        .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de fin inválida.' }),
+    endDate: z.string(),
+    // .min(1, { message: 'Por favor ingrese una fecha de fin.' })
+    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de fin inválida.' }),
 
     onlyOnce: z.boolean(),
 
@@ -76,15 +76,15 @@ const PromotionFormSchema = z.object({
 
     backgroundFile: z.instanceof(File),
 })
-    .refine(data => {
-        // Check if startDate is before or equal to endDate
-        const startDate = new Date(data.startDate);
-        const endDate = new Date(data.endDate);
-        return startDate <= endDate;
-    }, {
-        message: 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        path: ['startDate'], // Optional, specify the path for the error message
-    })
+    // .refine(data => {
+    //     // Check if startDate is before or equal to endDate
+    //     const startDate = new Date(data.startDate);
+    //     const endDate = new Date(data.endDate);
+    //     return startDate <= endDate;
+    // }, {
+    //     message: 'La fecha de inicio no puede ser mayor a la fecha de fin.',
+    //     path: ['startDate'], // Optional, specify the path for the error message
+    // })
     .refine(data => {
         // Validate `frecuency` when `onlyOnce` is true
         return !data.onlyOnce || data.frecuency === "0"; // Or the "SIN SELECCIONAR" value
@@ -131,7 +131,6 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
 
         const startDateMontevideo = DateTime.fromISO(startDate, { zone: 'UTC' }).setZone('America/Montevideo');
         const endDateMontevideo = DateTime.fromISO(endDate, { zone: 'UTC' }).setZone('America/Montevideo');
-
         data.append('start_date', startDateMontevideo.toISO()!);
         data.append('end_date', endDateMontevideo.toISO()!);
 
@@ -155,7 +154,7 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
         const method = promotionId ? 'PUT' : 'POST';
         const path = promotionId ? `promotion/${promotionId}` : 'promotion/';
 
-        const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: true });
+        const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: false });
         const responseJson: Promotion = await response.json();
 
         console.log("ADD OR UPDATE PROMOTION RESPONSE", responseJson);

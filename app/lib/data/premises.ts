@@ -12,7 +12,7 @@ export async function fetchActivePremises(
 
     try {
         const query = new URLSearchParams({ skip: skip.toString(), limit: limit.toString() })
-        const response = await apiFetchServer({ method: 'GET', path: 'premise', body: undefined, query: query });
+        const response = await apiFetchServer({ method: 'GET', path: 'premise/', body: undefined, query: query });
 
         console.log("Premises response", response);
 

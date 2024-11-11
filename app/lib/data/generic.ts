@@ -49,10 +49,8 @@ export async function fetchFilteredData(
     } else {
       searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query, });
     }
-
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
     const responseJson = await response.json();
-    console.log(`Data response for ${path}`, responseJson);
 
     return responseJson;
   } catch (error) {

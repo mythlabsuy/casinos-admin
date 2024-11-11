@@ -68,9 +68,6 @@ export async function CreateOrUpdateParticipant(prevState: ParticipantFormState,
 
     const response = await apiFetchServer({ method: method, path: path, body: JSON.stringify(body) });
     const responseJson: Participant = await response.json();
-    console.log("ADD OR UPDATE PARTICIPANT RESPONSE", responseJson);
-
-    console.log("NEW/UPDATE PARTICIPANT RESPONSE: " + participantId, response);
 
   } catch (error) {
     return {

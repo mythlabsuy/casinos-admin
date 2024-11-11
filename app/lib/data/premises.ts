@@ -12,12 +12,8 @@ export async function fetchActivePremises(
 
     try {
         const query = new URLSearchParams({ skip: skip.toString(), limit: limit.toString() })
-        const response = await apiFetchServer({ method: 'GET', path: 'premise', body: undefined, query: query });
-
-        console.log("Premises response", response);
-
+        const response = await apiFetchServer({ method: 'GET', path: 'premise/', body: undefined, query: query });
         const premisesResp: PremisesResponse = await response.json();
-
         return premisesResp.premises.filter((s) => s.disabled == false);
     } catch (error) {
         console.error('Database Error:', error);
@@ -31,9 +27,6 @@ export async function fetchPremiseById(
 ): Promise<Premise> {
     try {
         const response = await apiFetchServer({ method: 'GET', path: `premise/${id}`, body: undefined, });
-
-        console.log("Premises response", response);
-
         return await response.json();
     } catch (error) {
         console.error('Database Error:', error);

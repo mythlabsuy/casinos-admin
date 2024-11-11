@@ -75,7 +75,10 @@ export default function PremiseForm({ premise }: Props) {
             id="premise-logo-image"
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
-            mediaFiles={formData.media_files || premise?.logo || []}
+            mediaFiles={[
+              ...(formData?.logoImage ? [formData.logoImage] : []),
+              ...(premise?.logo ? [premise.logo] : []),
+            ]}
           />
         </div>
         <div className="mb-4">
@@ -89,11 +92,14 @@ export default function PremiseForm({ premise }: Props) {
             id="premise-privacy-image"
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
-            mediaFiles={formData.media_files || premise?.privacy_policy || []}
+            mediaFiles={[
+              ...(formData?.privacyImage ? [formData.privacyImage] : []),
+              ...(premise?.privacy_policy ? [premise.privacy_policy] : []),
+            ]}
           />
         </div>
       </div>
-      
+
       {state?.message && (
         <div className="my-2 rounded border border-red-500 bg-red-100 p-4 text-red-700">
           {state?.message}

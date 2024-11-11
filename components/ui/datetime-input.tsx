@@ -110,7 +110,6 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, DateTimeInputProps>((op
     if (!allHasValue) return;
     const date = parse(inputStr, formatStr, value || new TZDate(new Date(), timezone));
     const year = getYear(date);
-    // console.log('inputValue', {allHasValue, validSegments, inputStr, formatStr, date, year});
     if (isValid(date) && year > 1900 && year < 2100) {
       return date;
     }
@@ -118,7 +117,6 @@ const DateTimeInput = React.forwardRef<HTMLInputElement, DateTimeInputProps>((op
   useEffect(() => {
     if (!inputValue) return;
     if (value?.getTime() !== inputValue.getTime()) {
-      // console.log('inputValueChanged', {formatStr, inputStr, value, inputValue, });
       options.onChange?.(inputValue);
     }
   }, [inputValue]);

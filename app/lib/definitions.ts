@@ -75,8 +75,8 @@ export type Promotion = {
   participation_instructions: string;
   ticket_extra_data: string;
   
-  start_date: Date;
-  end_date: Date;
+  start_date: string;
+  end_date: string;
   just_once: boolean;
   
   frequency: number;

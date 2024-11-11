@@ -20,6 +20,7 @@ interface Props {
   maxFilesAmount?: number;
   mediaFile?: MediaFile | File;
   errors?: string[];
+  required?: boolean,
 }
 
 export default function SingleFileChooser({
@@ -30,6 +31,7 @@ export default function SingleFileChooser({
   name,
   mediaFile,
   errors,
+  required = false,
 }: Props) {
   const [fileNames, setFileNames] = useState<string>('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -97,7 +99,7 @@ export default function SingleFileChooser({
         text={modalText}
       />
 
-      <div className="flex items-center justify-center sm:col-span-12">
+      <div className="flex items-center justify-center sm:col-span-12 relative w-full">
         <label
           htmlFor={id}
           className="dark:hover:bg-bray-800 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-50 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -107,9 +109,9 @@ export default function SingleFileChooser({
             id={id}
             name={name ? name : id}
             type="file"
-            className="hidden"
+            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
             onChange={handleFileInput}
-            
+            required={required}
           />
         </label>
       </div>

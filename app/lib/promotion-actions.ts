@@ -5,6 +5,8 @@ import { apiFetchServer } from "./api";
 import { Promotion } from "./definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { DateTime } from "luxon";
+// import {DateTime} from 'luxon';
 
 export type PromotionFormState = {
     errors?: {
@@ -47,17 +49,15 @@ const PromotionFormSchema = z.object({
     participationInstructions: z.string().min(1, { message: 'Por favor ingresa instrucciones.' }),
     ticketExtraData: z.string().min(1, { message: 'Por favor ingrese datos para el ticket.' }),
 
-    termsAndConditionsFile: z.instanceof(File).refine(file => file !== null && file.size > 0, {
-        message: 'Por favor sube el archivo de términos y condiciones.'
-    }),
+    termsAndConditionsFile: z.instanceof(File),
 
-    startDate: z.string()
-        .min(1, { message: 'Por favor ingrese una fecha de inicio.' })
-        .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de inicio inválida.' }),
+    startDate: z.string(),
+    // .min(1, { message: 'Por favor ingrese una fecha de inicio.' })
+    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de inicio inválida.' }),
 
-    endDate: z.string()
-        .min(1, { message: 'Por favor ingrese una fecha de fin.' })
-        .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de fin inválida.' }),
+    endDate: z.string(),
+    // .min(1, { message: 'Por favor ingrese una fecha de fin.' })
+    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de fin inválida.' }),
 
     onlyOnce: z.boolean(),
 
@@ -72,23 +72,19 @@ const PromotionFormSchema = z.object({
             return Number.isInteger(num) && num > 0; // Validate natural number greater than 0
         }, { message: 'El máximo de participaciones debe ser un número natural mayor a 0.' }),
 
-    firstPageFile: z.instanceof(File).refine(file => file !== null && file.size > 0, {
-        message: 'Por favor sube el archivo de la primera página.'
-    }),
+    firstPageFile: z.instanceof(File),
 
-    backgroundFile: z.instanceof(File).refine(file => file !== null && file.size > 0, {
-        message: 'Por favor sube el archivo de fondo.'
-    }),
+    backgroundFile: z.instanceof(File),
 })
-    .refine(data => {
-        // Check if startDate is before or equal to endDate
-        const startDate = new Date(data.startDate);
-        const endDate = new Date(data.endDate);
-        return startDate <= endDate;
-    }, {
-        message: 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-        path: ['startDate'], // Optional, specify the path for the error message
-    })
+    // .refine(data => {
+    //     // Check if startDate is before or equal to endDate
+    //     const startDate = new Date(data.startDate);
+    //     const endDate = new Date(data.endDate);
+    //     return startDate <= endDate;
+    // }, {
+    //     message: 'La fecha de inicio no puede ser mayor a la fecha de fin.',
+    //     path: ['startDate'], // Optional, specify the path for the error message
+    // })
     .refine(data => {
         // Validate `frecuency` when `onlyOnce` is true
         return !data.onlyOnce || data.frecuency === "0"; // Or the "SIN SELECCIONAR" value
@@ -128,28 +124,38 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
     try {
 
         const data: FormData = new FormData()
-        data.append('terms_and_conditions', termsAndConditionsFile);
-        data.append('welcome_background', firstPageFile);
-        data.append('background', backgroundFile);
         data.append('name', name);
         data.append('is_active', String(isActive)); //boolean
         data.append('description', description);
         data.append('participation_instructions', participationInstructions);
-        data.append('start_date', startDate);
-        data.append('end_date', endDate);
+
+        const startDateMontevideo = DateTime.fromISO(startDate, { zone: 'UTC' }).setZone('America/Montevideo');
+        const endDateMontevideo = DateTime.fromISO(endDate, { zone: 'UTC' }).setZone('America/Montevideo');
+        data.append('start_date', startDateMontevideo.toISO()!);
+        data.append('end_date', endDateMontevideo.toISO()!);
+
         data.append('just_once', String(onlyOnce)); // boolean
         data.append('frequency', frecuency); //int
         data.append('maximum_participations', maximumParticipations); //integer
         data.append('ticket_extra_data', ticketExtraData);
 
+
+        if (termsAndConditionsFile.size > 0) {
+            data.append('terms_and_conditions', termsAndConditionsFile);
+        }
+        if (firstPageFile.size > 0) {
+            data.append('welcome_background', firstPageFile);
+        }
+        if (backgroundFile.size > 0) {
+            data.append('background', backgroundFile);
+        }
+
         const promotionId = formData.get('promotion_id'); //On add this will be null
         const method = promotionId ? 'PUT' : 'POST';
         const path = promotionId ? `promotion/${promotionId}` : 'promotion/';
 
-        const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: true });
+        const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: false });
         const responseJson: Promotion = await response.json();
-
-        console.log("ADD OR UPDATE PROMOTION RESPONSE", responseJson);
     } catch (error) {
         var errorText = 'Error inesperado';
         if (error instanceof Error) {
@@ -163,12 +169,12 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
     }
 
     revalidatePath('/welcome/promotions');
-    redirect('/welcome/promotions/create');
+    redirect('/welcome/promotions');
 }
 
 export async function softDeletePromotion(id: number) {
     try {
-        const response = await apiFetchServer({ method: 'DELETE', path: `promotion/`+3, body: undefined });
+        const response = await apiFetchServer({ method: 'DELETE', path: `promotion/${id}`, body: undefined });
         revalidatePath('/welcome/promotion');
         return { message: 'Promocion borrada.' };
     } catch (error) {

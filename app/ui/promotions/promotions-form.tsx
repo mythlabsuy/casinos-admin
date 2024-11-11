@@ -17,6 +17,7 @@ import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import SwitchWithIcon from '../components/form-fields/switch';
 import Select from '../components/form-fields/select';
+import { DateTime } from 'luxon';
 interface Props {
   promotion?: Promotion;
 }
@@ -31,8 +32,8 @@ export default function PromotionForm({ promotion }: Props) {
     CreateOrUpdatePromotion,
     initialState,
   );
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState<Date | undefined>(promotion?.start_date ? DateTime.fromISO(promotion.start_date).toJSDate() : undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(promotion?.end_date ? DateTime.fromISO(promotion.end_date).toJSDate() : undefined);
   const [formData, setFormData] = useState<Partial<FormDataValues>>({});
 
   useEffect(() => {
@@ -70,13 +71,13 @@ export default function PromotionForm({ promotion }: Props) {
   return (
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Hidden input with category id for the edit */}
+        {/* Hidden input with promotion id for the edit */}
         {promotion ? (
           <input
             type="hidden"
             value={promotion.id}
-            id="premise_id"
-            name="premise_id"
+            id="promotion_id"
+            name="promotion_id"
           />
         ) : null}
         <div className="grid grid-cols-2 gap-4">
@@ -166,6 +167,7 @@ export default function PromotionForm({ promotion }: Props) {
             <SingleFileChooser
               id="termsAndConditionsFile"
               removeMediaCallback={() => {}}
+              required={!promotion}
               mediaFile={
                 state?.formData.termsAndConditionsFile ||
                 promotion?.terms_and_conditions
@@ -194,6 +196,7 @@ export default function PromotionForm({ promotion }: Props) {
               value={startDate}
               onChange={setStartDate}
               timeZone="America/Montevideo"
+              required
               locale={es}
               name="startDate"
               errors={state?.errors ? state?.errors.startDate : undefined}
@@ -202,12 +205,7 @@ export default function PromotionForm({ promotion }: Props) {
               type="hidden"
               name="startDate"
               value={
-                startDate
-                  ?.toLocaleString('sv-SE', {
-                    timeZone: 'America/Montevideo',
-                    hour12: false,
-                  })
-                  .replace(' ', 'T') + '.000'
+                startDate?.toISOString()
               }
             />
           </div>
@@ -223,6 +221,7 @@ export default function PromotionForm({ promotion }: Props) {
             <DateTimePicker
               value={endDate}
               onChange={setEndDate}
+              required
               timeZone="America/Montevideo"
               locale={es}
               name="endDate"
@@ -232,12 +231,7 @@ export default function PromotionForm({ promotion }: Props) {
               type="hidden"
               name="endDate"
               value={
-                endDate
-                  ?.toLocaleString('sv-SE', {
-                    timeZone: 'America/Montevideo',
-                    hour12: false,
-                  })
-                  .replace(' ', 'T') + '.000'
+                endDate?.toISOString()
               }
             />
           </div>
@@ -310,6 +304,7 @@ export default function PromotionForm({ promotion }: Props) {
             <SingleFileChooser
               id="firstPageFile"
               name="firstPageFile"
+              required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={
                 formData.firstPageFile || promotion?.welcome_background
@@ -327,6 +322,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="backgroundFile"
+              required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={formData.backgroundFile || promotion?.background}
               errors={state?.errors ? state?.errors.backgroundFile : undefined}

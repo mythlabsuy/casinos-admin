@@ -53,21 +53,8 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
     if (privacyImage.size > 0) {
       data.append('privacy_policy', privacyImage);
     }
-
-    // Log the FormData content for debugging
-    for (const [key, value] of data.entries()) {
-      console.log(key, value);
-    }
-
-
-
     const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
     const responseJson: Premise = await response.json();
-    console.log("ADD OR UPDATE PREMISE RESPONSE", responseJson);
-
-
-
-    console.log("NEW/UPDATE PREMISE RESPONSE: " + premiseId, response);
 
   } catch (error) {
     var errorText = 'Error inesperado';
@@ -100,7 +87,6 @@ async function removeCategoryImages(categoryId: number, imagesToRemove: string) 
   //TODO return responses from image removal
   for (let index = 0; index < imagesToRemoveArr.length; index++) {
     const imageRemoveResponse = await apiFetchServer({ method: 'DELETE', path: `category/${categoryId}/delete-file/` });
-    console.log("IMAGE REMOVED: ", imageRemoveResponse.json());
   }
 }
 

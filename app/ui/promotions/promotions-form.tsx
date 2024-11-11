@@ -31,8 +31,10 @@ export default function PromotionForm({ promotion }: Props) {
     CreateOrUpdatePromotion,
     initialState,
   );
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    promotion?.start_date,
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(promotion?.end_date);
   const [formData, setFormData] = useState<Partial<FormDataValues>>({});
 
   useEffect(() => {
@@ -166,6 +168,7 @@ export default function PromotionForm({ promotion }: Props) {
             <SingleFileChooser
               id="termsAndConditionsFile"
               removeMediaCallback={() => {}}
+              required={!promotion}
               mediaFile={
                 state?.formData.termsAndConditionsFile ||
                 promotion?.terms_and_conditions
@@ -194,6 +197,7 @@ export default function PromotionForm({ promotion }: Props) {
               value={startDate}
               onChange={setStartDate}
               timeZone="America/Montevideo"
+              required
               locale={es}
               name="startDate"
               errors={state?.errors ? state?.errors.startDate : undefined}
@@ -202,12 +206,7 @@ export default function PromotionForm({ promotion }: Props) {
               type="hidden"
               name="startDate"
               value={
-                startDate
-                  ?.toLocaleString('sv-SE', {
-                    timeZone: 'America/Montevideo',
-                    hour12: false,
-                  })
-                  .replace(' ', 'T') + '.000'
+                startDate?.toLocaleString()
               }
             />
           </div>
@@ -223,6 +222,7 @@ export default function PromotionForm({ promotion }: Props) {
             <DateTimePicker
               value={endDate}
               onChange={setEndDate}
+              required
               timeZone="America/Montevideo"
               locale={es}
               name="endDate"
@@ -232,12 +232,7 @@ export default function PromotionForm({ promotion }: Props) {
               type="hidden"
               name="endDate"
               value={
-                endDate
-                  ?.toLocaleString('sv-SE', {
-                    timeZone: 'America/Montevideo',
-                    hour12: false,
-                  })
-                  .replace(' ', 'T') + '.000'
+                endDate?.toLocaleString()
               }
             />
           </div>
@@ -310,6 +305,7 @@ export default function PromotionForm({ promotion }: Props) {
             <SingleFileChooser
               id="firstPageFile"
               name="firstPageFile"
+              required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={
                 formData.firstPageFile || promotion?.welcome_background
@@ -327,6 +323,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="backgroundFile"
+              required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={formData.backgroundFile || promotion?.background}
               errors={state?.errors ? state?.errors.backgroundFile : undefined}

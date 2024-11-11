@@ -13,7 +13,7 @@ export default async function ParticipantsTable({
   currentPage: number;
 }) {
   // const searchParams = new URLSearchParams({ show_all: 'true' });
-  const dataList:any = await fetchFilteredData('participant', query, currentPage);
+  const dataList:any = await fetchFilteredData('participant/', query, currentPage);
   const data = dataList['participants'];
   const total_amount = dataList['total_amount'];
 

@@ -50,7 +50,7 @@ export async function fetchUser(tokens: any){
     'Authorization': tokens.token_type + " " + tokens.access_token
   });
     
-  const response = await fetch(getFullPath('user/users/me'), 
+  const response = await fetch(getFullPath('user/users/me/'), 
     {
       method: "GET",
       headers: headers

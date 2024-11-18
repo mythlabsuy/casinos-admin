@@ -10,22 +10,24 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/welcome');
-      
+      const isSignout = nextUrl.pathname.startsWith('/welcome/signout');
+
+      if(isSignout) return true;
       if (isOnDashboard) {
         if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
+        return false;
       } else if (isLoggedIn) {
-        return Response.redirect(new URL('/welcome', nextUrl));
+        return Response.redirect(new URL('/welcome/premises', nextUrl));
       }
       return false;
     },
     jwt({ token, user }) {
-      if (user && user.tokens) {
-        token.accessToken = user.tokens.token_type + " " + user.tokens.access_token; // Set access token in JWT
-        token.refreshToken = user.tokens.token_type + " " + user.tokens.refresh_token; // Set access token in JWT
-        token.user_data = user.user_data;
-      }
-      return token;
+        if (user && user.tokens) {
+          token.accessToken = user.tokens.token_type + " " + user.tokens.access_token; // Set access token in JWT
+          token.refreshToken = user.tokens.token_type + " " + user.tokens.refresh_token; // Set access token in JWT
+          token.user_data = user.user_data;
+        }
+        return token;
     },
     session({ session, token }) {
       session.accessToken = token.accessToken;

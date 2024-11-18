@@ -1,11 +1,10 @@
 'use client';
 
-import { MediaFile, Promotion } from '@/app/lib/definitions';
+import { Promotion } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { NumberInput, TextInput } from '../components/form-fields/input';
-import FileChooser from '../components/form-fields/file-chooser';
 import {
   CreateOrUpdatePromotion,
   FormDataValues,
@@ -14,7 +13,6 @@ import {
 import SingleFileChooser from '../components/form-fields/single-file-chooser';
 import { DateTimePicker } from '@/components/ui/datetime-picker';
 import { es } from 'date-fns/locale';
-import { format } from 'date-fns';
 import SwitchWithIcon from '../components/form-fields/switch';
 import Select from '../components/form-fields/select';
 import { DateTime } from 'luxon';
@@ -166,6 +164,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="termsAndConditionsFile"
+              allowedFileTypes={['application/pdf']}
               removeMediaCallback={() => {}}
               required={!promotion}
               mediaFile={
@@ -303,6 +302,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="firstPageFile"
+              allowedFileTypes={['image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/webp']}
               name="firstPageFile"
               required={!promotion}
               removeMediaCallback={() => {}}
@@ -322,6 +322,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="backgroundFile"
+              allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
               required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={formData.backgroundFile || promotion?.background}

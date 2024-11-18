@@ -73,6 +73,7 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-logo-image"
+            allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
             mediaFiles={[
@@ -90,6 +91,7 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-privacy-image"
+            allowedFileTypes={['application/pdf']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
             mediaFiles={[

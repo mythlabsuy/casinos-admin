@@ -42,7 +42,7 @@ export default async function Page({
         <Breadcrumbs
           homeUrl="/welcome"
           breadcrumbs={[
-            { label: 'Usuarios', href: '/welcome/promotions', active: true },
+            { label: 'Usuarios', href: '/welcome/users', active: true },
           ]}
         />
         <div className="flex flex-col items-end -mt-2 w-min pr-2 gap-2">

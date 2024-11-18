@@ -280,7 +280,7 @@ export default function PromotionForm({ promotion }: Props) {
                 state?.errors ? state?.errors.maximumParticipations : undefined
               }
               icon="UserIcon"
-              label="Cantidad máxima"
+              label="Cantidad máxima de participación por frecuencia seleccionada"
               step={1}
               min={0}
             />

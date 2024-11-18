@@ -1,6 +1,5 @@
 import { fetchFilteredData } from '@/app/lib/data/generic';
 import Breadcrumbs, { Breadcrumb } from '@/app/ui/components/breadcrumbs';
-import PromotionForm from '@/app/ui/promotions/promotions-form';
 import UsersForm from '@/app/ui/users/users-form';
 import { Metadata } from 'next';
 

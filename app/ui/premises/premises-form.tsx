@@ -73,6 +73,9 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-logo-image"
+            fileWeight='1.5 Mb'
+            fileTypes='avif, jpeg, png, webp'
+            fileSize='8:5 (Ej: 1280x800 px)'
             allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
@@ -91,6 +94,8 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-privacy-image"
+            fileWeight='1.5 Mb'
+            fileTypes='pdf'
             allowedFileTypes={['application/pdf']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}

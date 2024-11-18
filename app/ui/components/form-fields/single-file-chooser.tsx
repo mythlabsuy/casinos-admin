@@ -21,11 +21,17 @@ interface Props {
   mediaFile?: MediaFile | File;
   errors?: string[];
   required?: boolean,
+  fileTypes?: string;
+  fileSize?: string;
+  fileWeight?: string;
 }
 
 export default function SingleFileChooser({
   id,
   allowedFileTypes = ALLOWED_IMAGE_TYPES,
+  fileTypes='', 
+  fileSize='', 
+  fileWeight='',
   maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED,
   maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT,
   name,
@@ -102,9 +108,9 @@ export default function SingleFileChooser({
       <div className="flex items-center justify-center sm:col-span-12 relative w-full">
         <label
           htmlFor={id}
-          className="dark:hover:bg-bray-800 flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-50 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          className="dark:hover:bg-bray-800 flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-50 dark:hover:border-gray-500 dark:hover:bg-gray-600"
         >
-          <FileChooserLabel fileNames={fileNames} />
+          <FileChooserLabel fileNames={fileNames} fileTypes={fileTypes} fileSize={fileSize} fileWeight={fileWeight}/>
           <input
             id={id}
             name={name ? name : id}

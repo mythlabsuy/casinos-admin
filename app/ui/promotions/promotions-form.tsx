@@ -164,6 +164,8 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="termsAndConditionsFile"
+              fileWeight='1.5 Mb'
+              fileTypes='pdf'
               allowedFileTypes={['application/pdf']}
               removeMediaCallback={() => {}}
               required={!promotion}
@@ -302,6 +304,9 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="firstPageFile"
+              fileWeight='1.5 Mb'
+              fileTypes='avif, jpeg, png, webp, gif'
+              fileSize='9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical.'
               allowedFileTypes={['image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/webp']}
               name="firstPageFile"
               required={!promotion}
@@ -322,6 +327,9 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="backgroundFile"
+              fileWeight='1.5 Mb'
+              fileTypes='avif, jpeg, png, webp'
+              fileSize='9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical.'
               allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
               required={!promotion}
               removeMediaCallback={() => {}}

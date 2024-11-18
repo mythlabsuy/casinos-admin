@@ -15,9 +15,12 @@ interface Props {
   maxFileSizeBytes?: number;
   maxFilesAmount?: number;
   mediaFiles?: MediaFile[];
+  fileTypes?: string;
+  fileSize?: string;
+  fileWeight?: string;
 }
 
-export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES, removeMediaCallback , maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED, maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT, mediaFiles = [], name }: Props ) {
+export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES, fileTypes='', fileSize='', fileWeight='', removeMediaCallback, maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED, maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT, mediaFiles = [], name }: Props ) {
   const [fileNames, setFileNames] = useState<string>("");
   const [formMediaFiles, setFormMediaFiles] = useState<MediaFile[] | undefined>(mediaFiles.filter(mf => !mf.disabled));
 
@@ -82,10 +85,10 @@ export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES
         text={modalText}/>
       
         <div className="flex items-center justify-center sm:col-span-12">
-          <label htmlFor={id} className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 
+          <label htmlFor={id} className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 
             border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 
             dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-            <FileChooserLabel fileNames={fileNames}/>
+            <FileChooserLabel fileNames={fileNames} fileTypes={fileTypes} fileSize={fileSize} fileWeight={fileWeight}/>
             <input id={id} name={ name ? name : id } type="file" className="hidden" onChange={handleFileInput} multiple/>
           </label>
         </div> 

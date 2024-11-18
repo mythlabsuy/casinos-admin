@@ -6,7 +6,7 @@ import { Promotion } from "./definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { DateTime } from "luxon";
-// import {DateTime} from 'luxon';
+import { cookies } from 'next/headers';
 
 export type PromotionFormState = {
     errors?: {
@@ -94,6 +94,10 @@ const PromotionFormSchema = z.object({
     });
 
 export async function CreateOrUpdatePromotion(prevState: PromotionFormState, formData: FormData) {
+    const cookieStore = cookies();
+
+    let selectedPremise = cookieStore.get('selectedPremise')?.value;
+
     const validatedFields = PromotionFormSchema.safeParse({
         name: formData.get('name'),
         description: formData.get('description'),
@@ -152,7 +156,7 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
 
         const promotionId = formData.get('promotion_id'); //On add this will be null
         const method = promotionId ? 'PUT' : 'POST';
-        const path = promotionId ? `promotion/${promotionId}` : 'promotion/';
+        const path = promotionId ? `promotion/${promotionId}` : `promotion/${selectedPremise}`;
 
         const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: false });
         const responseJson: Promotion = await response.json();

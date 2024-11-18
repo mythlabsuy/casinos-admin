@@ -1,6 +1,7 @@
 import DynamicHeroIcon from '../../dynamic-hero-icon';
 import clsx from 'clsx';
 
+type InputType = 'text' | 'password' | 'email' | 'number' | 'tel';
 interface BaseInputProps {
   id: string;
   name?: string;
@@ -10,20 +11,25 @@ interface BaseInputProps {
   icon?: string;
   errors?: string[];
   disabled?: boolean;
+  type?: InputType;
+  required?: boolean;
 }
 
 interface InputProps extends BaseInputProps {
   defaultValue?: string | number;
-  type: string;
+  type?: InputType;
   step?: number;
   min?: number;
   max?: number;
   multiline?: boolean;
+  required? : boolean;
 }
 
 interface TextInputProps extends BaseInputProps {
   defaultValue?: string;
   multiline?: boolean;
+  type?: InputType;
+  required?: boolean;
 }
 
 interface NumberInputProps extends BaseInputProps {
@@ -44,7 +50,11 @@ export function TextInput({
   errors,
   disabled = false,
   multiline = false,
+  type = 'text',
+  required = false,
 }: TextInputProps) {
+  const validTypes: InputType[] = ['text', 'password', 'email', 'number', 'tel'];
+  const finalType = validTypes.includes(type) ? type : 'text';
   return (
     <Input
       id={id}
@@ -55,9 +65,10 @@ export function TextInput({
       label={label}
       icon={icon}
       errors={errors}
-      type="text"
+      type={finalType}
       disabled={disabled}
       multiline={multiline}
+      required={required}
     />
   );
 }
@@ -110,6 +121,7 @@ export default function Input({
   max,
   disabled = false,
   multiline,
+  required,
 }: InputProps) {
   return (
     <>
@@ -153,6 +165,7 @@ export default function Input({
               aria-describedby={`${id}-error`}
               defaultValue={defaultValue}
               disabled={disabled}
+              required={required}
             />
           )}
           {icon ? (

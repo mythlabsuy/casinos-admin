@@ -1,7 +1,9 @@
+'only server'
 import { API_HOST } from "@/app/lib/env";
-import { auth } from '@/auth';
-import { Session } from "next-auth";
+import { auth, signOut } from '@/auth';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { CustomError } from "./definitions";
 
 interface Props {
   path?: string,
@@ -85,23 +87,22 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
       body: body
     });
     if (!response.ok) {
+      if(response.status === 401 && path != 'auth/login'){
+        throw new CustomError('Unauthorized access', 401);
+      }
       const errorResponse = await response.json();
-      // console.log('---ERROR---');
-      // console.log('THE ERROR RESPONSE: ---', errorResponse);
-      // console.log('---ERROR---');
-      // If the response contains a 'detail' field, use it, otherwise fallback to a generic error
       const errorDetail = errorResponse.detail || 'Ha ocurrido un error inesperado.';
-      throw new Error(errorDetail); // Throw error with the detail message
+      throw new Error(errorDetail); 
     }
 
     return response; // Return the successful response
 
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof Error || error instanceof CustomError) {
       console.log('apiFetchServer', error)
       throw error;
     }
-    throw { error: 'Error inesperado' }; 
+    throw  new Error('Error inesperado')
   }
 }
 

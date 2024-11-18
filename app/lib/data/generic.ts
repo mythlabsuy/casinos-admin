@@ -40,7 +40,6 @@ export async function fetchFilteredData(
   //TODO Filter articles using search bar text
   try {
     let searchParams = urlParams;
-    console.error('fetchFilteredData 1');
     
     if (urlParams) {
       searchParams?.append('skip', offset.toString());
@@ -52,9 +51,7 @@ export async function fetchFilteredData(
       searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query, });
     }
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
-    console.error('fetchFilteredData 2', response);
     const responseJson = await response.json();
-    console.error('fetchFilteredData 3', responseJson);
 
     return responseJson;
   } catch (error) {

@@ -1,3 +1,4 @@
+import { isRedirectError } from "next/dist/client/components/redirect";
 import { apiFetchServer } from "../api";
 import { Premise } from "../definitions";
 import { PremiseResponse, PremisesResponse } from "../responses";
@@ -13,11 +14,11 @@ export async function fetchActivePremises(
     try {
         const query = new URLSearchParams({ skip: skip.toString(), limit: limit.toString() })
         const response = await apiFetchServer({ method: 'GET', path: 'premise/', body: undefined, query: query });
-        const premisesResp: PremisesResponse = await response.json();
+        const premisesResp: PremisesResponse = await response?.json();
         return premisesResp.premises.filter((s) => s.disabled == false);
     } catch (error) {
-        console.error('Database Error:', error);
-        throw new Error('Failed to fetch active premises.');
+        // console.error('error in fetchActivePremises', error);
+        throw error;
     }
 }
 
@@ -27,7 +28,7 @@ export async function fetchPremiseById(
 ): Promise<Premise> {
     try {
         const response = await apiFetchServer({ method: 'GET', path: `premise/${id}`, body: undefined, });
-        return await response.json();
+        return await response?.json();
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch premise by Id.');

@@ -46,6 +46,7 @@ export default function PremiseSelect({ premises }: Props) {
 
     setPremise(e as number); // Update state when select value changes
     setStoreCookie(e); // Set cookie when the user selects a new premise
+    window.location.reload()
   };
 
   return (

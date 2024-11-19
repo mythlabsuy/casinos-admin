@@ -1,6 +1,6 @@
 'use client';
 
-import { Premise, MediaFile } from '@/app/lib/definitions';
+import { Premise } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import FileChooser from '../components/form-fields/file-chooser';
 import {
   CreateOrUpdatePremise,
   PremiseFormState,
-} from '@/app/lib/premise-actions';
+} from '@/app/lib/actions/premise-actions';
 
 interface Props {
   premise?: Premise;

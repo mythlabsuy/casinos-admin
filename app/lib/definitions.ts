@@ -54,7 +54,7 @@ export type Welcome = {
 }
 
 export type Role = {
-  id: 1;
+  id: number;
   name: string;
   perms: number[];
   disabled: boolean;

@@ -6,7 +6,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { disableUser } from '@/app/lib/actions/user-actions';
 
-export default async function UsersTable({ data }: { data: any }) {
+export default async function RolesTable({ data }: { data: any }) {
   return (
     <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -26,21 +26,6 @@ export default async function UsersTable({ data }: { data: any }) {
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                   <div className="flex items-center gap-3">
-                    {/* {item.logo?.path ? (
-                      <Image
-                        src={
-                          item.logo?.path?.startsWith('http')
-                            ? item.logo.path
-                            : `/${item.logo.path?.replace(/^\/+/, '')}` // ensures only one leading slash
-                        }
-                        className="rounded-md"
-                        width={58}
-                        height={58}
-                        alt={`Logo del local ${item.name}`}
-                      />
-                    ) : (
-                      <DynamicHeroIcon icon="PhotoIcon" className="h-7 w-7" />
-                    )} */}
                     <p>
                       <span className={clsx({ 'line-through': item.disabled })}>{item.username}</span> 
                       {item.disabled ? <span className='bg-red-300 border rounded-lg py-1 px-2 ml-2'>Deshabilitado</span> : null }

@@ -9,7 +9,7 @@ import {
   CreateOrUpdatePromotion,
   FormDataValues,
   PromotionFormState,
-} from '@/app/lib/promotion-actions';
+} from '@/app/lib/actions/promotion-actions';
 import SingleFileChooser from '../components/form-fields/single-file-chooser';
 import { DateTimePicker } from '@/components/ui/datetime-picker';
 import { es } from 'date-fns/locale';

@@ -4,7 +4,7 @@ import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
 import { IconButton } from '../components/icon-button';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { disablePremise } from '@/app/lib/premise-actions';
+import { disablePremise } from '@/app/lib/actions/premise-actions';
 import DynamicHeroIcon from '../dynamic-hero-icon';
 import clsx from 'clsx';
 

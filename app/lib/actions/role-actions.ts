@@ -48,13 +48,22 @@ export async function CreateOrUpdateRole(prevState: RoleFormState, formData: For
         const selectedPerms = perms
             .filter((item: Option) => item.selected)
             .map((item: Option) => parseInt(item.id, 10));
-        const body = {
-            name: name,
-            perms: selectedPerms,
+        let body;
+        let query;
+
+        if (roleId) {
+            body = selectedPerms;
+            query = new URLSearchParams({ name: name })
+        } else {
+            body = {
+                name: name,
+                perms: selectedPerms,
+            }
         }
+
         const method = roleId ? 'PUT' : 'POST';
         const path = roleId ? `role/${roleId}` : 'role/';
-        const response = await apiFetchServer({ method: method, path: path, body: JSON.stringify(body) });
+        const response = await apiFetchServer({ method: method, query: query, path: path, body: JSON.stringify(body) });
 
     } catch (error) {
         var errorText = 'Error inesperado';
@@ -67,18 +76,18 @@ export async function CreateOrUpdateRole(prevState: RoleFormState, formData: For
         };
     }
 
-    revalidatePath('/welcome/users');
-    redirect('/welcome/users');
+    revalidatePath('/welcome/roles');
+    redirect('/welcome/roles');
 }
 
-export async function disableUser(id: number) {
+export async function disableRole(id: number) {
     try {
-        const response = await apiFetchServer({ method: 'DELETE', path: `user/${id}`, body: undefined });
-        revalidatePath('/welcome/users');
-        return { message: 'Usuario deshabilidado.' };
+        const response = await apiFetchServer({ method: 'DELETE', path: `role/${id}`, body: undefined });
+        revalidatePath('/welcome/roles');
+        return { message: 'Rol deshabilidado.' };
     } catch (error) {
         return {
-            message: 'Error al deshabilitar el usuario.',
+            message: 'Error al deshabilitar el rol.',
         };
     }
 }

@@ -44,22 +44,23 @@ export default function RolesForm({ role }: Props) {
     }
   }, [state]);
 
-  // React.useEffect(() => {
-  //   if (user) {
-  //     const initialPremiseOptions = user.premises.map((premise) => ({
-  //       value: premise.id.toString(),
-  //       label: premise.name,
-  //     }));
-  //     setPremiseOptions(initialPremiseOptions);
-  //   }
-  // }, [user?.premises]);
+
+  React.useEffect(() => {
+    if (role) {
+      const permsSet = new Set(role.perms);
+      const updatedList = permissions.map((item) =>
+        permsSet.has(item.id) ? { ...item, selected : true } : item
+      );
+      setPermissions(updatedList);
+    }
+  }, [role?.perms]);
 
   return (
     <form action={formAction}>
       <div className="rounded-md  p-4 md:p-6 ">
         {/* Hidden input with category id for the edit */}
         {role ? (
-          <input type="hidden" value={role.id} id="user_id" name="user_id" />
+          <input type="hidden" value={role.id} id="role_id" name="role_id" />
         ) : null}
         <div className="grid grid-cols-1 sm:grid-cols-2">
           {/* Name */}
@@ -67,7 +68,7 @@ export default function RolesForm({ role }: Props) {
             <TextInput
               id="name"
               label="Nombre"
-              defaultValue={formData.name || ''}
+              defaultValue={formData.name || role?.name || ''}
               errors={state?.errors ? state?.errors.name : undefined}
               required
             />

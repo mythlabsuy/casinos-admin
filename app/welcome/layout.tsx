@@ -8,6 +8,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     { name: 'Promociones', href: '/welcome/promotions', iconName: 'TicketIcon' },
     { name: 'Locales', href: '/welcome/premises', iconName: 'BuildingStorefrontIcon' },
     { name: 'Usuarios', href: '/welcome/users', iconName: 'UserGroupIcon' },
+    { name: 'Roles', href: '/welcome/roles', iconName: 'LockClosedIcon' },
   ]
 
   const session = await auth();

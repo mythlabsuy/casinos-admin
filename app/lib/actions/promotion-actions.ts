@@ -1,8 +1,8 @@
 'use server';
 
 import { z } from "zod";
-import { apiFetchServer } from "./api";
-import { Promotion } from "./definitions";
+import { apiFetchServer } from "../api";
+import { Promotion } from "../definitions";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { DateTime } from "luxon";

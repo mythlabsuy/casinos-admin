@@ -1,11 +1,11 @@
 'use client';
 
-import { Premise, User, Role, SystemUser } from '@/app/lib/definitions';
+import { Premise, Role, SystemUser } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
-import { CreateOrUpdateUser, UserFormState } from '@/app/lib/user-actions';
+import { CreateOrUpdateUser, UserFormState } from '@/app/lib/actions/user-actions';
 import MultipleSelector, { Option } from '../components/multiple-selector';
 import React from 'react';
 import Select from '../components/form-fields/select';

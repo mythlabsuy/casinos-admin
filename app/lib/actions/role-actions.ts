@@ -49,21 +49,15 @@ export async function CreateOrUpdateRole(prevState: RoleFormState, formData: For
             .filter((item: Option) => item.selected)
             .map((item: Option) => parseInt(item.id, 10));
         let body;
-        let query;
 
-        if (roleId) {
-            body = selectedPerms;
-            query = new URLSearchParams({ name: name })
-        } else {
-            body = {
-                name: name,
-                perms: selectedPerms,
-            }
+        body = {
+            name: name,
+            perms: selectedPerms,
         }
 
         const method = roleId ? 'PUT' : 'POST';
         const path = roleId ? `role/${roleId}` : 'role/';
-        const response = await apiFetchServer({ method: method, query: query, path: path, body: JSON.stringify(body) });
+        const response = await apiFetchServer({ method: method, path: path, body: JSON.stringify(body) });
 
     } catch (error) {
         var errorText = 'Error inesperado';

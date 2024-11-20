@@ -14,7 +14,7 @@ export async function fetchPagesAmount(path: string, search_query: string) {
   try {
     const query = new URLSearchParams({ query: search_query })
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: query });
-    const amount = await response.json();
+    const amount = await response.data;
 
     const totalPages = Math.ceil(amount / ITEMS_PER_PAGE);
     return totalPages;
@@ -51,7 +51,7 @@ export async function fetchFilteredData(
       searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query, });
     }
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
-    const responseJson = await response.json();
+    const responseJson = await response.data;
 
     return responseJson;
   } catch (error) {

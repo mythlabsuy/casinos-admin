@@ -54,7 +54,7 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
       data.append('privacy_policy', privacyImage);
     }
     const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
-    const responseJson: Premise = await response.json();
+    const responseJson: Premise = await response.data;
 
   } catch (error) {
     var errorText = 'Error inesperado';

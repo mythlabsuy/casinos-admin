@@ -67,7 +67,7 @@ export async function CreateOrUpdateParticipant(prevState: ParticipantFormState,
     const path = participantId ? `participant/${participantId}` : 'participant/';
 
     const response = await apiFetchServer({ method: method, path: path, body: JSON.stringify(body) });
-    const responseJson: Participant = await response.json();
+    const responseJson: Participant = await response.data;
 
   } catch (error) {
     return {

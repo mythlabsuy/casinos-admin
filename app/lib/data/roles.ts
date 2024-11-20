@@ -13,7 +13,7 @@ export async function fetchRoles(
     try {
         const query = new URLSearchParams({ skip: skip.toString(), limit: limit.toString() })
         const response = await apiFetchServer({ method: 'GET', path: 'premise/', body: undefined, query: query });
-        const premisesResp: PremisesResponse = await response?.json();
+        const premisesResp: PremisesResponse = await response?.data;
         return premisesResp.premises.filter((s) => s.disabled == false);
     } catch (error) {
         // console.error('error in fetchActivePremises', error);
@@ -27,7 +27,7 @@ export async function fetchRoleById(
 ): Promise<Premise> {
     try {
         const response = await apiFetchServer({ method: 'GET', path: `role/${id}`, body: undefined, });
-        return await response.json();
+        return await response.data;
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch role by Id.');

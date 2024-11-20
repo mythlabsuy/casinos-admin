@@ -12,7 +12,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   const id = params.id;
   
   const itemResponse = await fetchParticipant(id);
-  const item = await itemResponse.json()
+  const item = await itemResponse.data
 
   const basePath: string = '/welcome/participants';
   const breadcrumbConfig: Breadcrumb[] = [

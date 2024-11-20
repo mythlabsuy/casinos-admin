@@ -14,7 +14,7 @@ async function getUser(username: string, password: string): Promise<User | undef
     data.append('password', password);
 
     const responseTokens = await apiFetchServer({method: 'POST', path: 'auth/login', body: data, isForm: true});
-    const tokens: LoginResponse = await responseTokens.json();
+    const tokens: LoginResponse = await responseTokens.data;
 
     const decodedToken: TokenPayload | null = decodeToken(tokens.access_token);
 

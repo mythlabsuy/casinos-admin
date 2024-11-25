@@ -10,6 +10,9 @@ interface Props{
 
 const DynamicHeroIcon: FC<{icon: string, className: string, solid?: boolean}> = ({ icon, className, solid = false }: Props) => {
   const {...icons} = solid ? HIconsSolid : HIcons
+
+  if(!icon)
+    return null;
   // @ts-ignore
   const TheIcon: JSX.Element = icons[icon]
 

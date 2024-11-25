@@ -11,6 +11,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
     { name: 'Roles', href: '/welcome/roles', iconName: 'LockClosedIcon' },
   ]
 
+  const bottomNav = [
+    { name: 'Cambiar contraseña', href: '/welcome/update-password' },
+  ]
+
+
   const session = await auth();
   let userName: string = '';
   
@@ -23,7 +28,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <div className="flex h-screen flex-col lg:flex-row md:overflow-hidden">
       <SessionProvider>
         <div className="w-full flex-none lg:w-64">
-          <SideNav topNavigation={topNav} userName={userName}/>
+          <SideNav bottomNavigation={bottomNav} topNavigation={topNav} userName={userName}/>
         </div>
         <div className="flex-grow p-6 md:overflow-y-auto xs:p-12">{children}</div>
       </SessionProvider>

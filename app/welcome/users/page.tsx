@@ -22,8 +22,9 @@ export default async function Page({
     page?: string;
   };
 }) {
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+  const resolvedSearchParams = await Promise.resolve(searchParams);
+  const query = resolvedSearchParams?.query || '';
+  const currentPage = Number(resolvedSearchParams?.page) || 1;
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
   const dataList: any = await fetchFilteredData(

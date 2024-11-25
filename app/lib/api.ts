@@ -4,7 +4,7 @@ import { auth, signOut } from '@/auth';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { CustomError } from "./definitions";
-import axios from 'axios';
+import { AxiosHeaders } from 'axios';
 import axiosInstance from "@/axiosInstance";
 
 interface Props {
@@ -50,12 +50,12 @@ export async function apiFetch({ method = 'GET', path = '/', query, body, isForm
 export async function apiFetchServer({ method = 'GET', path = '/', query, body, isForm = false, isFileUpload = false, withAuth = true, addPremisePath = false, addPremiseQuery = false }: Props) {
   const cookieStore = await cookies();
 
-  var headers = new Headers({
-    'Accept': 'application/json'
-  },);
+  var axiosHeaders = new AxiosHeaders({
+    Accept: 'application/json',
+  });
 
   if (!isForm && !isFileUpload) {
-    headers.append('Content-type', 'application/json')
+    axiosHeaders.set('Content-type', 'application/json' )
   } else {
   }
 
@@ -63,7 +63,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     const session = await auth();
     // If user is not logged in session will be null
     if (session) {
-      headers.append('Authorization', session.accessToken ?? '');
+      axiosHeaders.set('Authorization', session.accessToken ?? '' )
     }
   }
 
@@ -83,37 +83,17 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     }
   }
   try {
-    // const response = await fetch(getFullPath(path) + (query ? (`?${query}`) : ''), {
-    //   method: method,
-    //   headers: headers,
-    //   body: body
-    // });
-    const headersObject: Record<string, string> = {};
-    // Convert the fetch Headers to a plain object
-    headers.forEach((value, key) => {
-      headersObject[key] = value;
-    });
     const response = await axiosInstance({
       url: getFullPath(path) + (query ? (`?${query}`) : ''),
       method: method,
-      headers: headersObject,
-      data: body, // Use 'data' instead of 'body'
+      headers: axiosHeaders,
+      data: body, 
     });
 
-    // if (!response.ok) {
-    //   if (response.status === 401 && path != 'auth/login') {
-    //     throw new CustomError('Unauthorized access', 401);
-    //   }
-    //   const errorResponse = await response.data;
-    //   const errorDetail = errorResponse.detail || 'Ha ocurrido un error inesperado.';
-    //   throw new Error(errorDetail);
-    // }
-
-    return response; // Return the successful response
+    return response; 
 
   } catch (error) {
     if (error instanceof Error || error instanceof CustomError) {
-      console.log('apiFetchServer', error)
       throw error;
     }
     throw new Error('Error inesperado')

@@ -9,7 +9,7 @@ export async function fetchUserById(
 ): Promise<SystemUser> {
     try {
         const response = await apiFetchServer({ method: 'GET', path: `user/${id}`, body: undefined, });
-        return await response.json();
+        return await response.data;
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch user by id.');

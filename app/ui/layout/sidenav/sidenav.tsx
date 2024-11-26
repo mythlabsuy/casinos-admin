@@ -9,7 +9,7 @@ import { boolean } from 'zod';
 
 interface props {
   topNavigation: any[];
-  //bottomNavigation: any[],
+  bottomNavigation: any[],
   topNavTitle?: string;
   bottomNavTitle?: string;
   userName?: string;
@@ -20,6 +20,7 @@ export default async function SideNav({
   topNavTitle,
   bottomNavTitle,
   userName,
+  bottomNavigation,
 }: props) {
   let hasError: boolean = false;
   let apiStatus: number = 200;
@@ -44,14 +45,14 @@ export default async function SideNav({
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
-            <div className="flex h-16 shrink-0 items-center gap-x-4 border-b border-dotted px-6 py-3 text-sm font-semibold leading-6 text-white">
+            <div className="flex h-16 shrink-0 items-center gap-x-4 border-b px-6 py-3 text-sm font-semibold leading-6 text-white">
               <span aria-hidden="true">Bienvenido {userName}</span>
             </div>
             <nav className="flex flex-1 flex-col">
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <NavLinks
                   topNavigation={topNavigation}
-                  // bottomNavigation={bottomNavigation}
+                  bottomNavigation={bottomNavigation}
                   topNavTitle={topNavTitle}
                   bottomNavTitle={bottomNavTitle}
                 />
@@ -69,7 +70,7 @@ export default async function SideNav({
 
         <MobileSideNav
           topNavigation={topNavigation}
-          // bottomNavigation={bottomNavigation}
+          bottomNavigation={bottomNavigation}
           topNavTitle={topNavTitle}
           bottomNavTitle={bottomNavTitle}
           userName={userName}

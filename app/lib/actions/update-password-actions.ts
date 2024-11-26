@@ -63,7 +63,7 @@ export async function UpdatePassword(prevState: UpdatePasswordFormState, formDat
         const method = 'PUT';
         const path = 'user/update-password';
         const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true });
-        if (response.ok) {
+        if (response) {
             success = true;
         }
 

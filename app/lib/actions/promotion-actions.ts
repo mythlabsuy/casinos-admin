@@ -94,7 +94,7 @@ const PromotionFormSchema = z.object({
     });
 
 export async function CreateOrUpdatePromotion(prevState: PromotionFormState, formData: FormData) {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     let selectedPremise = cookieStore.get('selectedPremise')?.value;
 
@@ -159,7 +159,7 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
         const path = promotionId ? `promotion/${promotionId}` : `promotion/${selectedPremise}`;
 
         const response = await apiFetchServer({ method: method, path: path, body: data, isForm: true, addPremisePath: false });
-        const responseJson: Promotion = await response.json();
+        const responseJson: Promotion = await response.data;
     } catch (error) {
         var errorText = 'Error inesperado';
         if (error instanceof Error) {

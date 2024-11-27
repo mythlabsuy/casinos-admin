@@ -103,14 +103,3 @@ export type SystemUser = {
   premises: Premise[];
   disabled: boolean;
 }
-
-export class CustomError extends Error {
-  statusCode: number;
-
-  constructor(message: string, statusCode: number) {
-    super(message); 
-    this.statusCode = statusCode;
-    this.name = this.constructor.name; 
-    Object.setPrototypeOf(this, CustomError.prototype); // Ensure instanceof works correctly
-  }
-}

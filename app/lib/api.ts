@@ -2,8 +2,7 @@
 import { API_HOST } from "@/app/lib/env";
 import { auth } from '@/auth';
 import { cookies } from 'next/headers';
-import { CustomError } from "./definitions";
-import { AxiosHeaders } from 'axios';
+import { AxiosError, AxiosHeaders } from 'axios';
 import axiosInstance from "@/axiosInstance";
 
 interface Props {
@@ -28,9 +27,6 @@ export async function apiFetch({ method = 'GET', path = '/', query, body, isForm
     headers.append('Content-type', 'application/json')
   }
 
-  // if(withAuth){
-  //   headers.append('Authorization', token ?? '');
-  // }
 
   const response = await fetch(getFullPath(path) + (query ? ('?' + query) : ''),
     {
@@ -54,7 +50,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
   });
 
   if (!isForm && !isFileUpload) {
-    axiosHeaders.set('Content-type', 'application/json' )
+    axiosHeaders.set('Content-type', 'application/json')
   } else {
   }
 
@@ -62,7 +58,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     const session = await auth();
     // If user is not logged in session will be null
     if (session) {
-      axiosHeaders.set('Authorization', session.accessToken ?? '' )
+      axiosHeaders.set('Authorization', session.accessToken ?? '')
     }
   }
 
@@ -86,14 +82,17 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
       url: getFullPath(path) + (query ? (`?${query}`) : ''),
       method: method,
       headers: axiosHeaders,
-      data: body, 
+      data: body,
     });
 
-    return response; 
+    return response;
 
   } catch (error) {
-    
-    if (error instanceof Error || error instanceof CustomError) {
+
+    if (error instanceof AxiosError) {
+      if (error.response && error.response.data && error.response.data.detail) {
+        throw new Error(error.response.data.detail); 
+      }
       throw error;
     }
     throw new Error('Error inesperado')

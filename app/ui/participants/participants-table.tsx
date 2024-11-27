@@ -12,8 +12,11 @@ export default async function ParticipantsTable({
   query: string;
   currentPage: number;
 }) {
-  // const searchParams = new URLSearchParams({ show_all: 'true' });
-  const dataList:any = await fetchFilteredData('participant/', query, currentPage);
+  const dataList: any = await fetchFilteredData({
+    path: 'participant/',
+    query: query,
+    currentPage: currentPage,
+  });
   const data = dataList['participants'];
   const total_amount = dataList['total_amount'];
 
@@ -31,7 +34,7 @@ export default async function ParticipantsTable({
                     '[&:first-child>td:first-child]:rounded-tl-lg',
                     '[&:first-child>td:last-child]:rounded-tr-lg',
                     '[&:last-child>td:first-child]:rounded-bl-lg',
-                    '[&:last-child>td:last-child]:rounded-br-lg'
+                    '[&:last-child>td:last-child]:rounded-br-lg',
                   )}
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -58,7 +61,7 @@ export default async function ParticipantsTable({
                     {/* <IconButton id='deleteCategory' deleteAction={deleteCategory.bind(null, item.id)}>
                       <TrashIcon className="w-5" />
                     </IconButton> */}
-                  </TableActionsCell> 
+                  </TableActionsCell>
                 </tr>
               ))}
             </Table>
@@ -66,7 +69,7 @@ export default async function ParticipantsTable({
         </div>
       </div>
       <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={ getPagesAmount(total_amount)} />
+        <Pagination totalPages={getPagesAmount(total_amount)} />
       </div>
     </>
   );

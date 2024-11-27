@@ -25,12 +25,12 @@ export default async function Page({
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 
-  const dataList: any = await fetchFilteredData(
-    'role/',
-    '',
-    currentPage,
-    pageSearchParams,
-  );
+  const dataList: any = await fetchFilteredData({
+    path: 'role/',
+    query: '',
+    currentPage: currentPage,
+    urlParams: pageSearchParams,
+  });
   const data = dataList['roles'];
   const totalPages = getPagesAmount(dataList['count']);
 

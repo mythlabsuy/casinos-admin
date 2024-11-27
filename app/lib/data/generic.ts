@@ -1,5 +1,6 @@
 import { apiFetchServer } from "../api";
 
+//TODO remove limit on out of page list
 const ITEMS_PER_PAGE = 6;
 
 /**
@@ -29,26 +30,35 @@ export function getPagesAmount(amount: number) {
   return totalPages;
 }
 
-export async function fetchFilteredData(
-  path: string,
-  query: string,
-  currentPage: number,
-  urlParams?: URLSearchParams,
-  addPremiseQuery?: boolean,
-): Promise<any> {
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+export async function fetchFilteredData({
+  path,
+  query,
+  currentPage = 1,
+  urlParams,
+  addPremiseQuery = false,
+  unlimited = false,
+}: {
+  path: string;
+  query: string;
+  currentPage?: number;
+  urlParams?: URLSearchParams;
+  addPremiseQuery?: boolean;
+  unlimited?: boolean;
+}): Promise<any> {
+  const offset = unlimited ? 0 : (currentPage - 1) * ITEMS_PER_PAGE;
+  const limit = unlimited ? '100' : ITEMS_PER_PAGE.toString()
   //TODO Filter articles using search bar text
   try {
     let searchParams = urlParams;
-    
+
     if (urlParams) {
       searchParams?.append('skip', offset.toString());
-      searchParams?.append('limit', ITEMS_PER_PAGE.toString());
+      searchParams?.append('limit', limit);
       if (query) {
         searchParams?.append('query', query);
       }
     } else {
-      searchParams = new URLSearchParams({ skip: offset.toString(), limit: ITEMS_PER_PAGE.toString(), query: query, });
+      searchParams = new URLSearchParams({ skip: offset.toString(), limit: limit, query: query, });
     }
     const response = await apiFetchServer({ method: 'GET', path: path, body: undefined, query: searchParams, addPremiseQuery: addPremiseQuery });
     const responseJson = await response.data;

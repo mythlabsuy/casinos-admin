@@ -20,20 +20,21 @@ export default async function Page() {
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 
-  const dataList: any = await fetchFilteredData(
-    'premise/',
-    '',
-    1,
-    pageSearchParams,
-  );
+  const dataList: any = await fetchFilteredData({
+    path: 'premise/',
+    query: '',
+    urlParams: pageSearchParams,
+    unlimited: true,
+  });
   const data = dataList['premises'];
 
-  const rolesResponse: any = await fetchFilteredData(
-    'role/',
-    '',
-    1,
-    pageSearchParams,
-  );
+  const rolesResponse: any = await fetchFilteredData({
+    path: 'role/',
+    query: '',
+    currentPage: 1,
+    urlParams: pageSearchParams,
+    unlimited: true,
+  });
   const roleList = rolesResponse['roles'];
 
   return (

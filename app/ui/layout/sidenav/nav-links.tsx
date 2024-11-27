@@ -1,6 +1,4 @@
 import TopNavLink from './top-nav-link';
-import { signOut } from '@/auth';
-import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import BottomNavLink from './bottom-nav-link';
 
 interface Props {

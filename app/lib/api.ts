@@ -1,8 +1,7 @@
 'only server'
 import { API_HOST } from "@/app/lib/env";
-import { auth, signOut } from '@/auth';
+import { auth } from '@/auth';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { CustomError } from "./definitions";
 import { AxiosHeaders } from 'axios';
 import axiosInstance from "@/axiosInstance";
@@ -93,6 +92,7 @@ export async function apiFetchServer({ method = 'GET', path = '/', query, body, 
     return response; 
 
   } catch (error) {
+    
     if (error instanceof Error || error instanceof CustomError) {
       throw error;
     }

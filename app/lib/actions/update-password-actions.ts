@@ -78,9 +78,7 @@ export async function UpdatePassword(prevState: UpdatePasswordFormState, formDat
         };
     }
     if (success) {
-        await signOut({redirectTo: '/login', redirect:true})
+        await signOut({})
     }
     return { result: "OK" };
-    // revalidatePath('/welcome/users');
-    // redirect('/welcome/users');
 }

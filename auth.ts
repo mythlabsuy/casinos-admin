@@ -6,7 +6,8 @@ import type { User } from '@/app/lib/definitions';
 import { apiFetchServer, getFullPath } from '@/app/lib/api';
 import { LoginResponse } from './app/lib/responses';
 import { decodeToken, TokenPayload } from './app/lib/token-decode';
- 
+import { cookies } from 'next/headers'
+
 async function getUser(username: string, password: string): Promise<User | undefined> {
   try {
     const data: FormData = new FormData()
@@ -57,7 +58,7 @@ export async function fetchUser(tokens: any){
   return response
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut: originalSignOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -78,3 +79,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 });
+
+export const signOut = async (options?: any) => {
+
+  (await cookies()).delete('selectedPremise')
+
+  return originalSignOut(options);
+};

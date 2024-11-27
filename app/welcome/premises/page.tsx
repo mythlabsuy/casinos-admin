@@ -5,10 +5,7 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { ButtonLink } from '@/app/ui/components/button-link';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
-import {
-  fetchFilteredData,
-  getPagesAmount,
-} from '@/app/lib/data/generic';
+import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import PremisesTable from '@/app/ui/premises/premises-table';
 
 export const metadata: Metadata = {
@@ -29,12 +26,12 @@ export default async function Page({
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 
-  const dataList: any = await fetchFilteredData(
-    'premise/',
-    '',
-    currentPage,
-    pageSearchParams,
-  );
+  const dataList: any = await fetchFilteredData({
+    path: 'premise/',
+    query: '',
+    currentPage: currentPage,
+    urlParams: pageSearchParams,
+  });
   const data = dataList['premises'];
   const totalPages = getPagesAmount(dataList['count']);
 
@@ -47,7 +44,7 @@ export default async function Page({
             { label: 'Locales', href: '/welcome/premises', active: true },
           ]}
         />
-        <div className="flex flex-col items-end -mt-2 w-min pr-2 gap-2">
+        <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
           <ButtonLink href="/welcome/premises/create" />
         </div>
       </div>

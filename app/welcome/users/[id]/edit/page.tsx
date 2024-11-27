@@ -9,10 +9,10 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Editar local',
 };
- 
+
 export default async function Page(props: { params: Promise<{ id: string }> }) {
-    const params = await props.params;
-    const id = params.id;
+  const params = await props.params;
+  const id = params.id;
   const basePath: string = '/welcome/premises';
   const breadcrumbConfig: Breadcrumb[] = [
     { label: 'Usuarios', href: basePath },
@@ -21,31 +21,28 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       href: `${basePath}/users/${id}/edit`,
       active: true,
     },
-  ]
+  ];
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 
   const user: any = await fetchUserById('', id);
 
-  const premisesResponse: any = await fetchFilteredData(
-    'premise/',
-    '',
-    1,
-    pageSearchParams,
-  );
+  const premisesResponse: any = await fetchFilteredData({
+    path: 'premise/',
+    query: '',
+    unlimited: true,
+  });
   const premises = premisesResponse['premises'];
 
-
-  const rolesResponse: any = await fetchFilteredData(
-    'role/',
-    '',
-    1,
-    pageSearchParams,
-  );
+  const rolesResponse: any = await fetchFilteredData({
+    path: 'role/',
+    query: '',
+    currentPage: 1,
+    urlParams: pageSearchParams,
+    unlimited: true,
+  });
   const roleList = rolesResponse['roles'];
 
-  
-  
   return (
     <main>
       <Breadcrumbs breadcrumbs={breadcrumbConfig} />

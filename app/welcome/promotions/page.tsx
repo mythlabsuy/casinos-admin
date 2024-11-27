@@ -28,11 +28,13 @@ export default async function Page({
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
   const dataList: any = await fetchFilteredData(
-    'promotion/',
-    '',
-    currentPage,
-    pageSearchParams,
-    true,
+    {
+    path: 'promotion/',
+    query: '',
+    currentPage: currentPage,
+    urlParams : pageSearchParams,
+    addPremiseQuery : true,
+    }
   );
   const data = dataList['promotions'];
   const totalPages = getPagesAmount(dataList['count']);

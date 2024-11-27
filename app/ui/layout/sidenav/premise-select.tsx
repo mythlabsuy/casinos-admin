@@ -20,33 +20,34 @@ function setStoreCookie(value: string | number) {
 
 export default function PremiseSelect({ premises }: Props) {
   const premiseMap = new Map();
-  
+
   // Populate the premiseMap with premise names and ids
   premises.map((premise) => premiseMap.set(premise.name, premise.id));
 
   // Default state is the first premise's id or 0 if no premises are available
-  const [premise, setPremise] = useState(
-    premises.length > 0 ? premises[0].id : 0
+  const [premiseId, setPremiseId] = useState(
+    premises.length > 0 ? premises[0].id : 0,
   );
 
   useEffect(() => {
-    // Check for selected premise cookie on component mount
-    const selectedPremise = Cookies.get('selectedPremise');
-
-    if (selectedPremise) {
-      setPremise(parseInt(selectedPremise, 10)); // Set premise from cookie
+    const selectedPremiseId = Cookies.get('selectedPremise');
+    if (selectedPremiseId) {
+      const isPremiseIdInList = premises.some(
+        (premise) => premise.id.toString() === selectedPremiseId,
+      );
+      if (isPremiseIdInList) {
+        setPremiseId(parseInt(selectedPremiseId, 10));
+      }
     } else {
       if (premises.length > 0) {
-        setStoreCookie(premises[0].id.toString()); // Set the default premise cookie
+        setStoreCookie(premises[0].id.toString());
       }
     }
-  }, [premises]); // Runs when premises list changes
+  }, [premises]);
 
   const handlePremiseChange = (e: any) => {
-
-    setPremise(e as number); // Update state when select value changes
-    setStoreCookie(e); // Set cookie when the user selects a new premise
-    window.location.reload()
+    setPremiseId(e as number);
+    setStoreCookie(e);
   };
 
   return (
@@ -55,7 +56,7 @@ export default function PremiseSelect({ premises }: Props) {
         <Select
           id="store"
           icon="BuildingStorefrontIcon"
-          value={premise}
+          value={premiseId}
           values={premiseMap}
           onChange={handlePremiseChange} // Ensure handlePremiseChange is used
         />
@@ -63,4 +64,3 @@ export default function PremiseSelect({ premises }: Props) {
     </>
   );
 }
-

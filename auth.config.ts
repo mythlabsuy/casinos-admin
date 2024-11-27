@@ -10,9 +10,6 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnDashboard = nextUrl.pathname.startsWith('/welcome');
-      const isSignout = nextUrl.pathname.startsWith('/welcome/signout');
-
-      if(isSignout) return true;
       if (isOnDashboard) {
         if (isLoggedIn) return true;
         return false;

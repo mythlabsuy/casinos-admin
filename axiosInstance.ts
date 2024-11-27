@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       try {
         // Trigger the signOut function to log out the user
-        await signOut({  redirect: true, redirectTo: '/login' });
+        await signOut({});
 
       } catch (signOutError) {
         console.error('SignOut failed:', signOutError);

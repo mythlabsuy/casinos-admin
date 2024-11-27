@@ -3,9 +3,7 @@ import MobileSideNav from './mobile/mobile-nav';
 import PremiseSelect from './premise-select';
 import { fetchActivePremises } from '@/app/lib/data/premises';
 import LogoutBtn from './logout-btn';
-import { LogOut } from '@/components/ui/logOut';
-import { CustomError, Premise } from '@/app/lib/definitions';
-import { boolean } from 'zod';
+import { Premise } from '@/app/lib/definitions';
 
 interface props {
   topNavigation: any[];
@@ -23,25 +21,18 @@ export default async function SideNav({
   bottomNavigation,
 }: props) {
   let hasError: boolean = false;
-  let apiStatus: number = 200;
   let premises: Premise[] = [];
 
   try {
     const response = await fetchActivePremises();
     premises = response;
   } catch (error) {
-    if (error instanceof CustomError) {
-      if (error.statusCode === 401) {
-        apiStatus = 401;
-      }
-    }
     hasError = true;
   }
 
   return (
     <>
       <div>
-        <LogOut status={apiStatus} />
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">

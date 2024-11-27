@@ -6,7 +6,7 @@ export default function LogoutBtn() {
   return (
     <form id='main-navbar-logout' action={async () => { 
       'use server'
-      await signOut({redirectTo: '/login', redirect:true}); 
+      await signOut({}); 
       }}>
       <ul role="list" className="-mx-2 space-y-1">
         <button type='submit' className="w-full text-gray-400 hover:bg-gray-800 hover:text-white group flex gap-x-3 rounded-md p-2 

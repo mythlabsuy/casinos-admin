@@ -1,11 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
-import { UpdatePassword, UpdatePasswordFormState } from '@/app/lib/actions/update-password-actions';
-import { signOut } from '@/auth';
+import {
+  UpdatePassword,
+  UpdatePasswordFormState,
+} from '@/app/lib/actions/update-password-actions';
+import FullScreenLoading from '../components/fullScreenLoading';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 
 export default function UpdatePasswordForm() {
   const initialState: UpdatePasswordFormState = {
@@ -13,7 +16,7 @@ export default function UpdatePasswordForm() {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     UpdatePassword,
     initialState,
   );
@@ -22,7 +25,7 @@ export default function UpdatePasswordForm() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    const response = await UpdatePassword(state,formData);
+    const response = await UpdatePassword(state, formData);
   };
 
   const [formData, setFormData] = useState<any>({});
@@ -35,8 +38,9 @@ export default function UpdatePasswordForm() {
 
   return (
     <form action={formAction}>
+      <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md p-4 md:p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* current password */}
           <div className="mb-4 sm:col-span-2">
             <TextInput
@@ -52,7 +56,7 @@ export default function UpdatePasswordForm() {
           <div className="mb-4">
             <TextInput
               id="newPassword"
-              name='newPassword'
+              name="newPassword"
               label="Nueva contraseña"
               defaultValue={state?.formData.newPassword || ''}
               errors={state.errors ? state.errors.newPassword : undefined}
@@ -86,7 +90,9 @@ export default function UpdatePasswordForm() {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>
+          Guardar
+        </FormSubmitButtonWithLoading>
       </div>
     </form>
   );

@@ -17,6 +17,17 @@ import Select from '../components/form-fields/select';
 import { DateTime } from 'luxon';
 import FullScreenLoading from '../components/fullScreenLoading';
 import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { CustomButton } from '../customButton';
 interface Props {
   promotion?: Promotion;
 }
@@ -31,8 +42,16 @@ export default function PromotionForm({ promotion }: Props) {
     CreateOrUpdatePromotion,
     initialState,
   );
-  const [startDate, setStartDate] = useState<Date | undefined>(promotion?.start_date ? DateTime.fromISO(promotion.start_date).toJSDate() : undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(promotion?.end_date ? DateTime.fromISO(promotion.end_date).toJSDate() : undefined);
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    promotion?.start_date
+      ? DateTime.fromISO(promotion.start_date).toJSDate()
+      : undefined,
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    promotion?.end_date
+      ? DateTime.fromISO(promotion.end_date).toJSDate()
+      : undefined,
+  );
   const [formData, setFormData] = useState<Partial<FormDataValues>>({});
 
   useEffect(() => {
@@ -45,8 +64,12 @@ export default function PromotionForm({ promotion }: Props) {
     promotion ? promotion?.frequency.toString() : '0',
   );
 
-  const [isOnlyOnce, setIsOnlyOnce] = useState( formData.onlyOnce ||promotion?.just_once || false);
-  const [isActive, setIsActive] = useState(formData.isActive || promotion?.is_active || false);
+  const [isOnlyOnce, setIsOnlyOnce] = useState(
+    formData.onlyOnce || promotion?.just_once || false,
+  );
+  const [isActive, setIsActive] = useState(
+    formData.isActive || promotion?.is_active || false,
+  );
 
   useEffect(() => {
     if (isOnlyOnce) {
@@ -68,7 +91,7 @@ export default function PromotionForm({ promotion }: Props) {
   ]);
 
   return (
-    <form action={formAction}>
+    <form id="promotionsForm" action={formAction}>
       <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Hidden input with promotion id for the edit */}
@@ -166,8 +189,8 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="termsAndConditionsFile"
-              fileWeight='1.5 Mb'
-              fileTypes='pdf'
+              fileWeight="1.5 Mb"
+              fileTypes="pdf"
               allowedFileTypes={['application/pdf']}
               removeMediaCallback={() => {}}
               required={!promotion}
@@ -207,9 +230,7 @@ export default function PromotionForm({ promotion }: Props) {
             <input
               type="hidden"
               name="startDate"
-              value={
-                startDate?.toISOString()
-              }
+              value={startDate?.toISOString()}
             />
           </div>
 
@@ -233,9 +254,7 @@ export default function PromotionForm({ promotion }: Props) {
             <input
               type="hidden"
               name="endDate"
-              value={
-                endDate?.toISOString()
-              }
+              value={endDate?.toISOString()}
             />
           </div>
 
@@ -307,10 +326,16 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="firstPageFile"
-              fileWeight='1.5 Mb'
-              fileTypes='avif, jpeg, png, webp, gif'
-              fileSize='9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical.'
-              allowedFileTypes={['image/avif', 'image/gif', 'image/jpeg', 'image/png', 'image/webp']}
+              fileWeight="1.5 Mb"
+              fileTypes="avif, jpeg, png, webp, gif"
+              fileSize="9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical."
+              allowedFileTypes={[
+                'image/avif',
+                'image/gif',
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+              ]}
               name="firstPageFile"
               required={!promotion}
               removeMediaCallback={() => {}}
@@ -330,10 +355,15 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="backgroundFile"
-              fileWeight='1.5 Mb'
-              fileTypes='avif, jpeg, png, webp'
-              fileSize='9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical.'
-              allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
+              fileWeight="1.5 Mb"
+              fileTypes="avif, jpeg, png, webp"
+              fileSize="9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical."
+              allowedFileTypes={[
+                'image/avif',
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+              ]}
               required={!promotion}
               removeMediaCallback={() => {}}
               mediaFile={formData.backgroundFile || promotion?.background}
@@ -354,7 +384,32 @@ export default function PromotionForm({ promotion }: Props) {
         >
           Cancelar
         </Link>
-        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
+        <Dialog>
+          <DialogTrigger asChild>
+            <CustomButton className="bg-blue-500 hover:bg-blue-600">
+              Guardar
+            </CustomButton>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Atención</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              La promoción está {isActive ? 'activa' : 'inactiva'}. ¿Está seguro
+              que desea continuar?
+            </DialogDescription>
+            <DialogFooter>
+              <DialogClose asChild>
+                <button className="px-4">Cancelar</button>
+              </DialogClose>
+              <DialogClose asChild>
+                <FormSubmitButtonWithLoading isPending={false} form={'promotionsForm'}>
+                  Guardar
+                </FormSubmitButtonWithLoading>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </form>
   );

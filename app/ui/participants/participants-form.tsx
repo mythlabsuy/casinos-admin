@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
 import { Participant } from '@/app/lib/definitions';
 import { CreateOrUpdateParticipant, ParticipantFormState } from '@/app/lib/actions/participants';
+import FullScreenLoading from '../components/fullScreenLoading';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 
 interface Props {
   participant?: Participant;
@@ -17,7 +18,7 @@ export default function ParticipantsForm({ participant }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     CreateOrUpdateParticipant,
     initialState,
   );
@@ -32,6 +33,7 @@ export default function ParticipantsForm({ participant }: Props) {
 
   return (
     <form action={formAction}>
+      <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Hidden input with participant id for the edit */}
         {participant ? (
@@ -92,7 +94,7 @@ export default function ParticipantsForm({ participant }: Props) {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
       </div>
     </form>
   );

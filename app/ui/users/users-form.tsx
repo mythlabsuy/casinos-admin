@@ -2,13 +2,14 @@
 
 import { Premise, Role, SystemUser } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
 import { CreateOrUpdateUser, UserFormState } from '@/app/lib/actions/user-actions';
 import MultipleSelector, { Option } from '../components/multiple-selector';
 import React from 'react';
 import Select from '../components/form-fields/select';
+import FullScreenLoading from '../components/fullScreenLoading';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 
 interface Props {
   user?: SystemUser;
@@ -22,7 +23,7 @@ export default function UsersForm({ user, roleList, premises }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(CreateOrUpdateUser, initialState);
+  const [state, formAction, isPending] = useActionState(CreateOrUpdateUser, initialState);
   const [formData, setFormData] = useState<any>({});
 
   const [role, setRole] = useState(
@@ -57,6 +58,7 @@ export default function UsersForm({ user, roleList, premises }: Props) {
 
   return (
     <form action={formAction}>
+        <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md p-4 md:p-6">
         {/* Hidden input with category id for the edit */}
         {user ? (
@@ -144,7 +146,7 @@ export default function UsersForm({ user, roleList, premises }: Props) {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
       </div>
     </form>
   );

@@ -2,7 +2,6 @@
 
 import { Premise } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
 import FileChooser from '../components/form-fields/file-chooser';
@@ -10,6 +9,8 @@ import {
   CreateOrUpdatePremise,
   PremiseFormState,
 } from '@/app/lib/actions/premise-actions';
+import FullScreenLoading from '../components/fullScreenLoading';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 
 interface Props {
   premise?: Premise;
@@ -21,7 +22,7 @@ export default function PremiseForm({ premise }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     CreateOrUpdatePremise,
     initialState,
   );
@@ -42,6 +43,7 @@ export default function PremiseForm({ premise }: Props) {
 
   return (
     <form action={formAction}>
+      <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md p-4 md:p-6">
         {/* Hidden input with category id for the edit */}
         {premise ? (
@@ -73,10 +75,15 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-logo-image"
-            fileWeight='1.5 Mb'
-            fileTypes='avif, jpeg, png, webp'
-            fileSize='8:5 (Ej: 1280x800 px)'
-            allowedFileTypes={['image/avif', 'image/jpeg', 'image/png', 'image/webp']}
+            fileWeight="1.5 Mb"
+            fileTypes="avif, jpeg, png, webp"
+            fileSize="8:5 (Ej: 1280x800 px)"
+            allowedFileTypes={[
+              'image/avif',
+              'image/jpeg',
+              'image/png',
+              'image/webp',
+            ]}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
             mediaFiles={[
@@ -94,8 +101,8 @@ export default function PremiseForm({ premise }: Props) {
           </label>
           <FileChooser
             id="premise-privacy-image"
-            fileWeight='1.5 Mb'
-            fileTypes='pdf'
+            fileWeight="1.5 Mb"
+            fileTypes="pdf"
             allowedFileTypes={['application/pdf']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
@@ -119,7 +126,7 @@ export default function PremiseForm({ premise }: Props) {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
       </div>
     </form>
   );

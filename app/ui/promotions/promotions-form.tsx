@@ -2,7 +2,6 @@
 
 import { Promotion } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { NumberInput, TextInput } from '../components/form-fields/input';
 import {
@@ -16,6 +15,8 @@ import { es } from 'date-fns/locale';
 import SwitchWithIcon from '../components/form-fields/switch';
 import Select from '../components/form-fields/select';
 import { DateTime } from 'luxon';
+import FullScreenLoading from '../components/fullScreenLoading';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 interface Props {
   promotion?: Promotion;
 }
@@ -26,7 +27,7 @@ export default function PromotionForm({ promotion }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(
+  const [state, formAction, isPending] = useActionState(
     CreateOrUpdatePromotion,
     initialState,
   );
@@ -68,6 +69,7 @@ export default function PromotionForm({ promotion }: Props) {
 
   return (
     <form action={formAction}>
+      <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Hidden input with promotion id for the edit */}
         {promotion ? (
@@ -351,7 +353,7 @@ export default function PromotionForm({ promotion }: Props) {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
       </div>
     </form>
   );

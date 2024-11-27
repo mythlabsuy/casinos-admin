@@ -2,7 +2,6 @@
 
 import { Role } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
 import React from 'react';
@@ -14,6 +13,8 @@ import Table from '../components/table';
 import { Perm, PermCategory, permDefaultValues } from '@/app/lib/enums/perms';
 import clsx from 'clsx';
 import SwitchWithIcon from '../components/form-fields/switch';
+import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
+import FullScreenLoading from '../components/fullScreenLoading';
 
 interface Props {
   role?: Role;
@@ -25,7 +26,10 @@ export default function RolesForm({ role }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction] = useActionState(CreateOrUpdateRole, initialState);
+  const [state, formAction, isPending] = useActionState(
+    CreateOrUpdateRole,
+    initialState,
+  );
   const [formData, setFormData] = useState<any>({});
 
   const [permissions, setPermissions] = useState<Perm[]>(permDefaultValues);
@@ -44,12 +48,11 @@ export default function RolesForm({ role }: Props) {
     }
   }, [state]);
 
-
   React.useEffect(() => {
     if (role) {
       const permsSet = new Set(role.perms);
       const updatedList = permissions.map((item) =>
-        permsSet.has(item.id) ? { ...item, selected : true } : item
+        permsSet.has(item.id) ? { ...item, selected: true } : item,
       );
       setPermissions(updatedList);
     }
@@ -57,14 +60,15 @@ export default function RolesForm({ role }: Props) {
 
   return (
     <form action={formAction}>
-      <div className="rounded-md  p-4 md:p-6 ">
+      <FullScreenLoading isLoading={isPending} />
+      <div className="rounded-md p-4 md:p-6">
         {/* Hidden input with category id for the edit */}
         {role ? (
           <input type="hidden" value={role.id} id="role_id" name="role_id" />
         ) : null}
         <div className="grid grid-cols-1 sm:grid-cols-2">
           {/* Name */}
-          <div className=" sm:col-span-2 px-2">
+          <div className="px-2 sm:col-span-2">
             <TextInput
               id="name"
               label="Nombre"
@@ -80,7 +84,7 @@ export default function RolesForm({ role }: Props) {
           />
 
           {/* Roles table */}
-          <div className=" rounded-lg">
+          <div className="rounded-lg">
             <Table titles={['Roles']}>
               {permissions
                 .filter((perm) => perm.category === PermCategory.ROLE)
@@ -97,14 +101,14 @@ export default function RolesForm({ role }: Props) {
                       '[&:last-child>td:last-child]:rounded-br-lg',
                     )}
                   >
-                    <td className=" py-3 pl-6 pr-3">
+                    <td className="py-3 pl-6 pr-3">
                       <div className="flex items-center gap-3">
                         <p>
                           <span>{rolePerm.label}</span>
                         </p>
                       </div>
                     </td>
-                    <td className=" py-3 pl-6 pr-3">
+                    <td className="py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
                         <SwitchWithIcon
                           id={`rp_${rolePerm.label}`}
@@ -122,7 +126,7 @@ export default function RolesForm({ role }: Props) {
           </div>
 
           {/* Participant table */}
-          <div className=" rounded-lg">
+          <div className="rounded-lg">
             <Table titles={['Participantes']}>
               {permissions
                 .filter((perm) => perm.category === PermCategory.PARTICIPANT)
@@ -139,7 +143,7 @@ export default function RolesForm({ role }: Props) {
                       '[&:last-child>td:last-child]:rounded-br-lg',
                     )}
                   >
-                    <td className=" py-3 pl-6 pr-3">
+                    <td className="py-3 pl-6 pr-3">
                       <div className="flex items-center gap-3">
                         <p>
                           <span>{participantPerm.label}</span>
@@ -248,7 +252,7 @@ export default function RolesForm({ role }: Props) {
           </div>
 
           {/* Promotion table */}
-          <div className="rounded-lg ">
+          <div className="rounded-lg">
             <Table titles={['Promociones']}>
               {permissions
                 .filter((perm) => perm.category === PermCategory.PROMOTION)
@@ -265,14 +269,14 @@ export default function RolesForm({ role }: Props) {
                       '[&:last-child>td:last-child]:rounded-br-lg',
                     )}
                   >
-                    <td className=" py-3 pl-6 pr-3">
+                    <td className="py-3 pl-6 pr-3">
                       <div className="flex items-center gap-3">
                         <p>
                           <span>{promotionPerm.label}</span>
                         </p>
                       </div>
                     </td>
-                    <td className=" py-3 pl-6 pr-3">
+                    <td className="py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
                         <SwitchWithIcon
                           id={`prop_${promotionPerm.label}`}
@@ -288,7 +292,6 @@ export default function RolesForm({ role }: Props) {
                 ))}
             </Table>
           </div>
-          
         </div>
       </div>
 
@@ -304,7 +307,9 @@ export default function RolesForm({ role }: Props) {
         >
           Cancelar
         </Link>
-        <Button type="submit">Guardar</Button>
+        <FormSubmitButtonWithLoading isPending={isPending}>
+          Guardar
+        </FormSubmitButtonWithLoading>
       </div>
     </form>
   );

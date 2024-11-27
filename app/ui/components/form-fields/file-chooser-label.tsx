@@ -53,7 +53,7 @@ export default function FileChooserLabel({ fileNames, fileTypes, fileSize, fileW
             return (
               <>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  { fileNames.split(',').length > 2 ? <span>Archivos seleccionados:</span> : <span>Archivo seleccionado: </span> }
+                  { fileNames?.split(',').length > 2 ? <span>Archivos seleccionados:</span> : <span>Archivo seleccionado: </span> }
                   <br />
                   {fileNames}
                 </p>

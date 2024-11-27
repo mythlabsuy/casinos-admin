@@ -45,8 +45,8 @@ export default function PromotionForm({ promotion }: Props) {
     promotion ? promotion?.frequency.toString() : '0',
   );
 
-  const [isOnlyOnce, setIsOnlyOnce] = useState(formData.onlyOnce || false);
-  const [isActive, setIsActive] = useState(formData.isActive || false);
+  const [isOnlyOnce, setIsOnlyOnce] = useState( formData.onlyOnce ||promotion?.just_once || false);
+  const [isActive, setIsActive] = useState(formData.isActive || promotion?.is_active || false);
 
   useEffect(() => {
     if (isOnlyOnce) {
@@ -287,6 +287,7 @@ export default function PromotionForm({ promotion }: Props) {
               label="Cantidad máxima de participación por frecuencia seleccionada"
               step={1}
               min={0}
+              required
             />
           </div>
 

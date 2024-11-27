@@ -86,6 +86,7 @@ export function NumberInput({
   min,
   max,
   disabled = false,
+  required = false,
 }: NumberInputProps) {
   return (
     <Input
@@ -102,6 +103,7 @@ export function NumberInput({
       min={min}
       max={max}
       disabled={disabled}
+      required={required}
     />
   );
 }

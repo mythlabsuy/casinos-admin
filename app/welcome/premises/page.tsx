@@ -12,17 +12,12 @@ export const metadata: Metadata = {
   title: 'Locales',
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
+export default async function Page(props: {
+  params: Promise<{ query: string; page: string }>;
 }) {
-  const resolvedSearchParams = await Promise.resolve(searchParams);
-  const query = resolvedSearchParams?.query || '';
-  const currentPage = Number(resolvedSearchParams?.page) || 1;
+  const params = await props.params;
+  const query = params.query || '';
+  const currentPage = Number(params.page || 1);
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 

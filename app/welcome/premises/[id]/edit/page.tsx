@@ -6,10 +6,10 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Editar local',
 };
- 
+
 export default async function Page(props: { params: Promise<{ id: string }> }) {
-    const params = await props.params;
-    const id = params.id;
+  const params = await props.params;
+  const id = params.id;
   const basePath: string = '/welcome/premises';
   const breadcrumbConfig: Breadcrumb[] = [
     { label: 'Locales', href: basePath },
@@ -18,11 +18,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
       href: `${basePath}/premises/${id}/edit`,
       active: true,
     },
-  ]
+  ];
 
   const premise: any = await fetchPremiseById('premise/', id);
   const data = premise['premise'];
-  
+
   return (
     <main>
       <Breadcrumbs breadcrumbs={breadcrumbConfig} />

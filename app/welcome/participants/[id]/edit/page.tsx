@@ -7,12 +7,13 @@ import { fetchParticipant } from '@/app/lib/data/participants';
 export const metadata: Metadata = {
   title: 'Editar Participante',
 };
- 
-export default async function Page({ params }: { params: { id: number } }) {
+
+export default async function Page(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   const id = params.id;
-  
+
   const itemResponse = await fetchParticipant(id);
-  const item = await itemResponse.data
+  const item = await itemResponse.data;
 
   const basePath: string = '/welcome/participants';
   const breadcrumbConfig: Breadcrumb[] = [
@@ -22,18 +23,16 @@ export default async function Page({ params }: { params: { id: number } }) {
       href: `${basePath}/${id}/edit`,
       active: true,
     },
-  ]
+  ];
 
   if (!item) {
     notFound();
   }
-  
+
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={breadcrumbConfig}
-      />
-      <ParticipantsForm participant={item}/>
+      <Breadcrumbs breadcrumbs={breadcrumbConfig} />
+      <ParticipantsForm participant={item} />
     </main>
   );
 }

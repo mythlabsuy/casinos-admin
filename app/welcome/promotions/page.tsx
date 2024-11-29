@@ -4,38 +4,28 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { ButtonLink } from '@/app/ui/components/button-link';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
-import {
-  fetchFilteredData,
-  getPagesAmount,
-} from '@/app/lib/data/generic';
+import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import PromotionsTable from '@/app/ui/promotions/promotions-table';
 
 export const metadata: Metadata = {
   title: 'Promociones',
 };
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
+export default async function Page(props: {
+  params: Promise<{ query: string; page: string }>;
 }) {
-  const resolvedSearchParams = await Promise.resolve(searchParams);
-  const query = resolvedSearchParams?.query || '';
-  const currentPage = Number(resolvedSearchParams?.page) || 1;
+  const params = await props.params;
+  const query = params.query || '';
+  const currentPage = Number(params.page || 1);
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
-  const dataList: any = await fetchFilteredData(
-    {
+  const dataList: any = await fetchFilteredData({
     path: 'promotion/',
     query: '',
     currentPage: currentPage,
-    urlParams : pageSearchParams,
-    addPremiseQuery : true,
-    }
-  );
+    urlParams: pageSearchParams,
+    addPremiseQuery: true,
+  });
   const data = dataList['promotions'];
   const totalPages = getPagesAmount(dataList['count']);
 
@@ -48,7 +38,7 @@ export default async function Page({
             { label: 'Promociones', href: '/welcome/promotions', active: true },
           ]}
         />
-        <div className="flex flex-col items-end -mt-2 w-min pr-2 gap-2">
+        <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
           <ButtonLink href="/welcome/promotions/create" />
         </div>
       </div>

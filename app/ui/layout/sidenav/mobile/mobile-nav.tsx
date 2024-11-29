@@ -86,6 +86,7 @@ export default function MobileSideNav({
                   <form
                     id="mobile-navbar-logout"
                     action={() => {
+                      //Do not delete this
                       Cookies.remove('selectedPremise');
                       signOut({});
                     }}

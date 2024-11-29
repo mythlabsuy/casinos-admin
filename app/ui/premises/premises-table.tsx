@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Premise } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
-import { IconButton } from '../components/icon-button';
+import { DeleteIconButton } from '../components/icon-button';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { disablePremise } from '@/app/lib/actions/premise-actions';
 import DynamicHeroIcon from '../dynamic-hero-icon';
@@ -51,12 +51,12 @@ export default async function PremisesTable({ data }: { data: any }) {
                 </td>
                 <TableActionsCell id={item.id} path="/welcome/premises">
                   {!item.disabled && (
-                    <IconButton
+                    <DeleteIconButton
                       id="deletePremise"
                       deleteAction={disablePremise.bind(null, item.id)}
                     >
                       <TrashIcon className="w-5" />
-                    </IconButton>
+                    </DeleteIconButton>
                   )}
                 </TableActionsCell>
               </tr>

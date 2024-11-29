@@ -88,7 +88,7 @@ export default function MobileSideNav({
                     action={() => {
                       //Do not delete this
                       Cookies.remove('selectedPremise');
-                      signOut({});
+                      signOut({redirect: true, redirectTo:'/login'});
                     }}
                     className="w-full"
                   >

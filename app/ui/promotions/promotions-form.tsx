@@ -326,7 +326,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <SingleFileChooser
               id="firstPageFile"
-              fileWeight="5 Mb"
+              fileWeight="10 Mb"
               fileTypes="avif, jpeg, png, webp, gif"
               fileSize="9:16 (Ej: 1080x1920 px, 768x1366 px). Orientación vertical."
               allowedFileTypes={[
@@ -336,7 +336,7 @@ export default function PromotionForm({ promotion }: Props) {
                 'image/png',
                 'image/webp',
               ]}
-              maxFileSizeBytes={5000000}
+              maxFileSizeBytes={10485760}
               name="firstPageFile"
               required={!promotion}
               removeMediaCallback={() => {}}

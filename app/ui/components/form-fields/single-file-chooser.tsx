@@ -81,7 +81,7 @@ export default function SingleFileChooser({
           fileNames = '';
           setModalOpen(true);
           setModalText(
-            'Archivo demasiado grande. Peso máximo permitido 1.5 MB',
+            'Archivo demasiado grande. Peso máximo permitido ' + fileSize,
           );
           return;
         }

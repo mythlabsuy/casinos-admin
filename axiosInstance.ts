@@ -4,7 +4,6 @@ import { signOut } from './auth';
 // Create an Axios instance
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.API_HOST,  
-  timeout: 10000,
 });
 
 // Add response interceptor

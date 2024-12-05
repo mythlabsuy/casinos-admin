@@ -83,7 +83,7 @@ export async function CreateOrUpdateUser(prevState: UserFormState, formData: For
 
         }
         const method = userId ? 'PUT' : 'POST';
-        const path = userId ? `user/${userId}` : 'auth/register/';
+        const path = userId ? `user/${userId}` : 'auth/register';
         const response = await apiFetchServer({ method: method, path: path, body: JSON.stringify(body) });
 
     } catch (error) {

@@ -13,11 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default async function Page(props: {
-  params: Promise<{ query: string; page: string }>;
+  searchParams?: Promise<{ 
+    page?: string 
+  }>;
 }) {
-  const params = await props.params;
-  const query = params.query || '';
-  const currentPage = Number(params.page || 1);
+  const params = await props.searchParams;
+  const currentPage = Number(params?.page || 1);
 
   const pageSearchParams = new URLSearchParams({ show_all: 'true' });
 
@@ -45,7 +46,7 @@ export default async function Page(props: {
       </div>
       {/* TODO ver como extraer los titulos para pasarle al Skeleton y al Table lo mismo */}
       <Suspense
-        key={query + currentPage}
+        key={currentPage}
         fallback={<TableSkeleton titles={['Local']} />}
       >
         <PremisesTable data={data} />

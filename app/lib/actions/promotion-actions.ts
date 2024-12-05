@@ -47,7 +47,7 @@ const PromotionFormSchema = z.object({
     name: z.string().min(1, { message: 'Por favor ingrese un nombre.' }),
     description: z.string().min(1, { message: 'Por favor ingrese una descripción.' }),
     participationInstructions: z.string().min(1, { message: 'Por favor ingresa instrucciones.' }),
-    ticketExtraData: z.string().min(1, { message: 'Por favor ingrese datos para el ticket.' }),
+    ticketExtraData: z.string(),
 
     termsAndConditionsFile: z.instanceof(File),
 

@@ -16,7 +16,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     { label: 'Promociones', href: basePath },
     {
       label: 'Editar Promoción',
-      href: `${basePath}/promotions/${id}/edit`,
+      href: `${basePath}/${id}/edit`,
       active: true,
     },
   ]

@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
-  const basePath: string = '/welcome/premises';
+  const basePath: string = '/welcome/users';
   const breadcrumbConfig: Breadcrumb[] = [
     { label: 'Usuarios', href: basePath },
     {
       label: 'Editar usuario',
-      href: `${basePath}/users/${id}/edit`,
+      href: `${basePath}/${id}/edit`,
       active: true,
     },
   ];

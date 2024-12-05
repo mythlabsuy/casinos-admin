@@ -15,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     { label: 'Roles', href: basePath },
     {
       label: 'Editar rol',
-      href: `${basePath}/roles/${id}/edit`,
+      href: `${basePath}/${id}/edit`,
       active: true,
     },
   ]

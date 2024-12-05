@@ -15,7 +15,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     { label: 'Locales', href: basePath },
     {
       label: 'Editar local',
-      href: `${basePath}/premises/${id}/edit`,
+      href: `${basePath}/${id}/edit`,
       active: true,
     },
   ];

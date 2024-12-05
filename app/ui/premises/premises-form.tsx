@@ -71,7 +71,7 @@ export default function PremiseForm({ premise }: Props) {
             htmlFor="premise-logo-image"
             className="mb-2 ml-1 block text-sm font-medium text-gray-700"
           >
-            Logo o foto del local
+            Encabezado para el ticket
           </label>
           <FileChooser
             id="premise-logo-image"

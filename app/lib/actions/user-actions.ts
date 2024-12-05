@@ -76,11 +76,10 @@ export async function CreateOrUpdateUser(prevState: UserFormState, formData: For
 
         const body = {
             username: username,
-            password: password,
             email: email,
             role_id: role,
             premises: transformedPremises,
-
+            ...(password && password.trim() !== "" ? { password: password } : {}),
         }
         const method = userId ? 'PUT' : 'POST';
         const path = userId ? `user/${userId}` : 'auth/register';

@@ -7,7 +7,7 @@ import UsersForm from '@/app/ui/users/users-form';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Editar local',
+  title: 'Editar Usuario',
 };
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

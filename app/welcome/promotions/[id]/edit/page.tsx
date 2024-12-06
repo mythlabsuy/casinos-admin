@@ -5,7 +5,7 @@ import PromotionForm from '@/app/ui/promotions/promotions-form';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Editar local',
+  title: 'Editar Promoción',
 };
  
 export default async function Page(props: { params: Promise<{ id: string }> }) {

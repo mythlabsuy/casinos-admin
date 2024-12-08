@@ -28,9 +28,9 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
     logoImage: formData.get('premise-logo-image'),
     privacyImage: formData.get('premise-privacy-image'),
   });
-  var n = formData.get('name')
   if (!validatedFields.success) {
     return {
+      ...prevState,
       errors: validatedFields.error.flatten().fieldErrors,
       formData: Object.fromEntries(formData.entries()),
     };
@@ -62,6 +62,7 @@ export async function CreateOrUpdatePremise(prevState: PremiseFormState, formDat
       errorText = error.message;
     }
     return {
+      ...prevState,
       message: errorText, // Directly access 'error' or fallback
       formData: Object.fromEntries(formData.entries()),
     };

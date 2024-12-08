@@ -1,11 +1,15 @@
 'use client';
 
-import { MediaFile } from "@/app/lib/definitions";
-import { useEffect, useState } from "react";
-import Modal, { ModalType } from "../modal";
-import GridGallery from "../grid-gallery";
-import FileChooserLabel from "./file-chooser-label";
-import { ALLOWED_IMAGE_TYPES, MAX_ALLOWED_FILES_AMOUNT, MAX_IMAGE_SIZE_IN_BYTES_ALLOWED } from "@/app/lib/constants";
+import { MediaFile } from '@/app/lib/definitions';
+import { useEffect, useState } from 'react';
+import Modal, { ModalType } from '../modal';
+import GridGallery from '../grid-gallery';
+import FileChooserLabel from './file-chooser-label';
+import {
+  ALLOWED_IMAGE_TYPES,
+  MAX_ALLOWED_FILES_AMOUNT,
+  MAX_IMAGE_SIZE_IN_BYTES_ALLOWED,
+} from '@/app/lib/constants';
 
 interface Props {
   id: string;
@@ -18,51 +22,81 @@ interface Props {
   fileTypes?: string;
   fileSize?: string;
   fileWeight?: string;
+  required?: boolean;
+  errors?: string[];
 }
 
-export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES, fileTypes='', fileSize='', fileWeight='', removeMediaCallback, maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED, maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT, mediaFiles = [], name }: Props ) {
-  const [fileNames, setFileNames] = useState<string>("");
-  const [formMediaFiles, setFormMediaFiles] = useState<MediaFile[] | undefined>(mediaFiles.filter(mf => !mf.disabled));
+export default function FileChooser({
+  id,
+  allowedFileTypes = ALLOWED_IMAGE_TYPES,
+  fileTypes = '',
+  fileSize = '',
+  fileWeight = '',
+  removeMediaCallback,
+  maxFileSizeBytes = MAX_IMAGE_SIZE_IN_BYTES_ALLOWED,
+  maxFilesAmount = MAX_ALLOWED_FILES_AMOUNT,
+  mediaFiles = [],
+  name,
+  required = false,
+  errors,
+}: Props) {
+  const [fileNames, setFileNames] = useState<string>('');
+  const [formMediaFiles, setFormMediaFiles] = useState<MediaFile[] | undefined>(
+    mediaFiles.filter((mf) => !mf.disabled),
+  );
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalText, setModalText] = useState<string>('');
-  
-  const handleFileInput = (e: { target: HTMLInputElement; }) => {
-    if(e.target && e.target.files){
+
+  useEffect(() => {
+    if (mediaFiles.length > 0 && mediaFiles[0].path) {
+      const firstFileName = mediaFiles[0].path.split('/').pop();
+      if (firstFileName) {
+        setFileNames(firstFileName);
+      }
+    }
+  }, [mediaFiles]);
+
+  const handleFileInput = (e: { target: HTMLInputElement }) => {
+    if (e.target && e.target.files) {
       let fileNames = '';
       let files: FileList = e.target.files;
-      if(files.length > maxFilesAmount){
+      if (files.length > maxFilesAmount) {
         setModalOpen(true);
-        setModalText(`Demasiada cantidad de archivos. Máximo permitido de ${maxFilesAmount}`);
+        setModalText(
+          `Demasiada cantidad de archivos. Máximo permitido de ${maxFilesAmount}`,
+        );
         return;
       }
       for (let index = 0; index < files.length; index++) {
         const element: File = files[index];
         fileNames += `${element.name}, `;
-        if(!allowedFileTypes.find(f => f == element.type)){
-          e.target.value = ''
-          fileNames = ''
+        if (!allowedFileTypes.find((f) => f == element.type)) {
+          e.target.value = '';
+          fileNames = '';
           setModalOpen(true);
           setModalText('Tipo de archivo no permitido.');
           return;
         }
-        if(element.size >= maxFileSizeBytes){
-          e.target.value = ''
-          fileNames = ''
+        if (element.size >= maxFileSizeBytes) {
+          e.target.value = '';
+          fileNames = '';
           setModalOpen(true);
-          setModalText('Archivo demasiado grande. Peso máximo permitido 1.5 MB');
+          setModalText(
+            'Archivo demasiado grande. Peso máximo permitido 1.5 MB',
+          );
           return;
         }
       }
       setFileNames(fileNames);
     }
-  }
+  };
 
   // setFormMediaFiles(mediaFiles.filter(mf => !mf.disabled));
   // useEffect(() => {
   // }, [mediaFiles]);
-  
-  function confirmRemoveMediaFile(mediaId: number){
+
+  function confirmRemoveMediaFile(mediaId: number) {
     //TODO add confirm dialog
     removeMediaCallback(mediaId);
 
@@ -75,25 +109,51 @@ export default function FileChooser({ id, allowedFileTypes = ALLOWED_IMAGE_TYPES
 
   return (
     <>
-      <Modal open={modalOpen} setOpen={setModalOpen} 
-        onConfirm={() => {setModalOpen(false)}}
-        confirmText='Cerrar'
+      <Modal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        onConfirm={() => {
+          setModalOpen(false);
+        }}
+        confirmText="Cerrar"
         type={ModalType.Warn}
-        hideCancelBtn = {true}
-        icon = 'ExclamationTriangleIcon'
-        title='Error al incluir archivo' 
-        text={modalText}/>
-      
-        <div className="flex items-center justify-center sm:col-span-12">
-          <label htmlFor={id} className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 
-            border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 
-            dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-            <FileChooserLabel fileNames={fileNames} fileTypes={fileTypes} fileSize={fileSize} fileWeight={fileWeight}/>
-            <input id={id} name={ name ? name : id } type="file" className="hidden" onChange={handleFileInput} multiple/>
-          </label>
-        </div> 
+        hideCancelBtn={true}
+        icon="ExclamationTriangleIcon"
+        title="Error al incluir archivo"
+        text={modalText}
+      />
 
-        {/* <div className="flex items-center justify-center sm:col-span-12">
+      <div className="flex items-center justify-center sm:col-span-12 relative w-full">
+        <label
+          htmlFor={id}
+          className="dark:hover:bg-bray-800 flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        >
+          <FileChooserLabel
+            fileNames={fileNames}
+            fileTypes={fileTypes}
+            fileSize={fileSize}
+            fileWeight={fileWeight}
+          />
+          <input
+            id={id}
+            name={name ? name : id}
+            type="file"
+            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            onChange={handleFileInput}
+            // multiple
+            required={required}
+          />
+        </label>
+      </div>
+      <div id={`${id}-error`} aria-live="polite" aria-atomic="true">
+        {errors &&
+          errors.map((error: string) => (
+            <p className="mt-2 text-sm text-red-500" key={error}>
+              {error}
+            </p>
+          ))}
+      </div>
+      {/* <div className="flex items-center justify-center sm:col-span-12">
           <div className="w-full py-8 relative">
             <GridGallery mediaFiles={ formMediaFiles } removeCallback={confirmRemoveMediaFile} removeIcon="TrashIcon" iconBgColor="bg-gray-200" iconColor="text-red-700"/>
           </div>

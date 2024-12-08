@@ -37,9 +37,9 @@ export type FormDataValues = {
     isActive: boolean;
     frecuency: string;
     maximumParticipations: string;
-    firstPageFile: File;          // Required file
-    backgroundFile: File;        // Required file
-    termsAndConditionsFile: File;    // Added the missing terms and conditions file
+    firstPageFile: any | null;          // Required file
+    backgroundFile: any | null;        // Required file
+    termsAndConditionsFile: any | null;    // Added the missing terms and conditions file
 }
 
 

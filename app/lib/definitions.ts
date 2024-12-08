@@ -93,6 +93,7 @@ export type MediaFile = {
   path: string;
   mime_type: string;
   disabled?: boolean;
+  filename?: string;
 }
 
 export type SystemUser = {

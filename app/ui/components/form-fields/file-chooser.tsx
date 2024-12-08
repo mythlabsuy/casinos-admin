@@ -49,8 +49,9 @@ export default function FileChooser({
   const [modalText, setModalText] = useState<string>('');
 
   useEffect(() => {
-    if (mediaFiles.length > 0 && mediaFiles[0].path) {
-      const firstFileName = mediaFiles[0].path.split('/').pop();
+    if (mediaFiles.length > 0) {
+      const { filename, path } = mediaFiles[0];
+      const firstFileName = filename || path?.split('/').pop();
       if (firstFileName) {
         setFileNames(firstFileName);
       }
@@ -123,7 +124,7 @@ export default function FileChooser({
         text={modalText}
       />
 
-      <div className="flex items-center justify-center sm:col-span-12 relative w-full">
+      <div className="relative flex w-full items-center justify-center sm:col-span-12">
         <label
           htmlFor={id}
           className="dark:hover:bg-bray-800 flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -138,7 +139,7 @@ export default function FileChooser({
             id={id}
             name={name ? name : id}
             type="file"
-            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            className="absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
             onChange={handleFileInput}
             // multiple
             required={required}

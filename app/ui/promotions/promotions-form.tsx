@@ -9,7 +9,6 @@ import {
   FormDataValues,
   PromotionFormState,
 } from '@/app/lib/actions/promotion-actions';
-import SingleFileChooser from '../components/form-fields/single-file-chooser';
 import { DateTimePicker } from '@/components/ui/datetime-picker';
 import { es } from 'date-fns/locale';
 import SwitchWithIcon from '../components/form-fields/switch';
@@ -28,6 +27,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { CustomButton } from '../customButton';
+import FileChooser from '../components/form-fields/file-chooser';
 interface Props {
   promotion?: Promotion;
 }
@@ -52,7 +52,7 @@ export default function PromotionForm({ promotion }: Props) {
       ? DateTime.fromISO(promotion.end_date).toJSDate()
       : undefined,
   );
-  const [formData, setFormData] = useState<Partial<FormDataValues>>({});
+  const [formData, setFormData] = useState<Partial<any>>({});
 
   useEffect(() => {
     if (state?.errors) {
@@ -187,17 +187,17 @@ export default function PromotionForm({ promotion }: Props) {
             >
               Términos y condiciones
             </label>
-            <SingleFileChooser
+            <FileChooser
               id="termsAndConditionsFile"
               fileWeight="1.5 Mb"
               fileTypes="pdf"
               allowedFileTypes={['application/pdf']}
               removeMediaCallback={() => {}}
               required={!promotion}
-              mediaFile={
-                state?.formData.termsAndConditionsFile ||
-                promotion?.terms_and_conditions
-              }
+              mediaFiles={[
+                ...(formData?.termsAndConditionsFile ? [formData.termsAndConditionsFile] : []),
+                ...(promotion?.terms_and_conditions ? [promotion.terms_and_conditions] : []),
+              ]}
               errors={
                 state?.errors ? state?.errors.termsAndConditionsFile : undefined
               }
@@ -324,7 +324,7 @@ export default function PromotionForm({ promotion }: Props) {
             >
               Primer página
             </label>
-            <SingleFileChooser
+            <FileChooser
               id="firstPageFile"
               fileWeight="10 Mb"
               fileTypes="avif, jpeg, png, webp, gif"
@@ -340,9 +340,10 @@ export default function PromotionForm({ promotion }: Props) {
               name="firstPageFile"
               required={!promotion}
               removeMediaCallback={() => {}}
-              mediaFile={
-                formData.firstPageFile || promotion?.welcome_background
-              }
+              mediaFiles={[
+                ...(formData?.firstPageFile ? [formData.firstPageFile] : []),
+                ...(promotion?.welcome_background ? [promotion.welcome_background] : []),
+              ]}
               errors={state?.errors ? state?.errors.firstPageFile : undefined}
             />
           </div>
@@ -354,7 +355,7 @@ export default function PromotionForm({ promotion }: Props) {
             >
               Fondo general
             </label>
-            <SingleFileChooser
+            <FileChooser
               id="backgroundFile"
               fileWeight="1.5 Mb"
               fileTypes="avif, jpeg, png, webp"
@@ -367,7 +368,10 @@ export default function PromotionForm({ promotion }: Props) {
               ]}
               required={!promotion}
               removeMediaCallback={() => {}}
-              mediaFile={formData.backgroundFile || promotion?.background}
+              mediaFiles={[
+                ...(formData?.backgroundFile ? [formData.backgroundFile] : []),
+                ...(promotion?.background ? [promotion.background] : []),
+              ]}
               errors={state?.errors ? state?.errors.backgroundFile : undefined}
             />
           </div>

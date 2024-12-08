@@ -27,11 +27,11 @@ export default function PremiseForm({ premise }: Props) {
     initialState,
   );
   const [mediaToRemove, setMediaToRemove] = useState<string>();
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<Partial<any>>({});
 
   useEffect(() => {
-    if (state.errors) {
-      setFormData(state.formData || {});
+    if (state?.errors) {
+      setFormData((prevFormData) => ({ ...prevFormData, ...state?.formData }));
     }
   }, [state]);
 
@@ -63,6 +63,7 @@ export default function PremiseForm({ premise }: Props) {
               defaultValue={formData.name || premise?.name || ''}
               errors={state.errors ? state.errors.name : undefined}
               icon="DocumentTextIcon"
+              required={true}
             />
           </div>
         </div>
@@ -106,6 +107,7 @@ export default function PremiseForm({ premise }: Props) {
             allowedFileTypes={['application/pdf']}
             maxFilesAmount={1}
             removeMediaCallback={removeMedia}
+            required={!premise}
             mediaFiles={[
               ...(formData?.privacyImage ? [formData.privacyImage] : []),
               ...(premise?.privacy_policy ? [premise.privacy_policy] : []),
@@ -126,7 +128,9 @@ export default function PremiseForm({ premise }: Props) {
         >
           Cancelar
         </Link>
-        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
+        <FormSubmitButtonWithLoading isPending={isPending}>
+          Guardar
+        </FormSubmitButtonWithLoading>
       </div>
     </form>
   );

@@ -16,6 +16,7 @@ interface Props {
 
 function setStoreCookie(value: string | number) {
   Cookies.set('selectedPremise', value.toString(), { expires: 60 }); // Expires in 60 days
+  window.location.reload();
 }
 
 export default function PremiseSelect({ premises }: Props) {

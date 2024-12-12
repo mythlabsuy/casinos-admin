@@ -4,12 +4,12 @@ export interface TokenPayload {
   exp: number;
   email: string;
   scopes: number[];
-  premises: Premise[]; // Or use a more specific type based on your data
+  premises: TokenPremise[]; // Or use a more specific type based on your data
   // Add other fields in the token payload as needed
 }
 
 import { jwtDecode } from "jwt-decode";
-import { Premise } from "./definitions";
+import { TokenPremise } from "./definitions";
 
 export const decodeToken = (token: string): TokenPayload | null => {
   try {

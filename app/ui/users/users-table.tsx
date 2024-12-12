@@ -1,4 +1,4 @@
-import {SystemUser } from '@/app/lib/definitions';
+import {User } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
 import { DeleteIconButton } from '../components/icon-button';
@@ -12,7 +12,7 @@ export default async function UsersTable({ data }: { data: any }) {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg">
           <Table titles={['Usuario']}>
-            {data?.map((item: SystemUser) => (
+            {data?.map((item: User) => (
               <tr
                 key={`user_${item.username.toString()}`}
                 // className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg "

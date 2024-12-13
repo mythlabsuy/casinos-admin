@@ -6,13 +6,15 @@ import { ButtonLink } from '@/app/ui/components/button-link';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
 import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import UsersTable from '@/app/ui/users/users-table';
+import { ModuleEnum, ActionEnum } from '@/app/lib/enums/authActionModule';
+import AuthWrapper from '@/components/authWrapper';
 
 export const metadata: Metadata = {
   title: 'Usuarios',
 };
 
 export default async function Page(props: {
-  searchParams?: Promise<{ 
+  searchParams?: Promise<{
     query?: string;
     page?: string;
   }>;
@@ -41,9 +43,11 @@ export default async function Page(props: {
             { label: 'Usuarios', href: '/welcome/users', active: true },
           ]}
         />
-        <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
-          <ButtonLink href="/welcome/users/create" />
-        </div>
+        <AuthWrapper module={ModuleEnum.USER} action={ActionEnum.CREATE}>
+          <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
+            <ButtonLink href="/welcome/users/create" />
+          </div>
+        </AuthWrapper>
       </div>
       {/* TODO ver como extraer los titulos para pasarle al Skeleton y al Table lo mismo */}
       <Suspense

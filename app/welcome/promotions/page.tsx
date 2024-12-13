@@ -6,6 +6,8 @@ import { ButtonLink } from '@/app/ui/components/button-link';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
 import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import PromotionsTable from '@/app/ui/promotions/promotions-table';
+import AuthWrapper from '@/components/authWrapper';
+import { ActionEnum, ModuleEnum } from '@/app/lib/enums/authActionModule';
 
 export const metadata: Metadata = {
   title: 'Promociones',
@@ -41,9 +43,11 @@ export default async function Page(props: {
             { label: 'Promociones', href: '/welcome/promotions', active: true },
           ]}
         />
+        <AuthWrapper module={ModuleEnum.PROMOTION} action={ActionEnum.CREATE}>
         <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
           <ButtonLink href="/welcome/promotions/create" />
         </div>
+        </AuthWrapper>
       </div>
       {/* TODO ver como extraer los titulos para pasarle al Skeleton y al Table lo mismo */}
       <Suspense

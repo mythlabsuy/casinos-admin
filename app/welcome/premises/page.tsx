@@ -7,14 +7,16 @@ import { ButtonLink } from '@/app/ui/components/button-link';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
 import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import PremisesTable from '@/app/ui/premises/premises-table';
+import AuthWrapper from '@/components/authWrapper';
+import { ActionEnum, ModuleEnum } from '@/app/lib/enums/authActionModule';
 
 export const metadata: Metadata = {
   title: 'Locales',
 };
 
 export default async function Page(props: {
-  searchParams?: Promise<{ 
-    page?: string 
+  searchParams?: Promise<{
+    page?: string;
   }>;
 }) {
   const params = await props.searchParams;
@@ -40,9 +42,11 @@ export default async function Page(props: {
             { label: 'Locales', href: '/welcome/premises', active: true },
           ]}
         />
-        <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
-          <ButtonLink href="/welcome/premises/create" />
-        </div>
+        <AuthWrapper module={ModuleEnum.PREMISE} action={ActionEnum.CREATE}>
+          <div className="-mt-2 flex w-min flex-col items-end gap-2 pr-2">
+            <ButtonLink href="/welcome/premises/create" />
+          </div>
+        </AuthWrapper>
       </div>
       {/* TODO ver como extraer los titulos para pasarle al Skeleton y al Table lo mismo */}
       <Suspense

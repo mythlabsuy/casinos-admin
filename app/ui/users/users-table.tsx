@@ -1,10 +1,12 @@
-import {SystemUser } from '@/app/lib/definitions';
+import { User } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
 import { DeleteIconButton } from '../components/icon-button';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { disableUser } from '@/app/lib/actions/user-actions';
+import { ModuleEnum, ActionEnum } from '@/app/lib/enums/authActionModule';
+import AuthWrapper from '@/components/authWrapper';
 
 export default async function UsersTable({ data }: { data: any }) {
   return (
@@ -12,7 +14,7 @@ export default async function UsersTable({ data }: { data: any }) {
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg">
           <Table titles={['Usuario']}>
-            {data?.map((item: SystemUser) => (
+            {data?.map((item: User) => (
               <tr
                 key={`user_${item.username.toString()}`}
                 // className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg "
@@ -21,7 +23,7 @@ export default async function UsersTable({ data }: { data: any }) {
                   '[&:first-child>td:first-child]:rounded-tl-lg',
                   '[&:first-child>td:last-child]:rounded-tr-lg',
                   '[&:last-child>td:first-child]:rounded-bl-lg',
-                  '[&:last-child>td:last-child]:rounded-br-lg'
+                  '[&:last-child>td:last-child]:rounded-br-lg',
                 )}
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -42,20 +44,31 @@ export default async function UsersTable({ data }: { data: any }) {
                       <DynamicHeroIcon icon="PhotoIcon" className="h-7 w-7" />
                     )} */}
                     <p>
-                      <span className={clsx({ 'line-through': item.disabled })}>{item.username}</span> 
-                      {item.disabled ? <span className='bg-red-300 border rounded-lg py-1 px-2 ml-2'>Deshabilitado</span> : null }
+                      <span className={clsx({ 'line-through': item.disabled })}>
+                        {item.username}
+                      </span>
+                      {item.disabled ? (
+                        <span className="ml-2 rounded-lg border bg-red-300 px-2 py-1">
+                          Deshabilitado
+                        </span>
+                      ) : null}
                     </p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/users">
-                  {!item.disabled && (
-                    <DeleteIconButton
-                      id="deleteUser"
-                      deleteAction={disableUser.bind(null, item.id)}
-                    >
-                      <TrashIcon className="w-5" />
-                    </DeleteIconButton>
-                  )}
+                <TableActionsCell id={item.id} module={ModuleEnum.USER} path="/welcome/users">
+                  <AuthWrapper
+                    module={ModuleEnum.USER}
+                    action={ActionEnum.DELETE}
+                  >
+                    {!item.disabled && (
+                      <DeleteIconButton
+                        id="deleteUser"
+                        deleteAction={disableUser.bind(null, item.id)}
+                      >
+                        <TrashIcon className="w-5" />
+                      </DeleteIconButton>
+                    )}
+                  </AuthWrapper>
                 </TableActionsCell>
               </tr>
             ))}

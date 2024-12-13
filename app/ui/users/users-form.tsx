@@ -1,6 +1,6 @@
 'use client';
 
-import { Premise, Role, SystemUser } from '@/app/lib/definitions';
+import { Premise, Role, User } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { useActionState, useEffect, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
@@ -12,7 +12,7 @@ import FullScreenLoading from '../components/fullScreenLoading';
 import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 
 interface Props {
-  user?: SystemUser;
+  user?: User;
   roleList: Role[];
   premises: Premise[];
 }

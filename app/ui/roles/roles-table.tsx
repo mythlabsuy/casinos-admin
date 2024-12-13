@@ -1,10 +1,12 @@
-import {Role } from '@/app/lib/definitions';
+import { Role } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
 import { DeleteIconButton } from '../components/icon-button';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { disableRole } from '@/app/lib/actions/role-actions';
+import { ActionEnum, ModuleEnum } from '@/app/lib/enums/authActionModule';
+import AuthWrapper from '@/components/authWrapper';
 
 export default async function RolesTable({ data }: { data: any }) {
   return (
@@ -21,26 +23,41 @@ export default async function RolesTable({ data }: { data: any }) {
                   '[&:first-child>td:first-child]:rounded-tl-lg',
                   '[&:first-child>td:last-child]:rounded-tr-lg',
                   '[&:last-child>td:first-child]:rounded-bl-lg',
-                  '[&:last-child>td:last-child]:rounded-br-lg'
+                  '[&:last-child>td:last-child]:rounded-br-lg',
                 )}
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                   <div className="flex items-center gap-3">
                     <p>
-                      <span className={clsx({ 'line-through': item.disabled })}>{item.name}</span> 
-                      {item.disabled ? <span className='bg-red-300 border rounded-lg py-1 px-2 ml-2'>Deshabilitado</span> : null }
+                      <span className={clsx({ 'line-through': item.disabled })}>
+                        {item.name}
+                      </span>
+                      {item.disabled ? (
+                        <span className="ml-2 rounded-lg border bg-red-300 px-2 py-1">
+                          Deshabilitado
+                        </span>
+                      ) : null}
                     </p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/roles">
-                  {!item.disabled && (
-                    <DeleteIconButton
-                      id="deleteRole"
-                      deleteAction={disableRole.bind(null, item.id)}
-                    >
-                      <TrashIcon className="w-5" />
-                    </DeleteIconButton>
-                  )}
+                <TableActionsCell
+                  id={item.id}
+                  module={ModuleEnum.ROLE}
+                  path="/welcome/roles"
+                >
+                  <AuthWrapper
+                    module={ModuleEnum.ROLE}
+                    action={ActionEnum.DELETE}
+                  >
+                    {!item.disabled && (
+                      <DeleteIconButton
+                        id="deleteRole"
+                        deleteAction={disableRole.bind(null, item.id)}
+                      >
+                        <TrashIcon className="w-5" />
+                      </DeleteIconButton>
+                    )}
+                  </AuthWrapper>
                 </TableActionsCell>
               </tr>
             ))}

@@ -1,12 +1,12 @@
 
 import { apiFetchServer } from "../api";
-import { SystemUser } from "../definitions";
+import { User } from "../definitions";
 const ITEMS_PER_PAGE = 6;
 
 export async function fetchUserById(
     query?: string,
     id?: string,
-): Promise<SystemUser> {
+): Promise<User> {
     try {
         const response = await apiFetchServer({ method: 'GET', path: `user/${id}`, body: undefined, });
         return await response.data;

@@ -43,7 +43,7 @@ export const authConfig = {
         return true;  // Allow access to dashboard if logged in and permissions are checked
       } else if (isLoggedIn) {
         // If logged in but not on dashboard, redirect to the dashboard (or other page)
-        return Response.redirect(new URL('/welcome/premises', nextUrl));
+        return Response.redirect(new URL('/welcome', nextUrl));
       }
 
       return false;

@@ -112,7 +112,7 @@ export async function authenticate(
   formData: FormData,
 ) {
   try {
-    formData.append('redirectTo', '/welcome/premises');
+    formData.append('redirectTo', '/welcome');
     formData.append('redirect', 'true');
     await signIn('credentials', formData);
   } catch (error) {

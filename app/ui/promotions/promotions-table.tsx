@@ -7,6 +7,8 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import DynamicHeroIcon from '../dynamic-hero-icon';
 import clsx from 'clsx';
 import { softDeletePromotion } from '@/app/lib/actions/promotion-actions';
+import { ModuleEnum, ActionEnum } from '@/app/lib/enums/authActionModule';
+import AuthWrapper from '@/components/authWrapper';
 
 export default async function PromotionsTable({ data }: { data: any }) {
   let counter = 0;
@@ -49,14 +51,19 @@ export default async function PromotionsTable({ data }: { data: any }) {
                   </div>
                 </td>
                 <TableActionsCell id={item.id} path="/welcome/promotions">
-                  {!item.is_deleted && (
-                    <DeleteIconButton
-                      id="deletePromotion"
-                      deleteAction={softDeletePromotion.bind(null, item.id)}
-                    >
-                      <TrashIcon className="w-5" />
-                    </DeleteIconButton>
-                  )}
+                  <AuthWrapper
+                    module={ModuleEnum.PROMOTION}
+                    action={ActionEnum.DELETE}
+                  >
+                    {!item.is_deleted && (
+                      <DeleteIconButton
+                        id="deletePromotion"
+                        deleteAction={softDeletePromotion.bind(null, item.id)}
+                      >
+                        <TrashIcon className="w-5" />
+                      </DeleteIconButton>
+                    )}
+                  </AuthWrapper>
                 </TableActionsCell>
               </tr>
             ))}

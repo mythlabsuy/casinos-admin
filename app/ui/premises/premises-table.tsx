@@ -7,6 +7,8 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { disablePremise } from '@/app/lib/actions/premise-actions';
 import DynamicHeroIcon from '../dynamic-hero-icon';
 import clsx from 'clsx';
+import { ModuleEnum, ActionEnum } from '@/app/lib/enums/authActionModule';
+import AuthWrapper from '@/components/authWrapper';
 
 export default async function PremisesTable({ data }: { data: any }) {
   return (
@@ -23,7 +25,7 @@ export default async function PremisesTable({ data }: { data: any }) {
                   '[&:first-child>td:first-child]:rounded-tl-lg',
                   '[&:first-child>td:last-child]:rounded-tr-lg',
                   '[&:last-child>td:first-child]:rounded-bl-lg',
-                  '[&:last-child>td:last-child]:rounded-br-lg'
+                  '[&:last-child>td:last-child]:rounded-br-lg',
                 )}
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -44,20 +46,31 @@ export default async function PremisesTable({ data }: { data: any }) {
                       <DynamicHeroIcon icon="PhotoIcon" className="h-7 w-7" />
                     )}
                     <p>
-                      <span className={clsx({ 'line-through': item.disabled })}>{item.name}</span> 
-                      {item.disabled ? <span className='bg-red-300 border rounded-lg py-1 px-2 ml-2'>Deshabilitado</span> : null }
+                      <span className={clsx({ 'line-through': item.disabled })}>
+                        {item.name}
+                      </span>
+                      {item.disabled ? (
+                        <span className="ml-2 rounded-lg border bg-red-300 px-2 py-1">
+                          Deshabilitado
+                        </span>
+                      ) : null}
                     </p>
                   </div>
                 </td>
                 <TableActionsCell id={item.id} path="/welcome/premises">
-                  {!item.disabled && (
-                    <DeleteIconButton
-                      id="deletePremise"
-                      deleteAction={disablePremise.bind(null, item.id)}
-                    >
-                      <TrashIcon className="w-5" />
-                    </DeleteIconButton>
-                  )}
+                  <AuthWrapper
+                    module={ModuleEnum.PREMISE}
+                    action={ActionEnum.DELETE}
+                  >
+                    {!item.disabled && (
+                      <DeleteIconButton
+                        id="deletePremise"
+                        deleteAction={disablePremise.bind(null, item.id)}
+                      >
+                        <TrashIcon className="w-5" />
+                      </DeleteIconButton>
+                    )}
+                  </AuthWrapper>
                 </TableActionsCell>
               </tr>
             ))}

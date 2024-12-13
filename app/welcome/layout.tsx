@@ -1,15 +1,10 @@
 import SideNav from '@/app/ui/layout/sidenav/sidenav';
 import { auth } from '@/auth';
 import { SessionProvider } from 'next-auth/react';
+import { getTopNav } from '../lib/utils/navigation/getTopNav';
  
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const topNav = [
-    { name: 'Participantes', href: '/welcome/participants', iconName: 'UserGroupIcon' },
-    { name: 'Promociones', href: '/welcome/promotions', iconName: 'TicketIcon' },
-    { name: 'Locales', href: '/welcome/premises', iconName: 'BuildingStorefrontIcon' },
-    { name: 'Usuarios', href: '/welcome/users', iconName: 'UserGroupIcon' },
-    { name: 'Roles', href: '/welcome/roles', iconName: 'LockClosedIcon' },
-  ]
+  const topNav =  await getTopNav();
 
   const bottomNav = [
     { name: 'Cambiar contraseña', href: '/welcome/update-password' },
@@ -20,7 +15,6 @@ export default async function Layout({ children }: { children: React.ReactNode }
   let userName: string = '';
   
   if(session && session.user_data){
-    //TODO we were using full name here, I dont have that anymore
     userName = session.user_data.username;
   }
 

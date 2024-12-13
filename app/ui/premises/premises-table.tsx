@@ -57,7 +57,11 @@ export default async function PremisesTable({ data }: { data: any }) {
                     </p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/premises">
+                <TableActionsCell
+                  id={item.id}
+                  module={ModuleEnum.PREMISE}
+                  path="/welcome/premises"
+                >
                   <AuthWrapper
                     module={ModuleEnum.PREMISE}
                     action={ActionEnum.DELETE}

@@ -40,7 +40,11 @@ export default async function RolesTable({ data }: { data: any }) {
                     </p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/roles">
+                <TableActionsCell
+                  id={item.id}
+                  module={ModuleEnum.ROLE}
+                  path="/welcome/roles"
+                >
                   <AuthWrapper
                     module={ModuleEnum.ROLE}
                     action={ActionEnum.DELETE}

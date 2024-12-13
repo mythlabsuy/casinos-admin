@@ -4,6 +4,7 @@ import TableActionsCell from '../components/table-actions-cell';
 import { fetchFilteredData, getPagesAmount } from '@/app/lib/data/generic';
 import Pagination from '../components/pagination';
 import clsx from 'clsx';
+import { ModuleEnum } from '@/app/lib/enums/authActionModule';
 
 export default async function ParticipantsTable({
   query,
@@ -57,7 +58,11 @@ export default async function ParticipantsTable({
                       <p>{item.email}</p>
                     </div>
                   </td>
-                  <TableActionsCell id={item.id} path="/welcome/participants">
+                  <TableActionsCell
+                    id={item.id}
+                    module={ModuleEnum.PARTICIPANT}
+                    path="/welcome/participants"
+                  >
                     {/* <IconButton id='deleteCategory' deleteAction={deleteCategory.bind(null, item.id)}>
                       <TrashIcon className="w-5" />
                     </IconButton> */}

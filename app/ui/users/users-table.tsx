@@ -55,7 +55,7 @@ export default async function UsersTable({ data }: { data: any }) {
                     </p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/users">
+                <TableActionsCell id={item.id} module={ModuleEnum.USER} path="/welcome/users">
                   <AuthWrapper
                     module={ModuleEnum.USER}
                     action={ActionEnum.DELETE}

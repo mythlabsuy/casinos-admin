@@ -50,7 +50,11 @@ export default async function PromotionsTable({ data }: { data: any }) {
                     <p>{item.name}</p>
                   </div>
                 </td>
-                <TableActionsCell id={item.id} path="/welcome/promotions">
+                <TableActionsCell
+                  id={item.id}
+                  module={ModuleEnum.PROMOTION}
+                  path="/welcome/promotions"
+                >
                   <AuthWrapper
                     module={ModuleEnum.PROMOTION}
                     action={ActionEnum.DELETE}

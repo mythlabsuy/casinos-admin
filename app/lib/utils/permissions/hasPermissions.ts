@@ -56,7 +56,7 @@ export function hasPermission(
   }
 
   const permissionId = PermissionMap[module]?.[action];
-  if (!permissionId) return false;
+  if (permissionId === undefined) return false;
 
   return userPermissions.includes(permissionId);
 }

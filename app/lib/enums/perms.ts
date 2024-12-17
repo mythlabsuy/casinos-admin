@@ -29,6 +29,10 @@ export enum PermEnum {
     READ_PROMOTION = 21,
     UPDATE_PROMOTION = 22,
     DELETE_PROMOTION = 23,
+
+    EXPORT_PARTICIPANT = 24,
+
+    ONLY_ONE_PREMISE = 25,
 }
 
 export enum PermCategory {
@@ -36,8 +40,10 @@ export enum PermCategory {
     PARTICIPANT = "participant",
     USER = "user",
     MEDIA = "media",
-    PREMISE= "premise",
+    PREMISE = "premise",
     PROMOTION = "promotion",
+    EXPORT_PARTICIPANT = 'exportParticipant',
+    ONLY_ONE_PREMISE = 'onlyOnePremise',
 }
 
 export type Perm = {
@@ -83,5 +89,9 @@ export const permDefaultValues: Perm[] = [
     { id: PermEnum.READ_PROMOTION, label: "Ver promociones", selected: false, category: PermCategory.PROMOTION },
     { id: PermEnum.UPDATE_PROMOTION, label: "Actualizar promociones", selected: false, category: PermCategory.PROMOTION },
     { id: PermEnum.DELETE_PROMOTION, label: "Borrar promociones", selected: false, category: PermCategory.PROMOTION },
-    
+
+    { id: PermEnum.EXPORT_PARTICIPANT, label: "Exportar participantes", selected: false, category: PermCategory.EXPORT_PARTICIPANT },
+
+    { id: PermEnum.ONLY_ONE_PREMISE, label: "Solo un local (Usuario totem) ", selected: false, category: PermCategory.ONLY_ONE_PREMISE },
+
 ];

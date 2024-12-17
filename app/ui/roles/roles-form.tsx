@@ -292,6 +292,50 @@ export default function RolesForm({ role }: Props) {
                 ))}
             </Table>
           </div>
+
+          {/* Export participants table */}
+          <div className="rounded-lg">
+            <Table titles={['Opciones adicionales']}>
+              {permissions
+                .filter(
+                  (perm) => (perm.category === PermCategory.EXPORT_PARTICIPANT || perm.category === PermCategory.ONLY_ONE_PREMISE),
+                )
+                .map((premisePerm) => (
+                  <tr
+                    key={`perm_${premisePerm.label}`}
+                    onClick={() => togglePermission(premisePerm.id)}
+                    // className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg "
+                    className={clsx(
+                      'w-full cursor-pointer border-b py-3 text-sm last-of-type:border-none',
+                      '[&:first-child>td:first-child]:rounded-tl-lg',
+                      '[&:first-child>td:last-child]:rounded-tr-lg',
+                      '[&:last-child>td:first-child]:rounded-bl-lg',
+                      '[&:last-child>td:last-child]:rounded-br-lg',
+                    )}
+                  >
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex items-center gap-3">
+                        <p>
+                          <span>{premisePerm.label}</span>
+                        </p>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
+                        <SwitchWithIcon
+                          id={`prep_${premisePerm.label}`}
+                          label=""
+                          iconDisabled="XMarkIcon"
+                          iconEnabled="CheckIcon"
+                          value={premisePerm.selected}
+                          onChange={() => {}}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+            </Table>
+          </div>
         </div>
       </div>
 

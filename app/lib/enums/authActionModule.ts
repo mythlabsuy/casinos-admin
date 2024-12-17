@@ -4,6 +4,7 @@ export enum ActionEnum {
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
   EXPORT = 'EXPORT',
+  ONLY_ONE_PREMISE= 'ONLY_ONE_PREMISE',
 }
 
 export enum ModuleEnum {
@@ -12,7 +13,6 @@ export enum ModuleEnum {
   USER = 'USER',
   PREMISE = 'PREMISE',
   PROMOTION = 'PROMOTION',
-  EXPORT_PARTICIPANT = 'EXPORT_PARTICIPANT',
 }
 
 export function getModuleFromPath(path: string): ModuleEnum | undefined {
@@ -38,7 +38,7 @@ function getModuleEnumFromUrlString(value?: string): ModuleEnum | undefined {
     case 'promotions':
       return ModuleEnum.PROMOTION;
     case 'database':
-      return ModuleEnum.EXPORT_PARTICIPANT;
+      return ModuleEnum.PARTICIPANT;
     default:
       return undefined;
   }

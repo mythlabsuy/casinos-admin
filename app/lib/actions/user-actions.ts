@@ -42,8 +42,8 @@ const UserFormSchema = z.object({
                 return false;
             }
         }, { message: 'Por favor seleccione al menos un local válido.' }).transform((val) => JSON.parse(val)),
+    limitPremises: z.boolean(),
 });
-
 export async function CreateOrUpdateUser(prevState: UserFormState, formData: FormData) {
     const userId = formData.get('user_id');
     let schema = UserFormSchema;
@@ -60,6 +60,7 @@ export async function CreateOrUpdateUser(prevState: UserFormState, formData: For
         email: formData.get('email'),
         premises: formData.get('premises'),
         role: formData.get('role'),
+        limitPremises: formData.get('limitPremises') === 'true',
     });
     if (!validatedFields.success) {
         return {
@@ -69,11 +70,17 @@ export async function CreateOrUpdateUser(prevState: UserFormState, formData: For
         };
     }
 
-    const { username, password, email, role, premises } = validatedFields.data;
+    const { username, password, email, role, premises, limitPremises } = validatedFields.data;
 
     try {
         const transformedPremises = premises.map((item: Option) => parseInt(item.value, 10));
 
+        if (limitPremises && transformedPremises.length > 1) {
+            return {
+                message: 'El rol seleccionado solo permite un local por usuario.',
+                formData: Object.fromEntries(formData.entries()),
+            };
+        }
         const body = {
             username: username,
             email: email,

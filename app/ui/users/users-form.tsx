@@ -131,6 +131,12 @@ export default function UsersForm({ user, roleList, premises }: Props) {
               errors={state?.errors ? state?.errors.role : undefined}
             />
           </div>
+          <input
+            type="hidden"
+            name="limitPremises"
+            id="limitPremises"
+            value={limitPremises.toString()}
+          />
           <div className="col-span-2 flex w-full flex-col">
             <p className="text-l mb-1">
               Local/es: {premiseOptions.map((val) => val.label).join(', ')}
@@ -156,6 +162,11 @@ export default function UsersForm({ user, roleList, premises }: Props) {
             name="premises"
             value={JSON.stringify(premiseOptions)}
           />
+          {limitPremises ? (
+            <p className="text-red-700">
+              El rol seleccionado solo permite un local por usuario.{' '}
+            </p>
+          ) : null}
         </div>
       </div>
 

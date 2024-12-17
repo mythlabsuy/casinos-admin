@@ -20,6 +20,7 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.READ]: 5,
     [ActionEnum.UPDATE]: 6,
     [ActionEnum.DELETE]: 7,
+    [ActionEnum.EXPORT]: 24,
   },
   [ModuleEnum.USER]: {
     [ActionEnum.CREATE]: 8,
@@ -32,6 +33,8 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.READ]: 17,
     [ActionEnum.UPDATE]: 18,
     [ActionEnum.DELETE]: 19,
+    //This role works different, if you have it, then you are restricted by it
+    [ActionEnum.ONLY_ONE_PREMISE]: 25,
   },
   [ModuleEnum.PROMOTION]: {
     [ActionEnum.CREATE]: 20,
@@ -39,9 +42,9 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.UPDATE]: 22,
     [ActionEnum.DELETE]: 23,
   },
-  [ModuleEnum.EXPORT_PARTICIPANT]: {
-    [ActionEnum.EXPORT]: 24,
-  },
+  // [ModuleEnum.EXPORT_PARTICIPANT]: {
+  //   [ActionEnum.EXPORT]: 24,
+  // },
 };
 
 export function hasPermission(

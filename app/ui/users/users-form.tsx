@@ -2,14 +2,20 @@
 
 import { Premise, Role, User } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { useActionState, useEffect, useState } from 'react';
+import { useActionState, useEffect, useMemo, useState } from 'react';
 import { TextInput } from '../components/form-fields/input';
-import { CreateOrUpdateUser, UserFormState } from '@/app/lib/actions/user-actions';
+import {
+  CreateOrUpdateUser,
+  UserFormState,
+} from '@/app/lib/actions/user-actions';
 import MultipleSelector, { Option } from '../components/multiple-selector';
 import React from 'react';
 import Select from '../components/form-fields/select';
 import FullScreenLoading from '../components/fullScreenLoading';
 import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
+import { hasPermission } from '@/app/lib/utils/permissions/hasPermissions';
+import { ActionEnum, ModuleEnum } from '@/app/lib/enums/authActionModule';
+import UserFormSubmitDialog from './users-form-submit-dialog';
 
 interface Props {
   user?: User;
@@ -23,10 +29,13 @@ export default function UsersForm({ user, roleList, premises }: Props) {
     errors: {},
     formData: {},
   };
-  const [state, formAction, isPending] = useActionState(CreateOrUpdateUser, initialState);
+  const [state, formAction, isPending] = useActionState(
+    CreateOrUpdateUser,
+    initialState,
+  );
   const [formData, setFormData] = useState<any>({});
 
-  const [role, setRole] = useState(
+  const [roleId, setRoleId] = useState(
     user ? user?.role.id : roleList.length > 0 ? roleList[0].id : 0,
   );
 
@@ -56,9 +65,24 @@ export default function UsersForm({ user, roleList, premises }: Props) {
     }
   }, [user?.premises]);
 
+  const limitPremises = useMemo(() => {
+    const selectedRole =
+      roleList.find((roleItem) => roleItem.id == roleId) || null;
+    if (selectedRole) {
+      const hasLimitRole = hasPermission(
+        ModuleEnum.PREMISE,
+        ActionEnum.ONLY_ONE_PREMISE,
+        selectedRole.perms,
+      );
+      return hasLimitRole;
+    } else {
+      return false;
+    }
+  }, [roleId]);
+
   return (
     <form action={formAction}>
-        <FullScreenLoading isLoading={isPending} />
+      <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md p-4 md:p-6">
         {/* Hidden input with category id for the edit */}
         {user ? (
@@ -101,12 +125,18 @@ export default function UsersForm({ user, roleList, premises }: Props) {
               id="role"
               label="Seleccione un rol"
               icon="TagIcon"
-              value={role}
-              onChange={(e) => setRole(e as number)}
+              value={roleId}
+              onChange={(e) => setRoleId(e as number)}
               values={rolesMap}
               errors={state?.errors ? state?.errors.role : undefined}
             />
           </div>
+          <input
+            type="hidden"
+            name="limitPremises"
+            id="limitPremises"
+            value={limitPremises.toString()}
+          />
           <div className="col-span-2 flex w-full flex-col">
             <p className="text-l mb-1">
               Local/es: {premiseOptions.map((val) => val.label).join(', ')}
@@ -115,6 +145,7 @@ export default function UsersForm({ user, roleList, premises }: Props) {
               value={premiseOptions}
               onChange={setPremiseOptions}
               defaultOptions={promisesOptions}
+              maxSelected={limitPremises ? 1 : undefined}
               className="bg-white"
               badgeClassName=" "
               placeholder="Selecciona locales"
@@ -131,6 +162,11 @@ export default function UsersForm({ user, roleList, premises }: Props) {
             name="premises"
             value={JSON.stringify(premiseOptions)}
           />
+          {limitPremises ? (
+            <p className="text-red-700">
+              El rol seleccionado solo permite un local por usuario.{' '}
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -146,7 +182,13 @@ export default function UsersForm({ user, roleList, premises }: Props) {
         >
           Cancelar
         </Link>
-        <FormSubmitButtonWithLoading isPending={isPending}>Guardar</FormSubmitButtonWithLoading>
+        {premiseOptions.length > 1 && limitPremises ? (
+          <UserFormSubmitDialog></UserFormSubmitDialog>
+        ) : (
+          <FormSubmitButtonWithLoading isPending={isPending}>
+            Guardar
+          </FormSubmitButtonWithLoading>
+        )}
       </div>
     </form>
   );

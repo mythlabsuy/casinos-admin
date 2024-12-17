@@ -51,13 +51,9 @@ const PromotionFormSchema = z.object({
 
     termsAndConditionsFile: z.instanceof(File),
 
-    startDate: z.string(),
-    // .min(1, { message: 'Por favor ingrese una fecha de inicio.' })
-    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de inicio inválida.' }),
+    startDate: z.string().min(1, { message: 'Por favor ingresa la fecha de inicio.' }),
 
-    endDate: z.string(),
-    // .min(1, { message: 'Por favor ingrese una fecha de fin.' })
-    // .refine(date => !isNaN(Date.parse(date)), { message: 'Fecha de fin inválida.' }),
+    endDate: z.string().min(1, { message: 'Por favor ingresa la fecha de fin.' }),
 
     onlyOnce: z.boolean(),
 
@@ -65,31 +61,28 @@ const PromotionFormSchema = z.object({
 
     frecuency: z.string().min(1, { message: 'Por favor ingrese la frecuencia.' }),
 
-    maximumParticipations: z.string()
-        .min(1, { message: 'Por favor ingrese el máximo de participaciones.' })
-        .refine(value => {
-            const num = Number(value);
-            return Number.isInteger(num) && num > 0; // Validate natural number greater than 0
-        }, { message: 'El máximo de participaciones debe ser un número natural mayor a 0.' }),
+    maximumParticipations: z.string(),
 
     firstPageFile: z.instanceof(File),
 
     backgroundFile: z.instanceof(File),
 })
-    // .refine(data => {
-    //     // Check if startDate is before or equal to endDate
-    //     const startDate = new Date(data.startDate);
-    //     const endDate = new Date(data.endDate);
-    //     return startDate <= endDate;
-    // }, {
-    //     message: 'La fecha de inicio no puede ser mayor a la fecha de fin.',
-    //     path: ['startDate'], // Optional, specify the path for the error message
-    // })
     .refine(data => {
-        // Validate `frecuency` when `onlyOnce` is true
-        return !data.onlyOnce || data.frecuency === "0"; // Or the "SIN SELECCIONAR" value
+        return !data.onlyOnce || data.frecuency === "0"; 
     }, {
         message: 'Si es de una sola vez, no puede haber frecuencia.',
+        path: ['frecuency'],
+    }).refine(data => {
+        if (data.onlyOnce) return true; 
+        const num = Number(data.maximumParticipations);
+        return Number.isInteger(num) && num > 0;
+    }, {
+        message: 'El máximo de participaciones debe ser un número natural mayor a 0 cuando no es "solo una vez".',
+        path: ['maximumParticipations'],
+    }).refine(data => {
+        return data.onlyOnce || data.frecuency !== "0"; 
+    }, {
+        message: 'Si no es de una sola vez, debe seleccionar una frecuencia.',
         path: ['frecuency'],
     });
 

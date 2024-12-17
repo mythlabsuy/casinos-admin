@@ -2,7 +2,7 @@
 
 import { Promotion } from '@/app/lib/definitions';
 import Link from 'next/link';
-import { useActionState, useEffect, useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { NumberInput, TextInput } from '../components/form-fields/input';
 import {
   CreateOrUpdatePromotion,
@@ -89,9 +89,20 @@ export default function PromotionForm({ promotion }: Props) {
     ['SEMANAL', '2'],
     ['MENSUAL', '3'],
   ]);
+  const formRef = useRef<HTMLFormElement>(null);
+  const handleDialogConfirm = () => {
+    // Trigger form validation programmatically
+    if (formRef.current?.checkValidity()) {
+      setIsDialogOpen(true);
+      // formRef.current?.requestSubmit(); // Submits the form if valid
+    } else {
+      formRef.current?.reportValidity(); // Shows validation messages
+    }
+  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <form id="promotionsForm" action={formAction}>
+    <form id="promotionsForm"  ref={formRef} action={formAction}>
       <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Hidden input with promotion id for the edit */}
@@ -114,6 +125,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <TextInput
               id="name"
+              required={true}
               defaultValue={formData.name || promotion?.name || ''}
               errors={state?.errors ? state?.errors.name : undefined}
             />
@@ -129,6 +141,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <TextInput
               id="description"
+              required={true}
               defaultValue={
                 formData.description || promotion?.description || ''
               }
@@ -147,6 +160,7 @@ export default function PromotionForm({ promotion }: Props) {
             </label>
             <TextInput
               id="participationInstructions"
+              required={true}
               defaultValue={
                 formData.participationInstructions ||
                 promotion?.participation_instructions ||
@@ -195,8 +209,12 @@ export default function PromotionForm({ promotion }: Props) {
               removeMediaCallback={() => {}}
               required={!promotion}
               mediaFiles={[
-                ...(formData?.termsAndConditionsFile ? [formData.termsAndConditionsFile] : []),
-                ...(promotion?.terms_and_conditions ? [promotion.terms_and_conditions] : []),
+                ...(formData?.termsAndConditionsFile
+                  ? [formData.termsAndConditionsFile]
+                  : []),
+                ...(promotion?.terms_and_conditions
+                  ? [promotion.terms_and_conditions]
+                  : []),
               ]}
               errors={
                 state?.errors ? state?.errors.termsAndConditionsFile : undefined
@@ -222,7 +240,7 @@ export default function PromotionForm({ promotion }: Props) {
               value={startDate}
               onChange={setStartDate}
               timeZone="America/Montevideo"
-              required
+              required = {true}
               locale={es}
               name="startDate"
               errors={state?.errors ? state?.errors.startDate : undefined}
@@ -245,7 +263,7 @@ export default function PromotionForm({ promotion }: Props) {
             <DateTimePicker
               value={endDate}
               onChange={setEndDate}
-              required
+              required = {true}
               timeZone="America/Montevideo"
               locale={es}
               name="endDate"
@@ -342,7 +360,9 @@ export default function PromotionForm({ promotion }: Props) {
               removeMediaCallback={() => {}}
               mediaFiles={[
                 ...(formData?.firstPageFile ? [formData.firstPageFile] : []),
-                ...(promotion?.welcome_background ? [promotion.welcome_background] : []),
+                ...(promotion?.welcome_background
+                  ? [promotion.welcome_background]
+                  : []),
               ]}
               errors={state?.errors ? state?.errors.firstPageFile : undefined}
             />
@@ -389,12 +409,10 @@ export default function PromotionForm({ promotion }: Props) {
         >
           Cancelar
         </Link>
-        <Dialog>
-          <DialogTrigger asChild>
-            <CustomButton className="bg-blue-500 hover:bg-blue-600">
-              Guardar
-            </CustomButton>
-          </DialogTrigger>
+        <CustomButton type='button' onClick={handleDialogConfirm}>
+          Guardar
+        </CustomButton>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Atención</DialogTitle>
@@ -408,7 +426,10 @@ export default function PromotionForm({ promotion }: Props) {
                 <button className="px-4">Cancelar</button>
               </DialogClose>
               <DialogClose asChild>
-                <FormSubmitButtonWithLoading isPending={false} form={'promotionsForm'}>
+                <FormSubmitButtonWithLoading
+                  isPending={false}
+                  form={'promotionsForm'}
+                >
                   Guardar
                 </FormSubmitButtonWithLoading>
               </DialogClose>

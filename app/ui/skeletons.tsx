@@ -128,7 +128,7 @@ export function TableSkeleton( { titles, withActions = true }: Props) {
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
                 {titles.map((title: string) => (
-                  <th scope="col" className="px-4 py-5 font-medium">
+                  <th scope="col" key={title} className="px-4 py-5 font-medium">
                     {title}
                   </th>
                 ))}

@@ -32,7 +32,7 @@ export enum PermEnum {
 
     EXPORT_PARTICIPANT = 24,
 
-    ONLY_ONE_PREMISE = 25,
+    ONLY_ONE_PREMISE = 26,
 }
 
 export enum PermCategory {

@@ -34,7 +34,7 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.UPDATE]: 18,
     [ActionEnum.DELETE]: 19,
     //This role works different, if you have it, then you are restricted by it
-    [ActionEnum.ONLY_ONE_PREMISE]: 25,
+    [ActionEnum.ONLY_ONE_PREMISE]: 26,
   },
   [ModuleEnum.PROMOTION]: {
     [ActionEnum.CREATE]: 20,

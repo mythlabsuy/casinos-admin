@@ -4,7 +4,7 @@ import { userHasPermission } from "../permissions/userHasPermissions";
 
 export async function getTopNav(): Promise<Array<{ name: string; href: string; iconName: string }>> {
     const navItems = [
-        // { name: 'Participantes', href: '/welcome/participants', iconName: 'UserGroupIcon', module: ModuleEnum.PARTICIPANT, action: ActionEnum.READ },
+        { name: 'Participantes', href: '/welcome/participants', iconName: 'UserGroupIcon', module: ModuleEnum.PARTICIPANT, action: ActionEnum.READ },
         { name: 'Promociones', href: '/welcome/promotions', iconName: 'TicketIcon', module: ModuleEnum.PROMOTION, action: ActionEnum.READ },
         { name: 'Locales', href: '/welcome/premises', iconName: 'BuildingStorefrontIcon', module: ModuleEnum.PREMISE, action: ActionEnum.READ },
         { name: 'Usuarios', href: '/welcome/users', iconName: 'UserGroupIcon', module: ModuleEnum.USER, action: ActionEnum.READ },

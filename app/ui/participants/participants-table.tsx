@@ -63,9 +63,6 @@ export default async function ParticipantsTable({
                     module={ModuleEnum.PARTICIPANT}
                     path="/welcome/participants"
                   >
-                    {/* <IconButton id='deleteCategory' deleteAction={deleteCategory.bind(null, item.id)}>
-                      <TrashIcon className="w-5" />
-                    </IconButton> */}
                   </TableActionsCell>
                 </tr>
               ))}

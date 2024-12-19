@@ -1,8 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import { SessionUser } from './app/lib/definitions';
-import { getActionFromModuleAndPath, getModuleFromPath, ModuleEnum } from './app/lib/enums/authActionModule';
+import { getActionsFromModuleAndPath, getModuleFromPath } from './app/lib/enums/authActionModule';
 import { userHasPermission } from './app/lib/utils/permissions/userHasPermissions';
-import { se } from 'date-fns/locale';
 
 export const authConfig = {
   pages: {
@@ -23,14 +22,22 @@ export const authConfig = {
       }
       // If it's going to the forbidden page, we allow it
       if (isForbidden) return true;
-      
+
       //Protected pages logic, based on permission from token
       const module = getModuleFromPath(nextUrl.pathname);
       if (module) {
-        const action = getActionFromModuleAndPath(module, nextUrl.pathname);
+        const action = getActionsFromModuleAndPath(module, nextUrl.pathname);
         if (action) {
-          // Check if the user has permission for this module/action
-          const hasPermission = await userHasPermission(module, action, auth);  // Assuming this is an async function
+          let hasPermission: boolean;
+
+          if (Array.isArray(action)) {
+            const permissions = await Promise.all(
+              action.map((singleAction) => userHasPermission(module, singleAction, auth))
+            );
+            hasPermission = permissions.some((permission) => permission === true);
+          } else {
+            hasPermission = await userHasPermission(module, action, auth);
+          }
           if (!hasPermission) {
             // If no permission, redirect to the forbidden page
             return Response.redirect(new URL('/forbidden', nextUrl));
@@ -66,8 +73,3 @@ export const authConfig = {
   providers: [], // Add providers with an empty array for now
 } satisfies NextAuthConfig;
 
-
-function getModule(path: string) {
-
-}
-//

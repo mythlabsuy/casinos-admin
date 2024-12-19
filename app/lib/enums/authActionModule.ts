@@ -3,8 +3,9 @@ export enum ActionEnum {
   READ = 'READ',
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
-  EXPORT = 'EXPORT',
-  ONLY_ONE_PREMISE= 'ONLY_ONE_PREMISE',
+  EXPORT_PARTICIPANT_BY_PROMOTION = 'EXPORT_PARTICIPANT_BY_PROMOTION',
+  EXPORT_ALL_PARTICIPANT_BY_PREMISE = 'EXPORT_ALL_PARTICIPANT_BY_PREMISE',
+  ONLY_ONE_PREMISE = 'ONLY_ONE_PREMISE',
 }
 
 export enum ModuleEnum {
@@ -13,6 +14,7 @@ export enum ModuleEnum {
   USER = 'USER',
   PREMISE = 'PREMISE',
   PROMOTION = 'PROMOTION',
+  DATABASE = 'DATABASE'
 }
 
 export function getModuleFromPath(path: string): ModuleEnum | undefined {
@@ -38,13 +40,13 @@ function getModuleEnumFromUrlString(value?: string): ModuleEnum | undefined {
     case 'promotions':
       return ModuleEnum.PROMOTION;
     case 'database':
-      return ModuleEnum.PARTICIPANT;
+      return ModuleEnum.DATABASE;
     default:
       return undefined;
   }
 }
 
-export function getActionFromModuleAndPath(module: ModuleEnum, path: string): ActionEnum | undefined {
+export function getActionsFromModuleAndPath(module: ModuleEnum, path: string): ActionEnum | ActionEnum[] | undefined {
   // Extract the last segment of the path
   const segments = path.split('/').filter(Boolean); // Split and remove empty segments
   const lastSegment = segments[segments.length - 1]; // Get the last part of the path
@@ -60,12 +62,17 @@ export function getActionFromModuleAndPath(module: ModuleEnum, path: string): Ac
   return undefined;
 }
 
-function getActionEnumFromUrlString(value?: string): ActionEnum | undefined {
+function getActionEnumFromUrlString(value?: string): ActionEnum | ActionEnum[] | undefined {
   switch (value) {
     case 'create':
       return ActionEnum.CREATE;
     case 'edit':
       return ActionEnum.UPDATE;
+    case 'database':
+      return [
+        ActionEnum.EXPORT_PARTICIPANT_BY_PROMOTION,
+        ActionEnum.EXPORT_ALL_PARTICIPANT_BY_PREMISE,
+      ];
     default:
       return undefined;
   }
@@ -74,5 +81,5 @@ function getActionEnumFromUrlString(value?: string): ActionEnum | undefined {
 
 
 const modulePathStringList = ['roles', 'participants', 'users', 'premises', 'promotions', 'database'];
-const actionPathStringList = ['create', 'edit',];
+const actionPathStringList = ['create', 'edit', 'database'];
 

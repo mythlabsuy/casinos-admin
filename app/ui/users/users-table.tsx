@@ -1,7 +1,7 @@
 import { User } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
-import { DeleteIconButton } from '../components/icon-button';
+import { ActionButtonWithLoading } from '../components/action-button-with-loading';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { disableUser } from '@/app/lib/actions/user-actions';
@@ -28,21 +28,6 @@ export default async function UsersTable({ data }: { data: any }) {
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                   <div className="flex items-center gap-3">
-                    {/* {item.logo?.path ? (
-                      <Image
-                        src={
-                          item.logo?.path?.startsWith('http')
-                            ? item.logo.path
-                            : `/${item.logo.path?.replace(/^\/+/, '')}` // ensures only one leading slash
-                        }
-                        className="rounded-md"
-                        width={58}
-                        height={58}
-                        alt={`Logo del local ${item.name}`}
-                      />
-                    ) : (
-                      <DynamicHeroIcon icon="PhotoIcon" className="h-7 w-7" />
-                    )} */}
                     <p>
                       <span className={clsx({ 'line-through': item.disabled })}>
                         {item.username}
@@ -61,13 +46,13 @@ export default async function UsersTable({ data }: { data: any }) {
                     action={ActionEnum.DELETE}
                   >
                     {!item.disabled && (
-                      <DeleteIconButton
-                        id="deleteUser"
-                        deleteAction={disableUser.bind(null, item.id)}
-                      >
+                    <ActionButtonWithLoading
+                      id="deleteUser"
+                      action={disableUser.bind(null, item.id)}
+                    >
                         <TrashIcon className="w-5" />
-                      </DeleteIconButton>
-                    )}
+                    </ActionButtonWithLoading>
+                  )}
                   </AuthWrapper>
                 </TableActionsCell>
               </tr>

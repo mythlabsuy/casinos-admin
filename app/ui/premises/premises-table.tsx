@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Premise } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
-import { DeleteIconButton } from '../components/icon-button';
+import { ActionButtonWithLoading } from '../components/action-button-with-loading';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { disablePremise } from '@/app/lib/actions/premise-actions';
 import DynamicHeroIcon from '../dynamic-hero-icon';
@@ -67,12 +67,12 @@ export default async function PremisesTable({ data }: { data: any }) {
                     action={ActionEnum.DELETE}
                   >
                     {!item.disabled && (
-                      <DeleteIconButton
-                        id="deletePremise"
-                        deleteAction={disablePremise.bind(null, item.id)}
-                      >
-                        <TrashIcon className="w-5" />
-                      </DeleteIconButton>
+                    <ActionButtonWithLoading
+                      id="deletePremise"
+                      action={disablePremise.bind(null, item.id)}
+                    >
+                      <TrashIcon className="w-5" />
+                      </ActionButtonWithLoading>
                     )}
                   </AuthWrapper>
                 </TableActionsCell>

@@ -2,21 +2,27 @@ import Image from 'next/image';
 import { Promotion } from '@/app/lib/definitions';
 import Table from '../components/table';
 import TableActionsCell from '../components/table-actions-cell';
-import { ActionButtonWithLoading } from '../components/action-button-with-loading';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import DynamicHeroIcon from '../dynamic-hero-icon';
 import clsx from 'clsx';
-import { softDeletePromotion } from '@/app/lib/actions/promotion-actions';
-import { ModuleEnum, ActionEnum } from '@/app/lib/enums/authActionModule';
+import { FileUpIcon } from 'lucide-react';
+import { ExcelExportActionButton } from '../components/excel-export-action-button';
+import { ActionEnum, ModuleEnum } from '@/app/lib/enums/authActionModule';
 import AuthWrapper from '@/components/authWrapper';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
 
-export default async function PromotionsTable({ data }: { data: any }) {
+export default async function DatabasePromotionsTable({ data }: { data: any }) {
   let counter = 0;
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
-          <Table titles={['Promoción']}>
+          <Table titles={['Promociones']}>
             {data?.map((item: Promotion) => (
               <tr
                 key={`pro_${item.name.toString()}_${counter++}`}
@@ -52,21 +58,45 @@ export default async function PromotionsTable({ data }: { data: any }) {
                 </td>
                 <TableActionsCell
                   id={item.id}
-                  module={ModuleEnum.PROMOTION}
+                  module={ModuleEnum.PARTICIPANT}
                   path="/welcome/promotions"
                 >
                   <AuthWrapper
-                    module={ModuleEnum.PROMOTION}
-                    action={ActionEnum.DELETE}
+                    module={ModuleEnum.DATABASE}
+                    action={ActionEnum.EXPORT_PARTICIPANT_BY_PROMOTION}
+                    fallbackComponent={
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="">
+                              <Button
+                                disabled
+                                className="group relative rounded-md border p-2"
+                                variant={'outline'}
+                              >
+                                {<FileUpIcon className="w-6"></FileUpIcon>}
+                              </Button>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              No cuenta con los permisos necesarios para
+                              exportar participaciones por promoción.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    }
                   >
-                    {!item.is_deleted && (
-                    <ActionButtonWithLoading
-                      id="deletePromotion"
-                      action={softDeletePromotion.bind(null, item.id)}
+                    <ExcelExportActionButton
+                      outlined
+                      id="exportParticipant"
+                      promotionId={item.id.toString()}
+                      showDialogs={true}
+                      errorMessage="Error al generar el archivo"
                     >
-                        <TrashIcon className="w-5" />
-                      </ActionButtonWithLoading>
-                    )}
+                      <FileUpIcon className="w-6"></FileUpIcon>
+                    </ExcelExportActionButton>
                   </AuthWrapper>
                 </TableActionsCell>
               </tr>

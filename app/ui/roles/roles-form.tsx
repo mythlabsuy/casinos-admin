@@ -10,11 +10,17 @@ import {
   RoleFormState,
 } from '@/app/lib/actions/role-actions';
 import Table from '../components/table';
-import { Perm, PermCategory, permDefaultValues } from '@/app/lib/enums/perms';
+import {
+  Perm,
+  PermCategory,
+  permDefaultValues,
+  PermEnum,
+} from '@/app/lib/enums/perms';
 import clsx from 'clsx';
 import SwitchWithIcon from '../components/form-fields/switch';
 import FormSubmitButtonWithLoading from '../components/formSubmitButtonWithLoading';
 import FullScreenLoading from '../components/fullScreenLoading';
+import RolesFormErrorSubmitDialog from './roles-form-error-submit-dialog';
 
 interface Props {
   role?: Role;
@@ -57,6 +63,71 @@ export default function RolesForm({ role }: Props) {
       setPermissions(updatedList);
     }
   }, [role?.perms]);
+
+  const missingExportByPromotionPermissionList = React.useMemo(() => {
+    const missingPermissions: string[] = [];
+    const isExportAllSelected = permissions.some(
+      (perm) =>
+        perm.id === PermEnum.EXPORT_PARTICIPANT_BY_PROMOTION && perm.selected,
+    );
+    if (!isExportAllSelected) {
+      return [];
+    }
+    // Check for the other required permissions and add to the missing list if not selected
+    if (
+      !permissions.some(
+        (perm) => perm.id === PermEnum.READ_PROMOTION && perm.selected,
+      )
+    ) {
+      missingPermissions.push('Ver promociones');
+    }
+    if (
+      !permissions.some(
+        (perm) => perm.id === PermEnum.READ_PARTICIPANT && perm.selected,
+      )
+    ) {
+      missingPermissions.push('Ver participantes');
+    }
+
+    return missingPermissions;
+  }, [
+    permissions,
+    PermEnum.EXPORT_ALL_PARTICIPANT_BY_PREMISE,
+    PermEnum.READ_PREMISE,
+    PermEnum.READ_PARTICIPANT,
+  ]);
+
+  const missingExportByPremisePermissionList = React.useMemo(() => {
+    const missingPermissions: string[] = [];
+    const isExportAllSelected = permissions.some(
+      (perm) =>
+        perm.id === PermEnum.EXPORT_ALL_PARTICIPANT_BY_PREMISE && perm.selected,
+    );
+    if (!isExportAllSelected) {
+      return [];
+    }
+    if (
+      !permissions.some(
+        (perm) => perm.id === PermEnum.READ_PREMISE && perm.selected,
+      )
+    ) {
+      missingPermissions.push('Ver locales');
+    }
+    if (
+      !permissions.some(
+        (perm) => perm.id === PermEnum.READ_PARTICIPANT && perm.selected,
+      )
+    ) {
+      missingPermissions.push('Ver participantes');
+    }
+
+    return missingPermissions;
+  }, [
+    permissions,
+    PermEnum.EXPORT_ALL_PARTICIPANT_BY_PREMISE,
+    PermEnum.READ_PREMISE,
+    PermEnum.READ_PARTICIPANT,
+  ]);
 
   return (
     <form action={formAction}>
@@ -298,7 +369,12 @@ export default function RolesForm({ role }: Props) {
             <Table titles={['Opciones adicionales']}>
               {permissions
                 .filter(
-                  (perm) => (perm.category === PermCategory.EXPORT_PARTICIPANT || perm.category === PermCategory.ONLY_ONE_PREMISE),
+                  (perm) =>
+                    perm.category ===
+                      PermCategory.EXPORT_PARTICIPANT_BY_PROMOTION ||
+                    perm.category ===
+                      PermCategory.EXPORT_ALL_PARTICIPANT_BY_PREMISE ||
+                    perm.category === PermCategory.ONLY_ONE_PREMISE,
                 )
                 .map((premisePerm) => (
                   <tr
@@ -351,10 +427,30 @@ export default function RolesForm({ role }: Props) {
         >
           Cancelar
         </Link>
-        <FormSubmitButtonWithLoading isPending={isPending}>
-          Guardar
-        </FormSubmitButtonWithLoading>
+        {missingExportByPromotionPermissionList.length > 0 ||
+        missingExportByPremisePermissionList.length > 0 ? (
+          <RolesFormErrorSubmitDialog
+            missingPerms={
+              missingExportByPromotionPermissionList.length > 0
+                ? missingExportByPromotionPermissionList
+                : missingExportByPremisePermissionList
+            }
+            description={
+              missingExportByPromotionPermissionList.length > 0
+                ? promotionPermsMissingDialogMessage
+                : premisePermsMissingDialogMessage
+            }
+          ></RolesFormErrorSubmitDialog>
+        ) : (
+          <FormSubmitButtonWithLoading isPending={isPending}>
+            Guardar
+          </FormSubmitButtonWithLoading>
+        )}
       </div>
     </form>
   );
 }
+const promotionPermsMissingDialogMessage =
+  'Para exportar participantes por promoción, se requieren los siguientes permisos:';
+const premisePermsMissingDialogMessage =
+  'Para exportar todos los participantes por local, se requieren los siguientes permisos:';

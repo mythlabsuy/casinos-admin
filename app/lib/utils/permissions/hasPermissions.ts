@@ -20,7 +20,6 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.READ]: 5,
     [ActionEnum.UPDATE]: 6,
     [ActionEnum.DELETE]: 7,
-    [ActionEnum.EXPORT]: 24,
   },
   [ModuleEnum.USER]: {
     [ActionEnum.CREATE]: 8,
@@ -42,9 +41,11 @@ const PermissionMap: PermissionMapType = {
     [ActionEnum.UPDATE]: 22,
     [ActionEnum.DELETE]: 23,
   },
-  // [ModuleEnum.EXPORT_PARTICIPANT]: {
-  //   [ActionEnum.EXPORT]: 24,
-  // },
+  [ModuleEnum.DATABASE]: {
+    [ActionEnum.EXPORT_PARTICIPANT_BY_PROMOTION]: 24,
+    [ActionEnum.EXPORT_ALL_PARTICIPANT_BY_PREMISE]: 25,
+
+  },
 };
 
 export function hasPermission(
@@ -53,10 +54,14 @@ export function hasPermission(
   userPermissions: number[]
 ): boolean {
   //check for the edit role first, if it's not there, then we don't care about the other roles
-  const editPermission = PermissionMap[module]?.[ActionEnum.READ];
-  if (!editPermission || !userPermissions.includes(editPermission)) {
-    return false;
+  if (module != ModuleEnum.DATABASE) {
+    const readPermission = PermissionMap[module]?.[ActionEnum.READ];
+
+    if (!readPermission || !userPermissions.includes(readPermission)) {
+      return false;
+    }
   }
+
 
   const permissionId = PermissionMap[module]?.[action];
   if (permissionId === undefined) return false;

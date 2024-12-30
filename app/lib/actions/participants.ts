@@ -24,9 +24,7 @@ const PremiseFormSchema = z.object({
   document_number: z.string({
     required_error: 'Por favor ingrese un documento.',
   }).min(1, { message: 'Por favor ingrese un documento.' }),
-  email: z.string({
-    required_error: 'Por favor ingrese un email.',
-  }).min(1, { message: 'Por favor ingrese un email.' }),
+  email: z.string(),
   phone_number: z.string({
     required_error: 'Por favor ingrese un número de teléfono.',
   }).min(1, { message: 'Por favor ingrese un número de teléfono.' }),

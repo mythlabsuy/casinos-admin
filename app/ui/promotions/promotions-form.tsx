@@ -102,7 +102,7 @@ export default function PromotionForm({ promotion }: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
-    <form id="promotionsForm"  ref={formRef} action={formAction}>
+    <form id="promotionsForm" ref={formRef} action={formAction}>
       <FullScreenLoading isLoading={isPending} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Hidden input with promotion id for the edit */}
@@ -240,7 +240,7 @@ export default function PromotionForm({ promotion }: Props) {
               value={startDate}
               onChange={setStartDate}
               timeZone="America/Montevideo"
-              required = {true}
+              required={true}
               locale={es}
               name="startDate"
               errors={state?.errors ? state?.errors.startDate : undefined}
@@ -263,7 +263,7 @@ export default function PromotionForm({ promotion }: Props) {
             <DateTimePicker
               value={endDate}
               onChange={setEndDate}
-              required = {true}
+              required={true}
               timeZone="America/Montevideo"
               locale={es}
               name="endDate"
@@ -293,40 +293,44 @@ export default function PromotionForm({ promotion }: Props) {
               onChange={setIsActive}
             />
           </div>
+          {!isOnlyOnce ? (
+            <div className="mb-4">
+              <Select
+                id="frecuency"
+                label="Frecuencia"
+                icon="ChevronUpDownIcon"
+                value={frecuency}
+                onChange={(e) => setFrecuency(e as string)}
+                values={frecuencies}
+                errors={state?.errors ? state?.errors.frecuency : undefined}
+              />
+            </div>
+          ) : null}
 
-          <div className="mb-4">
-            <Select
-              id="frecuency"
-              label="Frecuencia"
-              icon="ChevronUpDownIcon"
-              value={frecuency}
-              onChange={(e) => setFrecuency(e as string)}
-              values={frecuencies}
-              errors={state?.errors ? state?.errors.frecuency : undefined}
-            />
-          </div>
-
-          {/* Maximum */}
-          <div className="mb-4">
-            <NumberInput
-              id="maximumParticipations"
-              defaultValue={
-                formData.maximumParticipations
-                  ? isNaN(parseInt(formData.maximumParticipations, 10))
-                    ? 0
-                    : parseInt(formData.maximumParticipations, 10)
-                  : promotion?.maximum_participations || 0
-              }
-              errors={
-                state?.errors ? state?.errors.maximumParticipations : undefined
-              }
-              icon="UserIcon"
-              label="Cantidad máxima de participación por frecuencia seleccionada"
-              step={1}
-              min={0}
-              required
-            />
-          </div>
+          {!isOnlyOnce ? (
+            <div className="mb-4">
+              <NumberInput
+                id="maximumParticipations"
+                defaultValue={
+                  formData.maximumParticipations
+                    ? isNaN(parseInt(formData.maximumParticipations, 10))
+                      ? 0
+                      : parseInt(formData.maximumParticipations, 10)
+                    : promotion?.maximum_participations || 0
+                }
+                errors={
+                  state?.errors
+                    ? state?.errors.maximumParticipations
+                    : undefined
+                }
+                icon="UserIcon"
+                label="Cantidad máxima de participación por frecuencia seleccionada"
+                step={1}
+                min={0}
+                required
+              />
+            </div>
+          ) : null}
 
           <div className="col-span-2 mb-4">
             <div className="block text-xl font-medium text-gray-700">
@@ -409,7 +413,7 @@ export default function PromotionForm({ promotion }: Props) {
         >
           Cancelar
         </Link>
-        <CustomButton type='button' onClick={handleDialogConfirm}>
+        <CustomButton type="button" onClick={handleDialogConfirm}>
           Guardar
         </CustomButton>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

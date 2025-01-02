@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dialog';
 import { CustomButton } from '../customButton';
 import FileChooser from '../components/form-fields/file-chooser';
+import clsx from 'clsx';
 interface Props {
   promotion?: Promotion;
 }
@@ -100,6 +101,10 @@ export default function PromotionForm({ promotion }: Props) {
     }
   };
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const maximumParticipationsDefault = formData.maximumParticipations
+    ? parseInt(formData.maximumParticipations, 10) || 0
+    : promotion?.maximum_participations || 0;
 
   return (
     <form id="promotionsForm" ref={formRef} action={formAction}>
@@ -293,44 +298,46 @@ export default function PromotionForm({ promotion }: Props) {
               onChange={setIsActive}
             />
           </div>
-          {!isOnlyOnce ? (
-            <div className="mb-4">
-              <Select
-                id="frecuency"
-                label="Frecuencia"
-                icon="ChevronUpDownIcon"
-                value={frecuency}
-                onChange={(e) => setFrecuency(e as string)}
-                values={frecuencies}
-                errors={state?.errors ? state?.errors.frecuency : undefined}
-              />
-            </div>
-          ) : null}
+          <div
+            className={clsx('mb-4', {
+              hidden: isOnlyOnce,
+            })}
+          >
+            <Select
+              id="frecuency"
+              label="Frecuencia"
+              icon="ChevronUpDownIcon"
+              value={frecuency}
+              onChange={(e) => setFrecuency(e as string)}
+              values={frecuencies}
+              errors={state?.errors ? state?.errors.frecuency : undefined}
+            />
+          </div>
 
-          {!isOnlyOnce ? (
-            <div className="mb-4">
-              <NumberInput
-                id="maximumParticipations"
-                defaultValue={
-                  formData.maximumParticipations
-                    ? isNaN(parseInt(formData.maximumParticipations, 10))
-                      ? 0
-                      : parseInt(formData.maximumParticipations, 10)
-                    : promotion?.maximum_participations || 0
-                }
-                errors={
-                  state?.errors
-                    ? state?.errors.maximumParticipations
-                    : undefined
-                }
-                icon="UserIcon"
-                label="Cantidad máxima de participación por frecuencia seleccionada"
-                step={1}
-                min={0}
-                required
-              />
-            </div>
-          ) : null}
+          <div
+            className={clsx('mb-4', {
+              hidden: isOnlyOnce,
+            })}
+          >
+            <NumberInput
+              id="maximumParticipations"
+              defaultValue={
+                formData.maximumParticipations
+                  ? isNaN(parseInt(formData.maximumParticipations, 10))
+                    ? 0
+                    : parseInt(formData.maximumParticipations, 10)
+                  : promotion?.maximum_participations || 0
+              }
+              errors={
+                state?.errors ? state?.errors.maximumParticipations : undefined
+              }
+              icon="UserIcon"
+              label="Cantidad máxima de participación por frecuencia seleccionada"
+              step={1}
+              min={0}
+              required={!isOnlyOnce}
+            />
+          </div>
 
           <div className="col-span-2 mb-4">
             <div className="block text-xl font-medium text-gray-700">

@@ -110,7 +110,7 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
     if (!validatedFields.success) {
         return {
             ...prevState,
-            message: null,
+            message: 'Ha ocurrido un error al validar los campos.',
             errors: validatedFields.error.flatten().fieldErrors,
             formData: Object.fromEntries(formData.entries()),
         };
@@ -133,7 +133,7 @@ export async function CreateOrUpdatePromotion(prevState: PromotionFormState, for
 
         data.append('just_once', String(onlyOnce)); // boolean
         data.append('frequency', frecuency); //int
-        data.append('maximum_participations', maximumParticipations); //integer
+        data.append('maximum_participations', validMaximumParticipations(maximumParticipations)); //integer
         data.append('ticket_extra_data', ticketExtraData);
 
 
@@ -180,3 +180,8 @@ export async function softDeletePromotion(id: number) {
         };
     }
 }
+
+const validMaximumParticipations = (str: string) => {
+    const parsed = parseInt(str, 10);
+    return isNaN(parsed) ? "0" : parsed.toString();
+  };

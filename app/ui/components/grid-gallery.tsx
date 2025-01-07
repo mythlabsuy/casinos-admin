@@ -1,9 +1,9 @@
-import { MediaFiles } from "@/app/lib/definitions";
+import { MediaFile } from "@/app/lib/definitions";
 import Image from 'next/image'
 import { Button } from "./button";
 
 interface Props {
-  mediaFiles?: MediaFiles[];
+  mediaFiles?: MediaFile[];
   removeCallback?: Function;
   removeIcon?: string;
   iconBgColor?: string;

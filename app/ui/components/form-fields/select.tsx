@@ -21,7 +21,6 @@ interface Props {
  * @returns 
  */
 export default function Select({ id, name,label, className, icon, errors, defaultValue, value, placeholder, values, onChange }: Props ) {
-  console.log(`SELECT DEFAULT VALUE (${id})`, defaultValue)
 
   return (
     <>

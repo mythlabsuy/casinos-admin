@@ -2,14 +2,12 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 
-import { OrderStatus } from "./enums/order-status";
-
 // However, these types are generated automatically if you're using an ORM such as Prisma.
 declare module 'next-auth' {
   interface Session {
     accessToken?: any;
     refreshToken?: any;
-    user_data?: any;
+    user_data?: SessionUser;
   }
 
   interface User {
@@ -18,130 +16,99 @@ declare module 'next-auth' {
       refresh_token: string;
       token_type: string;
     };
-    user_data?: HermesUser;
+    user_data?: SessionUser;
   }
 }
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  tokens: any; //TODO armar tipo de datos para el retorno de los tokens
-  user_data?: HermesUser;
+export type AuthUser = {
+  tokens: any; 
+  user_data?: SessionUser;
 };
+
+export type SessionUser = {
+  email: string;
+  roles: number[];
+  username: string;
+  premises: TokenPremise[];
+}
+
+export type User = {
+  id: number;
+  username: string;
+  email: string;
+  role: Role;
+  premises: Premise[];
+  disabled: boolean;
+}
+
 
 export type Premise = {
   id: number;
   name: string;
-  logo: string;
-  privacy_policy: string;
+  logo: MediaFile;
+  privacy_policy: MediaFile;
   disabled: boolean;
 }
 
-
-//HERMES
-export type Article = {
+export type Participant = {
   id: number;
-  name: string;
-  description: string;
-  size_weight: any[];
-  price: number;
-  currency: string;
-  current_stock: number;
-  reserved_stock: number;
-  internal_code: string;
-  barcode_value: string;
-  category: Category;
-  store_id: number
-  store: Premise;
-  media_files: MediaFiles[];
-  featured: boolean
-  disabled: boolean
+  full_name: string;
+  email: string;
+  document_number: string;
+  phone_number: string;
+  accepts_terms_of_service: boolean;
+  accepts_privacy_policy: boolean;
+  over_18: boolean;
 }
 
-export type Category = {
-  id: number;
-  name: string;
-  image: string;
-  image_bucket_key: string;
-  mime_type: string;
-  featured_order: number;
-  disabled: boolean;
+export type Welcome = {
+  document_number?: string;
 }
-
-
 
 export type Role = {
-  id: 1;
+  id: number;
   name: string;
   perms: number[];
   disabled: boolean;
 }
 
-export type Tenant = {
-  id: number;
-  name: string;
-  disabled: boolean;
-  stores: Premise[];
+export type ApiResponse = {
+  status: number;
+  data: any; 
 }
 
-export type MediaFiles = {
+export type Promotion = {
   id: number;
+  premise_id: number;
   name: string;
+  is_active: boolean;
+  is_deleted: boolean;
+  description: string;
+  participation_instructions: string;
+  ticket_extra_data: string;
+  
+  start_date: string;
+  end_date: string;
+  just_once: boolean;
+  
+  frequency: number;
+  maximum_participations: number;
+
+  terms_and_conditions: MediaFile;
+  welcome_background: MediaFile;
+  background: MediaFile;
+}
+
+export type MediaFile = {
+  id?: number;
+  name?: string;
   path: string;
   mime_type: string;
-  article_id: number;
-  disabled: boolean;
+  disabled?: boolean;
+  filename?: string;
 }
 
-export type Client = {
-  id: number;
-  full_name: string;
-  email: string;
-  document_number?: string;
-  document_type?: string;
-  tenant_id: number;
-  disabled: boolean;
-  store_id: 1;
-}
-
-export type HermesUser = {
-  id: number;
-  username: string;
-  tenant: Tenant;
-  store: Premise;
-  role: Role;
-  client: Client;
-  disabled: boolean;
-}
-
-export type Order = {
-  id: number;
-  order_number: string;
-  delivery_address: string;
-  billing_address: string;
-  status: OrderStatus;
-  is_store_pickup: boolean;
-  phone_number: string;
-  time_created: Date;
-  client_id: number;
-}
-
-export type OrdersListItemModel = {
-    order_id: number,
-    order_number: string,
-    date: Date,
-    price: number,
-    quantity: number,
-    currency: string,
-    status: OrderStatus,
-    client_name: string,
-    client_email: string,
-    client_phone: string,
-    media_file_path?: string,
-}
-
-export type ListOrdersModel = {
-    orders: [OrdersListItemModel]
+export type TokenPremise = {
+  id : number;
+  name : string;
 }

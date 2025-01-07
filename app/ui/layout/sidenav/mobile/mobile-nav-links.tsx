@@ -20,8 +20,8 @@ export default function MobileNavLinks({ topNavigation, bottomNavigation }: prop
           ))}
         </ul>
       </li>
+      {bottomNavigation.length > 0 ? <div className="border-b border-gray-200 pb-4"></div> : <></>}
       <li>
-        <div className="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
         <ul role="list" className="-mx-2 mt-2 space-y-1">
           {bottomNavigation.map((item) => (
             <li key={item.name}>

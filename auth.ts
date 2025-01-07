@@ -2,30 +2,36 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { z } from 'zod';
-import type { HermesUser, User } from '@/app/lib/definitions';
+import type { AuthUser } from '@/app/lib/definitions';
 import { apiFetchServer, getFullPath } from '@/app/lib/api';
- 
-async function getUser(username: string, password: string): Promise<User | undefined> {
+import { LoginResponse } from './app/lib/responses';
+import { decodeToken, TokenPayload } from './app/lib/token-decode';
+import { cookies } from 'next/headers'
+
+async function getUser(username: string, password: string): Promise<AuthUser | undefined> {
   try {
     const data: FormData = new FormData()
     data.append('username', username);
     data.append('password', password);
 
-    const responseTokens = await apiFetchServer({method: 'POST', path: 'auth/login', body: data, isForm: true});
-    const tokens = await responseTokens.json();
-    console.log('TOKENS RESPONSE', responseTokens, "TOKENS", tokens);
+    const responseTokens = await apiFetchServer({ method: 'POST', path: 'auth/login', body: data, isForm: true });
+    const tokens: LoginResponse = await responseTokens.data;
 
-    const responseUser = await fetchUser(tokens);
+    const decodedToken: TokenPayload | null = decodeToken(tokens.access_token);
 
-    const user: User = {
-      email: username,
-      password: '',
-      id: '1',
-      name: 'John Doe',
-      tokens: tokens,
-      user_data: await responseUser.json()
+    if (!decodedToken) {
+      throw ('No se pudo decodificar el token');
     }
-    
+    const user: AuthUser = {
+      tokens: tokens,
+      user_data: {
+        username: decodedToken.sub,
+        email: decodedToken.email,
+        premises: decodedToken.premises,
+        roles: decodedToken.scopes,
+      }
+    }
+
     return user;
   } catch (error) {
     console.error('Failed to fetch user:', error);
@@ -33,24 +39,7 @@ async function getUser(username: string, password: string): Promise<User | undef
   }
 }
 
-export async function fetchUser(tokens: any){
-  var headers = new Headers({
-    'Accept': 'application/json',
-    'Content-type': 'application/json',
-    'Authorization': tokens.token_type + " " + tokens.access_token
-  });
-    
-  const response = await fetch(getFullPath('user/users/me'), 
-    {
-      method: "GET",
-      headers: headers
-    }
-  );
-
-  return response
-}
-
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut: originalSignOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -58,19 +47,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const parsedCredentials = z
           .object({ username: z.string(), password: z.string().min(6) })
           .safeParse(credentials);
- 
+
         if (parsedCredentials.success) {
           const { username, password } = parsedCredentials.data;
           const user = await getUser(username, password);
           if (!user) return null;
-
-          console.log('Valid credentials');
           return user;
         }
- 
-        console.log('Invalid credentials');
+
         return null;
       },
     }),
   ],
 });
+
+export const signOut = async (options?: any) => {
+
+  (await cookies()).delete('selectedPremise')
+
+  return originalSignOut(options);
+};

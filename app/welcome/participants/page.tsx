@@ -5,6 +5,7 @@ import { ReactNode, Suspense } from 'react';
 import { Metadata } from 'next';
 import Breadcrumbs from '@/app/ui/components/breadcrumbs';
 import ParticipantsTable from '@/app/ui/participants/participants-table';
+import Alert from '@/app/ui/components/Alert';
 
 export const metadata: Metadata = {
   title: 'Participantes',
@@ -38,6 +39,9 @@ export default async function Page(props: {
           },
         ]}
       />
+      <Alert title='En esta sección se listan los participantes de todas las promociones y locales. 
+        Para aplicar filtros avanzados, dirígete a la sección "Base de Datos" y descarga el archivo Excel.' 
+        dismissable={false} alertType="Info"/>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="Búsqueda de participantes por Nombre, Documento o Email" />
       </div>

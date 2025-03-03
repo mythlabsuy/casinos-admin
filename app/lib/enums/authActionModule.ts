@@ -9,6 +9,7 @@ export enum ActionEnum {
 }
 
 export enum ModuleEnum {
+  DIVIDER = 'DIVIDER',
   ROLE = 'ROLE',
   PARTICIPANT = 'PARTICIPANT',
   USER = 'USER',

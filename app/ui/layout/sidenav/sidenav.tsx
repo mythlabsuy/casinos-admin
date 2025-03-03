@@ -40,7 +40,11 @@ export default async function SideNav({
               <span aria-hidden="true">Bienvenido {userName}</span>
             </div>
             <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
+              <ul role="list" className="flex flex-1 flex-col gap-y-3">
+                <li className="-mx-6">
+                  <PremiseSelect premises={premises} />
+                </li>
+
                 <NavLinks
                   topNavigation={topNavigation}
                   bottomNavigation={bottomNavigation}
@@ -48,9 +52,6 @@ export default async function SideNav({
                   bottomNavTitle={bottomNavTitle}
                 />
 
-                <li className="-mx-6 mt-auto">
-                  <PremiseSelect premises={premises} />
-                </li>
                 <div className="mb-4 flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
                   <LogoutBtn />
                 </div>

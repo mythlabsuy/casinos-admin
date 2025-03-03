@@ -22,7 +22,9 @@ export default async function PromotionsTable({ data }: { data: any }) {
                 key={`pro_${item.name.toString()}_${counter++}`}
                 // className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg "
                 className={clsx(
-                  'w-full border-b py-3 text-sm last-of-type:border-none',
+                  'w-full py-3 text-sm',
+                  { 'border-b': !item.is_active },
+                  { 'border-green-600 border-2': item.is_active },
                   '[&:first-child>td:first-child]:rounded-tl-lg',
                   '[&:first-child>td:last-child]:rounded-tr-lg',
                   '[&:last-child>td:first-child]:rounded-bl-lg',
@@ -30,7 +32,9 @@ export default async function PromotionsTable({ data }: { data: any }) {
                   { 'bg-red-600': item.is_deleted },
                 )}
               >
-                <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                <td className= {clsx(
+                  "whitespace-nowrap py-3 pl-6 pr-3",
+                )}>
                   <div className="flex items-center gap-3">
                     {item.background?.path ? (
                       <Image

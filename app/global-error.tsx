@@ -1,4 +1,8 @@
 'use client' // Error boundaries must be Client Components
+
+import * as Sentry from "@sentry/nextjs";
+import Error from "next/error";
+import { useEffect } from "react";
  
 export default function GlobalError({
   error,
@@ -7,6 +11,9 @@ export default function GlobalError({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  useEffect(() => {
+    Sentry.captureException(error);
+  }, [error]);
   return (
     // global-error must include html and body tags
     <html>

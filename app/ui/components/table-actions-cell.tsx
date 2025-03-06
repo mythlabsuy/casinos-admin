@@ -8,6 +8,7 @@ interface Props {
   children?: React.ReactNode;
   module: ModuleEnum;
   removeEditButton?: boolean;
+  className?: string;
 }
 
 export default async function TableActionsCell({
@@ -16,9 +17,10 @@ export default async function TableActionsCell({
   children,
   module,
   removeEditButton,
+  className
 }: Props) {
   return (
-    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+    <td className={`whitespace-nowrap py-3 pl-6 pr-3 ${className}`}>
       <div className="flex justify-end gap-3">
         <AuthWrapper module={module} action={ActionEnum.UPDATE}>
         {removeEditButton ? null : (

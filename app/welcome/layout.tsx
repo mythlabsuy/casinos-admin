@@ -7,9 +7,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const topNav =  await getTopNav();
 
   const bottomNav = [
-    { name: 'Cambiar contraseña', href: '/welcome/update-password' },
+    { name: 'Cambiar contraseña', href: '/welcome/update-password', iconName: 'KeyIcon', },
   ]
-
 
   const session = await auth();
   let userName: string = '';

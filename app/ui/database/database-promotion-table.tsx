@@ -19,9 +19,9 @@ import { Button } from '@/components/ui/button';
 export default async function DatabasePromotionsTable({ data }: { data: any }) {
   let counter = 0;
   return (
-    <div className="mt-6 flow-root">
+    <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-lg">
           <Table titles={['Promociones']}>
             {data?.map((item: Promotion) => (
               <tr

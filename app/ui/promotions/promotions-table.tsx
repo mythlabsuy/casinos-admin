@@ -13,9 +13,9 @@ import AuthWrapper from '@/components/authWrapper';
 export default async function PromotionsTable({ data }: { data: any }) {
   let counter = 0;
   return (
-    <div className="mt-6 flow-root">
+    <div className="flow-root">
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-lg">
           <Table titles={['Promoción']}>
             {data?.map((item: Promotion) => (
               <tr
